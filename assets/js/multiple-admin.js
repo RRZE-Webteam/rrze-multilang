@@ -7,6 +7,45 @@
     }
 
     $(function () {
+        $('#rrze-multilang-update-links').click(function () {
+            if (!rrzeMultilang.currentPost.postId) {
+                return;
+            }
+            $('select.rrze-multilang-links').each(function () {
+                var select = $(this);
+                var value = select.val().split('::');
+                var blogId = value[0];
+                var postId = value[1];
+                var restUrl = rrzeMultilang.apiSettings.getRoute(
+                    '/link/' + rrzeMultilang.currentPost.postId + '/blog/' + blogId + '/post/' + postId);
+
+                $('#rrze-multilang-update-links').next('.spinner')
+                    .css('visibility', 'visible');
+
+                $.ajax({
+                    type: 'POST',
+                    url: restUrl,
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader('X-WP-Nonce', rrzeMultilang.apiSettings.nonce);
+                    }
+                }).done(function (response) {
+                    var post = response[postId];
+
+                    if (!post) {
+                        return;
+                    }
+
+                    location.reload();
+                    return;
+                }).always(function () {
+                    $('#rrze-multilang-update-links').next('.spinner').css('visibility', 'hidden');
+                });
+            });
+
+        });
+    });
+
+    $(function () {
         $('#rrze-multilang-add-copy').click(function () {
             if (!rrzeMultilang.currentPost.postId) {
                 return;
@@ -30,7 +69,7 @@
                 if (!post) {
                     return;
                 }
-                
+
                 location.reload();
                 return;
             }).always(function () {
