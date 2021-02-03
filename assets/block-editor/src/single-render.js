@@ -133,7 +133,7 @@ export default function LanguagePanel() {
                         {
                             sprintf(
                                 /* translators: %s: Language name. */
-                                __('Add %s translation', 'rrze-multilang'),
+                                __('Add %s', 'rrze-multilang'),
                                 getLanguage(key)
                             )
                         }
