@@ -292,6 +292,7 @@ class Settings
             'depth' => 0,
             'hierarchical' => true,
             'post_type' => 'page',
+            'post_status' => 'publish',
             'sort_column' => 'name',
             'name' => $this->optionName . '[error_404_page]'
         ];
