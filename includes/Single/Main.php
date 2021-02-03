@@ -237,23 +237,18 @@ class Main
 
     public function enqueueBlockEditorAssets()
     {
+        $assetFile = include(plugin()->getPath('assets/block-editor/build') . 'single-index.asset.php');
+
         wp_enqueue_script(
             'rrze-multilang-block-editor-single',
             plugins_url('assets/block-editor/build/single-index.js', plugin()->getBasename()),
-            [
-                'wp-components',
-                'wp-data',
-                'wp-edit-post',
-                'wp-element',
-                'wp-plugins',
-                'wp-i18n'
-            ],
+            $assetFile['dependencies'],
             plugin()->getVersion()
         );
 
         wp_set_script_translations(
-            'rrze-multilang-block-editor-single', 
-            'rrze-multilang', 
+            'rrze-multilang-block-editor-single',
+            'rrze-multilang',
             plugin()->getPath('languages')
         );
     }
