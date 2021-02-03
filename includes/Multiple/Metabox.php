@@ -59,23 +59,20 @@ class Metabox
 
             switch_to_blog($blogId);
             $remoteOptions = (object) Options::getOptions();
-            $remoteSites[$blogId] = [
-                'blog_id' => $blogId,
-                'name' => get_bloginfo('name'),
-                'url' => get_bloginfo('url'),
-                'language' => Locale::getDefaultLocale(),
-                'posts' => Post::getPosts($postType, ['publish']),
-                'reference' => (array) get_post_meta($postId, '_rrze_multilang_multiple_reference', true),
-            ];
-            restore_current_blog();
-
             if (
-                !in_array($postType, $remoteOptions->post_types)
-                || !isset($this->siteOptions->connections[$blogId])
-                || !in_array($this->currentBlogId, $this->siteOptions->connections[$blogId])
+                in_array($postType, $remoteOptions->post_types)
+                && isset($this->siteOptions->connections[$blogId])
+                && in_array($this->currentBlogId, $this->siteOptions->connections[$blogId])
             ) {
-                continue;
+                $remoteSites[$blogId] = [
+                    'blog_id' => $blogId,
+                    'name' => get_bloginfo('name'),
+                    'url' => get_bloginfo('url'),
+                    'language' => Locale::getDefaultLocale(),
+                    'posts' => Post::getPosts($postType, ['publish'])
+                ];
             }
+            restore_current_blog();
         }
 
         if (empty($remoteSites)) {
@@ -83,18 +80,9 @@ class Metabox
             return;
         }
 
+        // Links
         echo '<div id="rrze-multilang-update-links-actions" class="descriptions">';
         foreach ($remoteSites as $blog) {
-            $reffered = false;
-            if (
-                isset($reference[$blogId])
-                && in_array($postId, $reference[$blogId])                
-                && isset($blog['reference'][$this->currentBlogId])
-                && in_array($postId, $blog['reference'][$this->currentBlogId])
-            ) {
-                $reffered = true;
-            }
-            $selected = selected($reffered, true, false);
             printf(
                 '<p><strong>%1$s</strong> &mdash; %2$s</p>',
                 esc_html($blog['name']),
@@ -102,17 +90,34 @@ class Metabox
             );
 
             printf(
-                '<select id="rrze-multilang-links-to-update" name="rrze-multilang-links-to-update-%s">',
+                '<select class="rrze-multilang-links" name="rrze-multilang-links-to-update-%s">',
                 $blogId
             );
 
             printf(
-                '<option value="0[0]">%s</option>',
+                '<option value="0::0">%s</option>',
                 __('&mdash; Select &mdash;', 'rrze-multilang')
             );
+
             foreach ($blog['posts'] as $refPost) {
+                $reffered = false;
+                if (
+                    isset($reference[$blog['blog_id']])
+                    && $reference[$blog['blog_id']] == $refPost->ID
+                ) {
+                    switch_to_blog($blog['blog_id']);
+                    $remoteRef = (array) get_post_meta($refPost->ID, '_rrze_multilang_multiple_reference', true);
+                    restore_current_blog();
+                    if (
+                        isset($remoteRef[$this->currentBlogId])
+                        && $remoteRef[$this->currentBlogId] == $postId
+                    ) {
+                        $reffered = true;
+                    }
+                }
+                $selected = selected($reffered, true, false);
                 printf(
-                    '<option value="%1$d[%2$d]" %3$s>%4$s</option>',
+                    '<option value="%1$d::%2$d" %3$s>%4$s</option>',
                     $blog['blog_id'],
                     $refPost->ID,
                     $selected,
@@ -142,7 +147,7 @@ class Metabox
         echo '<select id="rrze-multilang-copy-to-add">';
 
         printf(
-            '<option value="0[0]">%s</option>',
+            '<option value="0">%s</option>',
             __('&mdash; Select &mdash;', 'rrze-multilang')
         );
         foreach ($remoteSites as $blog) {
