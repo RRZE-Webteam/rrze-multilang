@@ -129,10 +129,9 @@ class Switcher
         $links = [];
 
         if (!$isMain && $reference) {
-            $ref = $reference;
-            $refBlogId = array_keys($ref);
-            $refBlogId = array_shift($refBlogId);
-            $refPostId = array_shift($ref[$refBlogId]);
+            $refKeys = array_keys($reference);
+            $refBlogId = array_shift($refKeys);
+            $refPostId = $reference[$refBlogId];
             switch_to_blog($refBlogId);
             $reference = $reference + (array) get_post_meta($refPostId, '_rrze_multilang_multiple_reference', true);
             restore_current_blog();
@@ -152,7 +151,7 @@ class Switcher
             }
             switch_to_blog($blogId);
             $refOptions = (object) Options::getOptions();
-            $error404Page = absint($refOptions->error_404_page);
+            $error404Page = get_permalink($refOptions->error_404_page);
             $refLocale = Locale::getDefaultLocale();
             $refStatus = get_post_status($refPostId);
             $refPermalink = get_permalink($refPostId);
@@ -174,12 +173,12 @@ class Switcher
 
             if ($isSingular && $refPostId) {
                 if ($postType && !in_array($postType, $refOptions->post_types)) {
-                    $link['href'] = $error404Page ? get_permalink($error404Page) : '';
+                    $link['href'] = $error404Page ? $error404Page : '';
                 } elseif ('publish' == $refStatus) {
                     $link['href'] = $refPermalink;
                 }
             } else {
-                $link['href'] = $error404Page ? get_permalink($error404Page) : '';
+                $link['href'] = $error404Page ? $error404Page : '';
             }
 
             $links[$refLocale] = $link;
