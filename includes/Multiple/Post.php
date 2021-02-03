@@ -81,8 +81,7 @@ class Post
             unset($reference[$this->currentBlogId]);
         }
 
-        foreach ($reference as $blogId => $value) {
-            $refPostId = array_shift($value);
+        foreach ($reference as $blogId => $refPostId) {
             switch_to_blog($blogId);
             $locale = Locale::getDefaultLocale();
             $title = get_the_title($refPostId);
