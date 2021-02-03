@@ -238,7 +238,7 @@ class Main
     public function enqueueBlockEditorAssets()
     {
         wp_enqueue_script(
-            'rrze-multilang-block-editor',
+            'rrze-multilang-block-editor-single',
             plugins_url('assets/block-editor/build/single-index.js', plugin()->getBasename()),
             [
                 'wp-components',
@@ -246,14 +246,15 @@ class Main
                 'wp-edit-post',
                 'wp-element',
                 'wp-plugins',
-                'wp-i18n',
+                'wp-i18n'
             ],
             plugin()->getVersion()
         );
 
         wp_set_script_translations(
-            'rrze-multilang-block-editor',
-            'rrze-multilang'
+            'rrze-multilang-block-editor-single', 
+            'rrze-multilang', 
+            plugin()->getPath('languages')
         );
     }
 }
