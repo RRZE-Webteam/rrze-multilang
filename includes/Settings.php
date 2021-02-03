@@ -97,7 +97,7 @@ class Settings
     {
         echo '<fieldset>';
         echo '<legend class="screen-reader-text">', __('Multilanguage Mode', 'rrze-multilang'), '</legend>';
-        echo '<label><input type="radio" name="', $this->optionName, '[multilang_mode]" id="rrze-multilang-multilang-mode" value="0" ', checked($this->options->multilang_mode, 0), '>', __('Disable', 'rrze-multilang'), '</label>', '<br>';
+        echo '<label><input type="radio" name="', $this->optionName, '[multilang_mode]" id="rrze-multilang-multilang-mode" value="0" ', checked($this->options->multilang_mode, 0), '>', __('Disabled', 'rrze-multilang'), '</label>', '<br>';
         echo '<label><input type="radio" name="', $this->optionName, '[multilang_mode]" id="rrze-multilang-multilang-mode" value="1" ', checked($this->options->multilang_mode, 1), '>', __('Single Website', 'rrze-multilang'), '</label>', '<br>';
         if (is_multisite()) {
             echo '<label><input type="radio" name="', $this->optionName, '[multilang_mode]" id="rrze-multilang-multilang-mode" value="2" ', checked($this->options->multilang_mode, 2), '>', __('Multiple Websites', 'rrze-multilang'), '</label>';
