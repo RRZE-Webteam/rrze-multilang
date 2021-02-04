@@ -112,7 +112,7 @@ class Translation
         self::$mo = null;
     }
 
-    public static function is_ready()
+    public static function isReady()
     {
         return (bool) self::$mo;
     }
