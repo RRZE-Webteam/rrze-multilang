@@ -109,8 +109,7 @@ class Settings
     {
         echo '<fieldset>';
         echo '<legend class="screen-reader-text">', __('Connection Type', 'rrze-multilang'), '</legend>';
-        echo '<label><input type="radio" name="', $this->optionName, '[connection_type]" id="rrze-multilang-connection-type" value="1" ', checked($this->options->connection_type, 1), '>', __('Main Website', 'rrze-multilang'), '</label>', '<br>';
-        echo '<label><input type="radio" name="', $this->optionName, '[connection_type]" id="rrze-multilang-connection-type" value="0" ', checked($this->options->connection_type, 0), '>', __('Secondary Website', 'rrze-multilang'), '</label>';
+        echo '<label><input type="checkbox" name="', $this->optionName, '[connection_type]" id="rrze-multilang-connection-type" value="1" ', checked($this->options->connection_type, 1), '>', __('Main Website', 'rrze-multilang'), '</label>';
         echo '</fieldset>';
         if ($this->options->connection_type == 0) {
             $blogId = array_shift($this->siteOptions->connections[$this->currentBlogId]);
