@@ -34,7 +34,7 @@ class Users
     }
 
     public function adminBarInit($wp_admin_bar)
-    {  
+    {
         switch_to_locale(self::getUserLocale());
     }
 
@@ -54,7 +54,7 @@ class Users
             'selected_only' => false
         ]);
         $languages = Locale::getAvailableLanguages();
-        
+
         if (!isset($languages[$defaultLanguage])) {
             $languages[$defaultLanguage] = $defaultLanguage;
         }
@@ -64,7 +64,7 @@ class Users
         } else {
             $currentLanguage = $currentLocale;
         }
-        
+
         $wp_admin_bar->add_menu([
             'parent' => 'top-secondary',
             'id'     => 'rrze-multilang-user-locale',
@@ -92,13 +92,18 @@ class Users
                 $lang = $availableLanguages[$locale];
             } else {
                 $lang = $locale;
-            }            
+            }
             $url = wp_nonce_url($url, 'rrze-multilang-switch-locale');
 
             $wp_admin_bar->add_menu([
                 'parent' => 'rrze-multilang-user-locale',
                 'id'     => 'rrze-multilang-user-locale-' . $locale,
-                'title'  => $locale == $defaultLanguage ? sprintf(__('%s &mdash; Website Default', 'rrze-multilang'), $lang) : $lang,
+                'title'  => $locale == $defaultLanguage ?
+                    sprintf(
+                        /* translators: %s: The user website default language. */
+                        __('%s &mdash; Website Default', 'rrze-multilang'),
+                        $lang
+                    ) : $lang,
                 'href'   => $url,
             ]);
         }
@@ -119,7 +124,7 @@ class Users
         $currentLocale = self::getUserLocale();
 
         if (
-            ! Locale::isAvailableLocale($locale)
+            !Locale::isAvailableLocale($locale)
             || $locale == $currentLocale
         ) {
             return;
