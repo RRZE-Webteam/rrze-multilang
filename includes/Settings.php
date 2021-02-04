@@ -279,13 +279,13 @@ class Settings
             }
             echo '<br><br>';
         }
-        echo '<p class="description">', __('Select the languages you wish to make your website available in.', 'rrze-multilang'), '</p>';
+        echo '<p class="description">', __('Select the languages available for the website.', 'rrze-multilang'), '</p>';
     }
 
     public function Error404pageField()
     {
         $args = [
-            'show_option_none' => __('&mdash; Select &mdash;', 'rrze-multilang'),
+            'show_option_none' => __('&mdash; None &mdash;', 'rrze-multilang'),
             'option_none_value' => 0,
             'selected' => $this->options->error_404_page,
             'depth' => 0,
@@ -296,7 +296,7 @@ class Settings
             'name' => $this->optionName . '[error_404_page]'
         ];
         wp_dropdown_pages($args);
-        echo '<p class="description">', __('The redirect page if the corresponding translation cannot be found.', 'rrze-multilang'), '</p>';
+        echo '<p class="description">', __('The redirect page to use if the translation does not exist.', 'rrze-multilang'), '</p>';
     }
 
     public function optionsValidate($input)
