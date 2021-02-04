@@ -822,11 +822,11 @@ class Post
             ) {
                 return $actions;
             }
-            /* translators: %s: The blog language. */
+            /* translators: %s: The translated post language. */
             $text = __('Edit %s translation', 'rrze-multilang');
             $editLink = get_edit_post_link($translation->ID);
         } else {
-            /* translators: %s: The blog language. */
+            /* translators: %s: The translated post language. */
             $text = __('Translate into %s', 'rrze-multilang');
             $editLink = admin_url(
                 'post-new.php?post_type=' . $post->post_type
