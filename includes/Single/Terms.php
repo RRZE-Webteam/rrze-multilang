@@ -17,7 +17,7 @@ class Terms
 
     public function bloginfoFilter($output, $show)
     {
-        if (!Translation::is_ready()) {
+        if (!Translation::isReady()) {
             return $output;
         }
 
@@ -32,7 +32,7 @@ class Terms
 
     public function getTermFilter($term, $taxonomy)
     {
-        if (!Translation::is_ready()) {
+        if (!Translation::isReady()) {
             return $term;
         }
 
