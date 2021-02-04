@@ -51,7 +51,7 @@ class Switcher
                     'rel' => 'alternate',
                     'hreflang' => $link['lang'],
                     'href' => esc_url($link['href']),
-                    'title' => $title,
+                    'title' => esc_attr($title)
                 ];
 
                 if (get_locale() === $link['locale']) {
