@@ -109,20 +109,26 @@ class Settings
     {
         echo '<fieldset>';
         echo '<legend class="screen-reader-text">', __('Connection Type', 'rrze-multilang'), '</legend>';
-        echo '<label><input type="checkbox" name="', $this->optionName, '[connection_type]" id="rrze-multilang-connection-type" value="1" ', checked($this->options->connection_type, 1), '>', __('Main Website', 'rrze-multilang'), '</label>';
+        echo '<select class="rrze-multilang-links" name="', $this->optionName, '[connection_type]">';
+        echo '<option value="1"', selected($this->options->connection_type, 1, true), '>',  __('Main Website', 'rrze-multilang'), '</option>';
+        echo '<option value="0"', selected($this->options->connection_type, 0, true), '>',  __('Secondary Website', 'rrze-multilang'), '</option>';
+        echo '</select>';
         echo '</fieldset>';
+
         if ($this->options->connection_type == 0) {
             $blogId = array_shift($this->siteOptions->connections[$this->currentBlogId]);
             if ($blogId) {
+                echo '<p>';
+                echo __('Connected to the following main website:', 'rrze-multilang'), '<br>';
                 $blogMeta = $this->getBlogMeta($blogId);
                 printf(
-                    '<p><a href="%1$s" title="%2$s">%3$s</a> &mdash; %4$s &mdash; %5$s</p>',
+                    '<a href="%1$s" title="%2$s">%3$s</a> &mdash; %4$s',
                     $blogMeta['admin_url'],
                     $blogMeta['site_name'],
                     $blogMeta['site_url'],
-                    $blogMeta['site_lang'],
-                    __('Main Website', 'rrze-multilang')
+                    $blogMeta['site_lang']
                 );
+                echo '</p>';
             } else {
                 echo '<p class="description">', __('There is no main website connected yet.', 'rrze-multilang'), '</p>';
             }
