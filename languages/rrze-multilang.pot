@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the RRZE Multilang plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: RRZE Multilang 0.1.0\n"
+"Project-Id-Version: RRZE Multilang 0.1.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/rrze-multilang\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-02-02T21:37:54+00:00\n"
+"POT-Creation-Date: 2021-02-03T21:03:06+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: rrze-multilang\n"
@@ -53,61 +53,71 @@ msgstr ""
 #: includes/Single/Metabox.php:62
 #: includes/Single/Post.php:725
 #: includes/Single/SwitcherWidget.php:30
+#: assets/block-editor/build/single-index.js:1
 #: assets/block-editor/src/single-render.js:26
 #: assets/block-editor/src/single-render.js:160
 msgid "Language"
 msgstr ""
 
-#: includes/Multiple/Metabox.php:82
+#: includes/Multiple/Metabox.php:79
 msgid "There are no websites available for translations."
 msgstr ""
 
-#: includes/Multiple/Metabox.php:111
-#: includes/Multiple/Metabox.php:146
-#: includes/Settings.php:289
+#: includes/Multiple/Metabox.php:99
+#: includes/Multiple/Metabox.php:151
+#: includes/Settings.php:288
 msgid "&mdash; Select &mdash;"
 msgstr ""
 
-#: includes/Multiple/Metabox.php:129
+#: includes/Multiple/Metabox.php:134
 msgid "Update Links"
 msgstr ""
 
-#: includes/Multiple/Metabox.php:140
+#: includes/Multiple/Metabox.php:145
 msgid "Copy To:"
 msgstr ""
 
-#: includes/Multiple/Metabox.php:162
+#: includes/Multiple/Metabox.php:167
 msgid "Add a Copy"
 msgstr ""
 
-#: includes/Multiple/RestApi.php:44
+#: includes/Multiple/RestApi.php:46
+msgid "You are not allowed to link posts."
+msgstr ""
+
+#: includes/Multiple/RestApi.php:68
 msgid "You are not allowed to access posts in the requested copy."
 msgstr ""
 
-#: includes/Multiple/RestApi.php:63
+#: includes/Multiple/RestApi.php:87
+#: includes/Multiple/RestApi.php:124
+#: includes/Multiple/RestApi.php:178
 #: includes/Single/RestApi.php:91
 #: includes/Single/RestApi.php:113
 #: includes/Single/RestApi.php:202
 msgid "The requested post was not found."
 msgstr ""
 
-#: includes/Multiple/RestApi.php:71
+#: includes/Multiple/RestApi.php:95
+#: includes/Multiple/RestApi.php:132
+#: includes/Multiple/RestApi.php:186
 #: includes/Single/RestApi.php:99
 #: includes/Single/RestApi.php:210
 msgid "The requested post type is not localizable."
 msgstr ""
 
-#: includes/Multiple/RestApi.php:86
+#: includes/Multiple/RestApi.php:110
+#: includes/Multiple/RestApi.php:201
 msgid "The requested website is not available."
 msgstr ""
 
-#: includes/Multiple/RestApi.php:96
-#: includes/Single/RestApi.php:230
-msgid "Failed to duplicate a post."
+#: includes/Multiple/RestApi.php:211
+msgid "Failed to copy a post."
 msgstr ""
 
-#: includes/Multiple/RestApi.php:108
-msgid "A copy of this %1$s has been added on %2$s"
+#. translators: %s: The blog name.
+#: includes/Multiple/RestApi.php:226
+msgid "A copy has been added on %s."
 msgstr ""
 
 #: includes/Multiple/Switcher.php:24
@@ -199,43 +209,39 @@ msgid "Multiple Websites"
 msgstr ""
 
 #: includes/Settings.php:112
-#: includes/Settings.php:125
-#: includes/Settings.php:206
+#: includes/Settings.php:124
+#: includes/Settings.php:205
 msgid "Main Website"
 msgstr ""
 
-#: includes/Settings.php:113
-msgid "Secondary Website"
-msgstr ""
-
-#: includes/Settings.php:128
+#: includes/Settings.php:127
 msgid "There is no main website connected yet."
 msgstr ""
 
-#: includes/Settings.php:150
+#: includes/Settings.php:149
 #: includes/Single/Tools.php:30
 #: includes/Single/Tools.php:31
 #: includes/Single/Tools.php:61
 msgid "Terms Translations"
 msgstr ""
 
-#: includes/Settings.php:198
+#: includes/Settings.php:197
 msgid "Note: It is only possible to connect the websites that have activated the plugin in \"Multiple Websites\" mode and in which you are an administrator."
 msgstr ""
 
-#: includes/Settings.php:200
+#: includes/Settings.php:199
 msgid "There are no websites available."
 msgstr ""
 
-#: includes/Settings.php:247
+#: includes/Settings.php:246
 msgid "Select the websites that should be connected."
 msgstr ""
 
-#: includes/Settings.php:270
+#: includes/Settings.php:269
 msgid "Website Default"
 msgstr ""
 
-#: includes/Settings.php:283
+#: includes/Settings.php:282
 msgid "Select the languages you wish to make your website available in."
 msgstr ""
 
@@ -253,6 +259,7 @@ msgid "The changes you made will be lost if you navigate away from this page."
 msgstr ""
 
 #: includes/Single/Metabox.php:76
+#: assets/block-editor/build/single-index.js:1
 #: assets/block-editor/src/single-render.js:71
 msgid "Translations"
 msgstr ""
@@ -276,11 +283,13 @@ msgstr ""
 msgid "Show all locales"
 msgstr ""
 
+#. translators: %s: The blog language.
 #: includes/Single/Post.php:826
 msgid "Edit %s translation"
 msgstr ""
 
-#: includes/Single/Post.php:829
+#. translators: %s: The blog language.
+#: includes/Single/Post.php:830
 msgid "Translate into %s"
 msgstr ""
 
@@ -292,8 +301,13 @@ msgstr ""
 msgid "The requested locale is not available."
 msgstr ""
 
-#: includes/Single/RestApi.php:283
-msgid "A translation of this %s has been added."
+#: includes/Single/RestApi.php:230
+msgid "Failed to duplicate a post."
+msgstr ""
+
+#. translators: %s: The language of the added translation.
+#: includes/Single/RestApi.php:287
+msgid "A %s translation has been added."
 msgstr ""
 
 #: includes/Single/TermsListTable.php:19
@@ -312,53 +326,62 @@ msgstr ""
 msgid "&mdash; Select Language &mdash;"
 msgstr ""
 
-#: includes/Single/Tools.php:68
+#. translators: %s: The search term.
+#: includes/Single/Tools.php:69
 msgid "Search results for &#8220;%s&#8221;"
 msgstr ""
 
-#: includes/Single/Tools.php:83
+#: includes/Single/Tools.php:84
 msgid "Search Translation"
 msgstr ""
 
-#: includes/Single/Tools.php:115
-#: includes/Single/Tools.php:145
+#: includes/Single/Tools.php:116
+#: includes/Single/Tools.php:146
 msgid "You are not allowed to edit terms translations."
 msgstr ""
 
-#: includes/Single/Tools.php:125
-#: includes/Single/Tools.php:155
+#: includes/Single/Tools.php:126
+#: includes/Single/Tools.php:156
 msgid "You are not allowed to edit terms in this locale."
 msgstr ""
 
-#: includes/Single/Users.php:101
+#. translators: %s: The user website default language.
+#: includes/Single/Users.php:104
 msgid "%s &mdash; Website Default"
 msgstr ""
 
-#: rrze-multilang.php:63
-msgid "The server is running PHP version %s. The Plugin requires at least PHP version %s."
-msgstr ""
-
+#. translators: 1: Server PHP version number, 2: Required PHP version number.
 #: rrze-multilang.php:65
-msgid "The server is running WordPress version %s. The Plugin requires at least WordPress version %s."
+msgid "The server is running PHP version %1$s. The Plugin requires at least PHP version %2$s."
 msgstr ""
 
-#: rrze-multilang.php:121
-msgid "Plugins: %s: %s"
+#. translators: 1: Server WordPress version number, 2: Required WordPress version number.
+#: rrze-multilang.php:72
+msgid "The server is running WordPress version %1$s. The Plugin requires at least WordPress version %2$s."
 msgstr ""
 
+#. translators: 1: The plugin name, 2: The error string.
+#: rrze-multilang.php:133
+msgid "Plugins: %1$s: %2$s"
+msgstr ""
+
+#: assets/block-editor/build/single-index.js:1
 #: assets/block-editor/src/single-render.js:64
 msgid "None"
 msgstr ""
 
+#: assets/block-editor/build/single-index.js:1
 #: assets/block-editor/src/single-render.js:104
 msgid "Translation created."
 msgstr ""
 
+#: assets/block-editor/build/single-index.js:1
 #: assets/block-editor/src/single-render.js:112
 msgid "Edit Post"
 msgstr ""
 
 #. translators: %s: Language name.
+#: assets/block-editor/build/single-index.js:3
 #: assets/block-editor/src/single-render.js:136
 msgid "Add %s"
 msgstr ""
