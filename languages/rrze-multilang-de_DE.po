@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RRZE Multilang 0.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/rrze-multilang\n"
-"POT-Creation-Date: 2021-02-04T09:53:29+00:00\n"
-"PO-Revision-Date: 2021-02-04 10:55+0100\n"
+"POT-Creation-Date: 2021-02-04T15:59:33+00:00\n"
+"PO-Revision-Date: 2021-02-04 17:00+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -194,21 +194,23 @@ msgstr "Einzelne Website"
 msgid "Multiple Websites"
 msgstr "Mehrere Websites"
 
-#: includes/Settings.php:112 includes/Settings.php:124
-#: includes/Settings.php:205
+#: includes/Settings.php:113 includes/Settings.php:208
 msgid "Main Website"
 msgstr "Hauptwebsite"
 
-#: includes/Settings.php:127
+#: includes/Settings.php:114
+msgid "Secondary Website"
+msgstr "Sekundäre Website"
+
+#: includes/Settings.php:122
+msgid "Connected to the following main website:"
+msgstr "Verbunden mit der folgenden Haupt-Website:"
+
+#: includes/Settings.php:133
 msgid "There is no main website connected yet."
 msgstr "Es ist noch keine Haupt-Website verbunden."
 
-#: includes/Settings.php:149 includes/Single/Tools.php:30
-#: includes/Single/Tools.php:31 includes/Single/Tools.php:61
-msgid "Terms Translations"
-msgstr "Begriffe Übersetzungen"
-
-#: includes/Settings.php:197
+#: includes/Settings.php:200
 msgid ""
 "Note: It is only possible to connect the websites that have activated the "
 "plugin in \"Multiple Websites\" mode and in which you are an administrator."
@@ -216,27 +218,32 @@ msgstr ""
 "Hinweis: Es ist nur möglich, Websites zu verbinden, die das Plugin im Modus "
 "“Mehrere Websites” aktiviert haben und in denen Sie Administrator sind."
 
-#: includes/Settings.php:199
+#: includes/Settings.php:202
 msgid "There are no websites available."
 msgstr "Es sind keine Websites verfügbar."
 
-#: includes/Settings.php:246
+#: includes/Settings.php:249
 msgid "Select the websites that should be connected."
 msgstr "Wählen Sie die Websites aus, die verbunden werden sollen."
 
-#: includes/Settings.php:269
+#: includes/Settings.php:272
 msgid "Website Default"
 msgstr "Website-Einstellung"
 
-#: includes/Settings.php:282
+#: includes/Settings.php:285
 msgid "Select the languages available for the website."
 msgstr "Wählen Sie die für die Website verfügbaren Sprachen aus."
 
-#: includes/Settings.php:288
+#: includes/Settings.php:287 includes/Single/Tools.php:30
+#: includes/Single/Tools.php:31 includes/Single/Tools.php:61
+msgid "Terms Translations"
+msgstr "Begriffe Übersetzungen"
+
+#: includes/Settings.php:293
 msgid "&mdash; None &mdash;"
 msgstr "&mdash; Keiner &mdash;"
 
-#: includes/Settings.php:299
+#: includes/Settings.php:304
 msgid "The redirect page to use if the translation does not exist."
 msgstr ""
 "Die Weiterleitungsseite, die verwendet werden soll, wenn die Übersetzung "
@@ -382,9 +389,6 @@ msgstr "%s hinzufügen"
 
 #~ msgid "(opens in a new window)"
 #~ msgstr "(öffnet in einem neuen Fenster)"
-
-#~ msgid "Secondary Website"
-#~ msgstr "Sekundäre Website"
 
 #~ msgid "Add %s translation"
 #~ msgstr "%s Übersetzung hinzufügen"
