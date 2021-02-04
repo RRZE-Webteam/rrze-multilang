@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-02-04T09:53:29+00:00\n"
+"POT-Creation-Date: 2021-02-04T15:59:33+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: rrze-multilang\n"
@@ -207,48 +207,55 @@ msgstr ""
 msgid "Multiple Websites"
 msgstr ""
 
-#: includes/Settings.php:112
-#: includes/Settings.php:124
-#: includes/Settings.php:205
+#: includes/Settings.php:113
+#: includes/Settings.php:208
 msgid "Main Website"
 msgstr ""
 
-#: includes/Settings.php:127
+#: includes/Settings.php:114
+msgid "Secondary Website"
+msgstr ""
+
+#: includes/Settings.php:122
+msgid "Connected to the following main website:"
+msgstr ""
+
+#: includes/Settings.php:133
 msgid "There is no main website connected yet."
 msgstr ""
 
-#: includes/Settings.php:149
+#: includes/Settings.php:200
+msgid "Note: It is only possible to connect the websites that have activated the plugin in \"Multiple Websites\" mode and in which you are an administrator."
+msgstr ""
+
+#: includes/Settings.php:202
+msgid "There are no websites available."
+msgstr ""
+
+#: includes/Settings.php:249
+msgid "Select the websites that should be connected."
+msgstr ""
+
+#: includes/Settings.php:272
+msgid "Website Default"
+msgstr ""
+
+#: includes/Settings.php:285
+msgid "Select the languages available for the website."
+msgstr ""
+
+#: includes/Settings.php:287
 #: includes/Single/Tools.php:30
 #: includes/Single/Tools.php:31
 #: includes/Single/Tools.php:61
 msgid "Terms Translations"
 msgstr ""
 
-#: includes/Settings.php:197
-msgid "Note: It is only possible to connect the websites that have activated the plugin in \"Multiple Websites\" mode and in which you are an administrator."
-msgstr ""
-
-#: includes/Settings.php:199
-msgid "There are no websites available."
-msgstr ""
-
-#: includes/Settings.php:246
-msgid "Select the websites that should be connected."
-msgstr ""
-
-#: includes/Settings.php:269
-msgid "Website Default"
-msgstr ""
-
-#: includes/Settings.php:282
-msgid "Select the languages available for the website."
-msgstr ""
-
-#: includes/Settings.php:288
+#: includes/Settings.php:293
 msgid "&mdash; None &mdash;"
 msgstr ""
 
-#: includes/Settings.php:299
+#: includes/Settings.php:304
 msgid "The redirect page to use if the translation does not exist."
 msgstr ""
 
