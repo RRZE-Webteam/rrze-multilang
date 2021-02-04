@@ -26,8 +26,11 @@ class Options
     {
         $options = [
             'multilang_mode' => 0,
-            'connection_type' => 0,
-            'post_types' => [],
+            'connection_type' => 1,
+            'post_types' => [
+                'post',
+                'page'
+            ],
             'languages' => [],
             'lang_rewrite_regex' => '',
             'copy_post_meta' => [
@@ -73,8 +76,8 @@ class Options
     {
         $defaults = self::defaultOptions();
         $options = (array) get_option(self::$optionName);
-        $options = wp_parse_args($options, $defaults);
-        $options = array_intersect_key($options, $defaults);
+        $options = Functions::parseArgsRecursive($options, $defaults);
+        $options = Functions::arrayIntersectKeyRecursive($options, $defaults);
 
         return $options;
     }
@@ -87,8 +90,8 @@ class Options
     {
         $defaults = self::defaultSiteOptions();
         $options = (array) get_site_option(self::$siteOptionName);
-        $options = wp_parse_args($options, $defaults);
-        $options = array_intersect_key($options, $defaults);
+        $options = Functions::parseArgsRecursive($options, $defaults);
+        $options = Functions::arrayIntersectKeyRecursive($options, $defaults);
 
         return $options;
     }
