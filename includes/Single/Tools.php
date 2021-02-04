@@ -65,6 +65,7 @@ class Tools
             printf(
                 '<span class="subtitle">%s</span>',
                 sprintf(
+                    /* translators: %s: The search term. */
                     __('Search results for &#8220;%s&#8221;', 'rrze-multilang'),
                     esc_html($_REQUEST['s'])
                 )
