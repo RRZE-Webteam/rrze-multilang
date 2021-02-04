@@ -88,7 +88,7 @@ class Metabox
                     esc_url($editLink),
                     get_the_title($translation->ID),
                     /* translators: accessibility text */
-                    esc_html(__('(opens in a new window)', 'rrze-multilang'))
+                    esc_html(__('Opens in a new window.', 'rrze-multilang'))
                 );
             } else {
                 echo get_the_title($translation->ID);
