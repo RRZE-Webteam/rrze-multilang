@@ -45,6 +45,32 @@ class Functions
         return array_pop($args);
     }
 
+    public static function parseArgsRecursive(&$array1, $array2)
+    {
+        $array1 = (array) $array1;
+        $array2 = (array) $array2;
+        $result = $array2;
+        foreach ($array1 as $key => &$value) {
+            if (is_array($value) && isset($result[$key])) {
+                $result[$key] = self::parseArgsRecursive($value, $result[$key]);
+            } else {
+                $result[$key] = $value;
+            }
+        }
+        return $result;
+    }
+
+    public static function arrayIntersectKeyRecursive($array1, $array2)
+    {
+        $array1 = array_intersect_key($array1, $array2);
+        foreach ($array1 as $key => $value) {
+            if (is_array($value) && is_array($array2[$key])) {
+                $array1[$key] = self::arrayIntersectKeyRecursive($value, $array2[$key]);
+            }
+        }
+        return $array1;
+    }
+
     public static function formatAtts($atts)
     {
         $html = '';
@@ -232,7 +258,7 @@ class Functions
     {
         if (!($currentUser = get_current_user_id())) {
             return;
-        }        
+        }
         $transient = sprintf('rrze_multilang_flash_admin_notices_%s', $currentUser);
         $transientValue = get_transient($transient);
         $notices = maybe_unserialize($transientValue ? $transientValue : '');
