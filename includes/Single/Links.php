@@ -31,8 +31,8 @@ class Links
         add_filter('get_previous_post_join', [$this, 'adjacentPostJoin'], 10, 3);
         add_filter('get_next_post_join', [$this, 'adjacentPostJoin'], 10, 3);
 
-        add_filter('get_previous_post_where', 'adjacentPostWhere', 10, 3);
-        add_filter('get_next_post_where', 'adjacentPostWhere', 10, 3);
+        add_filter('get_previous_post_where', [$this, 'adjacentPostWhere'], 10, 3);
+        add_filter('get_next_post_where', [$this, 'adjacentPostWhere'], 10, 3);
     }
 
     public function postLink($permalink, $post, $leavename)
