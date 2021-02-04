@@ -110,8 +110,8 @@ class Settings
         echo '<fieldset>';
         echo '<legend class="screen-reader-text">', __('Connection Type', 'rrze-multilang'), '</legend>';
         echo '<select class="rrze-multilang-links" name="', $this->optionName, '[connection_type]">';
-        echo '<option value="1"', selected($this->options->connection_type, 1, true), '>',  __('Main Website', 'rrze-multilang'), '</option>';
-        echo '<option value="0"', selected($this->options->connection_type, 0, true), '>',  __('Secondary Website', 'rrze-multilang'), '</option>';
+        echo '<option value="1"', selected($this->options->connection_type, 1), '>',  __('Main Website', 'rrze-multilang'), '</option>';
+        echo '<option value="0"', selected($this->options->connection_type, 0), '>',  __('Secondary Website', 'rrze-multilang'), '</option>';
         echo '</select>';
         echo '</fieldset>';
 
@@ -140,7 +140,7 @@ class Settings
         echo '<fieldset>';
         $postTypes = Functions::getPostTypes();
         foreach ($postTypes as $name => $label) {
-            $checked = checked(true, in_array($name, $this->options->post_types), false);
+            $checked = checked(in_array($name, $this->options->post_types), true, false);
             echo '<legend class="screen-reader-text">' . $label . '</legend>';
             printf(
                 '<label><input type="checkbox" name="%1$s[post_types][%2$s]" id="rrze-multilang-post-types-%2$s" value="%2$s"%3$s>%4$s</label><br>',
@@ -156,12 +156,12 @@ class Settings
     public function copyPostMetaField()
     {
         echo '<fieldset>';
-        foreach ($this->defaultOptions->copy_post_meta as $key => $value) {
+        foreach ($this->options->copy_post_meta as $key => $value) {
             $label = isset($this->copyPostMetaLabels[$key]) ? $this->copyPostMetaLabels[$key] : $key;
-            $checked = checked(true, !empty($this->options->copy_post_meta[$key]), false);
+            $checked = checked($value, 1, false);
             echo '<legend class="screen-reader-text">' . $label . '</legend>';
             printf(
-                '<label><input type="checkbox" name="%1$s[copy_post_meta][%2$s]" id="rrze-multilang-copy-post-meta-%2$s" value="1"%3$s>%4$s</label><br>',
+                '<label><input type="checkbox" name="%1$s[copy_post_meta][%2$s]" id="rrze-multilang-copy-post-meta-%2$s" value="1" %3$s>%4$s</label><br>',
                 $this->optionName,
                 $key,
                 $checked,
@@ -258,7 +258,7 @@ class Settings
         ]);
         foreach ($languages as $code => $language) {
             $default = $code == $defaultLanguage;
-            $checked = $default ? 'checked="checked"' : checked(true, in_array($code, $this->options->languages), false);
+            $checked = $default ? 'checked="checked"' : checked(in_array($code, $this->options->languages), true, false);
             if ($default) {
                 printf(
                     '<input type="hidden" name="%1$s[languages][%2$s]" value="%2$s">',
@@ -306,8 +306,15 @@ class Settings
 
     public function optionsValidate($input)
     {
+        $defaultOptions = Options::getDefaultOptions();
+        $input = Functions::parseArgsRecursive($input, $defaultOptions);
+
         $multilangMode = !empty($input['multilang_mode']) ? absint($input['multilang_mode']) : 0;
         $input['multilang_mode'] = in_array($multilangMode, [0, 1, 2]) ? $multilangMode : 0;
+
+        if ($input['multilang_mode'] == 0) {
+            return $defaultOptions;
+        }
 
         $connectionType = !empty($input['connection_type']) ? absint($input['connection_type']) : 0;
         $input['connection_type'] = in_array($connectionType, [0, 1]) ? $connectionType : 0;
@@ -324,7 +331,7 @@ class Settings
 
         $copyPostMeta = !empty($input['copy_post_meta']) ? (array) $input['copy_post_meta'] : [];
         foreach ($this->defaultOptions->copy_post_meta as $key => $value) {
-            $input['copy_post_meta'][$key] = isset($copyPostMeta[$key]) ? 1 : 0;
+            $input['copy_post_meta'][$key] = !empty($copyPostMeta[$key]) ? 1 : 0;
         }
 
         if ($input['multilang_mode'] == 2 && $input['connection_type'] == 1) {
