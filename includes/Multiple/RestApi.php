@@ -220,7 +220,14 @@ class RestApi
         //$postTypeObj = get_post_type_object($newPost->post_type);
         //$postTypeLabel = $postTypeObj->labels->singular_name;
 
-        Functions::flashAdminNotice(sprintf(__('A copy has been added on %s', 'rrze-multilang'), $blogName), 'updated');
+        Functions::flashAdminNotice(
+            sprintf(
+                /* translators: %s: The blog name. */
+                __('A copy has been added on %s.', 'rrze-multilang'),
+                $blogName
+            ),
+            'updated'
+        );
 
         $response[$blogId] = $blogId;
 
