@@ -278,9 +278,17 @@ class RestApi
             );
         }
 
-        $postTypeObj = get_post_type_object($newPost->post_type);
-        $postTypeLabel = $postTypeObj->labels->singular_name;
-        Functions::flashAdminNotice(sprintf(__('A translation of this %s has been added.', 'rrze-multilang'), $postTypeLabel), 'updated');
+        //$postTypeObj = get_post_type_object($newPost->post_type);
+        //$postTypeLabel = $postTypeObj->labels->singular_name;
+
+        Functions::flashAdminNotice(
+            sprintf(
+                /* translators: %s: The language of the added translation. */
+                __('A %s translation has been added.', 'rrze-multilang'),
+                $lang
+            ),
+            'updated'
+        );
 
         return rest_ensure_response($response);
     }
