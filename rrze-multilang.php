@@ -4,7 +4,7 @@
 Plugin Name:     RRZE Multilang
 Plugin URI:      https://github.com/RRZE-Webteam/rrze-multilang
 Description:     Multilanguage plugin for WordPress.
-Version:         0.1.2
+Version:         0.1.3
 Author:          RRZE-Webteam
 Author URI:      https://blogs.fau.de/webworking/
 License:         GNU General Public License v2
@@ -36,7 +36,7 @@ spl_autoload_register(function ($class) {
 });
 
 const RRZE_PHP_VERSION = '7.4';
-const RRZE_WP_VERSION = '5.5';
+const RRZE_WP_VERSION = '5.6';
 
 register_activation_hook(__FILE__, __NAMESPACE__ . '\activation');
 register_deactivation_hook(__FILE__, __NAMESPACE__ . '\deactivation');
@@ -60,9 +60,19 @@ function systemRequirements(): string
 
     $error = '';
     if (version_compare(PHP_VERSION, RRZE_PHP_VERSION, '<')) {
-        $error = sprintf(__('The server is running PHP version %s. The Plugin requires at least PHP version %s.', 'rrze-multilang'), PHP_VERSION, RRZE_PHP_VERSION);
+        $error = sprintf(
+            /* translators: 1: Server PHP version number, 2: Required PHP version number. */
+            __('The server is running PHP version %1$s. The Plugin requires at least PHP version %2$s.', 'rrze-multilang'),
+            PHP_VERSION,
+            RRZE_PHP_VERSION
+        );
     } elseif (version_compare($GLOBALS['wp_version'], RRZE_WP_VERSION, '<')) {
-        $error = sprintf(__('The server is running WordPress version %s. The Plugin requires at least WordPress version %s.', 'rrze-multilang'), $GLOBALS['wp_version'], RRZE_WP_VERSION);
+        $error = sprintf(
+            /* translators: 1: Server WordPress version number, 2: Required WordPress version number. */
+            __('The server is running WordPress version %1$s. The Plugin requires at least WordPress version %2$s.', 'rrze-multilang'),
+            $GLOBALS['wp_version'],
+            RRZE_WP_VERSION
+        );
     }
     return $error;
 }
@@ -118,7 +128,10 @@ function loaded()
                 $tag = is_plugin_active_for_network(plugin()->getBaseName()) ? 'network_admin_notices' : 'admin_notices';
                 add_action($tag, function () use ($pluginName, $error) {
                     printf(
-                        '<div class="notice notice-error"><p>' . __('Plugins: %s: %s', 'rrze-multilang') . '</p></div>',
+                        '<div class="notice notice-error"><p>' . 
+                        /* translators: 1: The plugin name, 2: The error string. */
+                        __('Plugins: %1$s: %2$s', 'rrze-multilang') . 
+                        '</p></div>',
                         esc_html($pluginName),
                         esc_html($error)
                     );
