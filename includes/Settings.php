@@ -145,9 +145,6 @@ class Settings
             );
         }
         echo '</fieldset>';
-        if ($this->options->multilang_mode == 1) {
-            echo '<p>', sprintf('<a href="%1$s">%2$s</a>', admin_url('tools.php?page=rrze-multilang'), __('Terms Translations', 'rrze-multilang')), '</p>';
-        }
     }
 
     public function copyPostMetaField()
@@ -280,6 +277,8 @@ class Settings
             echo '<br><br>';
         }
         echo '<p class="description">', __('Select the languages available for the website.', 'rrze-multilang'), '</p>';
+
+        echo '<p>', sprintf('<a href="%1$s">%2$s</a>', admin_url('tools.php?page=rrze-multilang'), __('Terms Translations', 'rrze-multilang')), '</p>';
     }
 
     public function Error404pageField()
