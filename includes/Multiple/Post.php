@@ -65,16 +65,21 @@ class Post
     {
         $posts = [];
         $isMain = $this->options->connection_type == 1 ? true : false;
-        $reference = (array) get_post_meta($postId, '_rrze_multilang_multiple_reference', true);
+        $reference = get_post_meta($postId, '_rrze_multilang_multiple_reference', true);
 
-        if (!$isMain && $reference) {
-            $ref = $reference;
-            $refBlogId = array_keys($ref);
-            $refBlogId = array_shift($refBlogId);
-            $refPostId = array_shift($ref[$refBlogId]);
-            switch_to_blog($refBlogId);
-            $reference = $reference + (array) get_post_meta($refPostId, '_rrze_multilang_multiple_reference', true);
-            restore_current_blog();
+        if (!$isMain && is_array($reference)) {
+            $refBlogId = array_keys($reference);
+            $refPostId = isset($reference[$refBlogId]) ? $reference[$refBlogId] : 0;
+            if ($refPostId) {
+                switch_to_blog($refBlogId);
+                $remoteRef = get_post_meta($refPostId, '_rrze_multilang_multiple_reference', true);
+                $reference = is_array($remoteRef) ? $reference + $remoteRef : $reference;
+                restore_current_blog();
+            }
+        }
+
+        if (empty($reference)) {
+            return $posts;
         }
 
         if (isset($reference[$this->currentBlogId])) {
