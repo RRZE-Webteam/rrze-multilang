@@ -53,7 +53,7 @@ class Switcher
                     'rel' => 'alternate',
                     'hreflang' => $link['lang'],
                     'href' => esc_url($link['href']),
-                    'title' => $title,
+                    'title' => esc_attr($title)
                 ];
 
                 if (get_locale() === $link['locale']) {
@@ -122,19 +122,21 @@ class Switcher
             $post = get_post();
             $postId = $post->ID;
             $postType = get_post_type();
-            $reference = (array) get_post_meta($postId, '_rrze_multilang_multiple_reference', true);
+            $reference = get_post_meta($postId, '_rrze_multilang_multiple_reference', true);
             $isSingular = true;
         }
 
         $links = [];
 
-        if (!$isMain && $reference) {
-            $refKeys = array_keys($reference);
-            $refBlogId = array_shift($refKeys);
-            $refPostId = $reference[$refBlogId];
-            switch_to_blog($refBlogId);
-            $reference = $reference + (array) get_post_meta($refPostId, '_rrze_multilang_multiple_reference', true);
-            restore_current_blog();
+        if (!$isMain && is_array($reference)) {
+            $refBlogId = array_keys($reference);
+            $refPostId = isset($reference[$refBlogId]) ? $reference[$refBlogId] : 0;
+            if ($refPostId) {
+                switch_to_blog($refBlogId);
+                $remoteRef = get_post_meta($refPostId, '_rrze_multilang_multiple_reference', true);
+                $reference = is_array($remoteRef) ? $reference + $remoteRef : $reference;
+                restore_current_blog();
+            }
         }
 
         if (isset($reference[$currentBlogId])) {
@@ -151,7 +153,7 @@ class Switcher
             }
             switch_to_blog($blogId);
             $refOptions = (object) Options::getOptions();
-            $error404Page = get_permalink($refOptions->error_404_page);
+            $error404Page = $refOptions->error_404_page ? get_permalink($refOptions->error_404_page) : 0;
             $refLocale = Locale::getDefaultLocale();
             $refStatus = get_post_status($refPostId);
             $refPermalink = get_permalink($refPostId);
@@ -172,10 +174,10 @@ class Switcher
             ];
 
             if ($isSingular && $refPostId) {
-                if ($postType && !in_array($postType, $refOptions->post_types)) {
+                if (!in_array($postType, $refOptions->post_types)) {
                     $link['href'] = $error404Page ? $error404Page : '';
                 } elseif ('publish' == $refStatus) {
-                    $link['href'] = $refPermalink;
+                    $link['href'] = $refPermalink ? $refPermalink : '';
                 }
             } else {
                 $link['href'] = $error404Page ? $error404Page : '';
