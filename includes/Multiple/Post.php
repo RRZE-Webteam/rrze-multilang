@@ -68,7 +68,7 @@ class Post
         $reference = get_post_meta($postId, '_rrze_multilang_multiple_reference', true);
 
         if (!$isMain && is_array($reference)) {
-            $refBlogId = array_keys($reference);
+            $refBlogId = array_key_first($reference);
             $refPostId = isset($reference[$refBlogId]) ? $reference[$refBlogId] : 0;
             if ($refPostId) {
                 switch_to_blog($refBlogId);
