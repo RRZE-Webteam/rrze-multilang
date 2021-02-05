@@ -324,8 +324,9 @@ class Settings
 
         // post_types
         if (
-            $this->options->multilang_mode == $input['multilang_mode']
-            && $this->options->connection_type != 0
+            $this->options->multilang_mode == 1
+            || ($this->options->multilang_mode == $input['multilang_mode']
+            && $this->options->connection_type != 0)
         ) {
             $postTypes = [];
             $allPostTypes = Functions::getPostTypes();
