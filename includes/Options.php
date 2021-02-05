@@ -90,8 +90,8 @@ class Options
     {
         $defaults = self::defaultSiteOptions();
         $options = (array) get_site_option(self::$siteOptionName);
-        $options = Functions::parseArgsRecursive($options, $defaults);
-        $options = Functions::arrayIntersectKeyRecursive($options, $defaults);
+        $options = wp_parse_args($options, $defaults);
+        $options = array_intersect_key($options, $defaults);
 
         return $options;
     }
