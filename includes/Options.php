@@ -26,7 +26,7 @@ class Options
     {
         $options = [
             'multilang_mode' => 0,
-            'connection_type' => 1,
+            'connection_type' => 0,
             'post_types' => [
                 'post',
                 'page'
@@ -76,8 +76,8 @@ class Options
     {
         $defaults = self::defaultOptions();
         $options = (array) get_option(self::$optionName);
-        $options = Functions::parseArgsRecursive($options, $defaults);
-        $options = Functions::arrayIntersectKeyRecursive($options, $defaults);
+        $options = wp_parse_args($options, $defaults);
+        $options = array_intersect_key($options, $defaults);
 
         return $options;
     }
