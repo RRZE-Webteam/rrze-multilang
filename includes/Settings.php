@@ -71,7 +71,7 @@ class Settings
 
         add_settings_section('rrze_multilang_general_section', false, '__return_false', $this->menuPage);
         add_settings_field('multilang_mode', __('Multilanguage Mode', 'rrze-multilang'), [$this, 'multilangModeField'], $this->menuPage, 'rrze_multilang_general_section');
-        
+
         if ($this->options->multilang_mode == 0) {
             $this->deleteMainConnection($this->currentBlogId);
         } elseif ($this->options->multilang_mode == 1) {
@@ -141,14 +141,14 @@ class Settings
     public function postTypesField()
     {
         echo '<fieldset>';
-        $postTypes = Functions::getPostTypes();
-        foreach ($postTypes as $name => $label) {
-            $checked = checked(in_array($name, $this->options->post_types), true, false);
+        $allPostTypes = Functions::getPostTypes();
+        foreach ($allPostTypes as $key => $label) {
+            $checked = checked(in_array($key, $this->options->post_types), true, false);
             echo '<legend class="screen-reader-text">' . $label . '</legend>';
             printf(
-                '<label><input type="checkbox" name="%1$s[post_types][%2$s]" id="rrze-multilang-post-types-%2$s" value="%2$s"%3$s>%4$s</label><br>',
+                '<label><input type="checkbox" name="%1$s[post_types][]" id="rrze-multilang-post-types-%2$s" value="%2$s"%3$s>%4$s</label><br>',
                 $this->optionName,
-                $name,
+                $key,
                 $checked,
                 $label
             );
@@ -206,10 +206,10 @@ class Settings
             echo '<p class="description">', $note, '</p>';
             return;
         }
-        
+
         foreach ($availableBlogs as $blogId => $meta) {
             $mainConnection = ($meta['connection_type'] == 1) ? ' &mdash; ' . __('Main Website', 'rrze-multilang') : '';
-            $checked = checked(in_array($blogId, $this->siteOptions->connections[$this->currentBlogId]), true, false);                       
+            $checked = checked(in_array($blogId, $this->siteOptions->connections[$this->currentBlogId]), true, false);
             if ($meta['connection_type'] == 1 || !isset($currentUserBlogs[$blogId]) || !isset($this->siteOptions->connections[$blogId])) {
                 if ($checked && isset($this->siteOptions->connections[$blogId])) {
                     printf(
@@ -323,14 +323,21 @@ class Settings
         $input['connection_type'] = in_array($connectionType, [0, 1, 2]) ? $connectionType : 0;
 
         // post_types
-        $postTypes = !empty($input['post_types']) ? (array) $input['post_types'] : [];
-        $allPostTypes = Functions::getPostTypes();
-        foreach ($postTypes as $key => $name) {
-            if (!isset($allPostTypes[$name])) {
-                unset($postTypes[$key]);
+        if (
+            $this->options->multilang_mode == $input['multilang_mode']
+            && $this->options->connection_type != 0
+        ) {
+            $postTypes = [];
+            $allPostTypes = Functions::getPostTypes();
+            foreach (array_keys($allPostTypes) as $key) {
+                if (in_array($key, $input['post_types'])) {
+                    $postTypes[] = $key;
+                }
             }
+            $input['post_types'] = $postTypes;
+        } else {
+            $input['post_types'] = $defaultOptions['post_types'];
         }
-        $input['post_types'] = array_values(array_unique($postTypes));
 
         $input['error_404_page'] = !empty($input['error_404_page']) ? absint($input['error_404_page']) : 0;
 
@@ -360,7 +367,7 @@ class Settings
                     $this->siteOptions->connections[$blogId] = [$this->currentBlogId];
                 }
             }
-            $this->siteOptions->connections[$this->currentBlogId] = $connections;           
+            $this->siteOptions->connections[$this->currentBlogId] = $connections;
             update_site_option($this->siteOptionName, (array) $this->siteOptions);
 
             // copy_post_meta
