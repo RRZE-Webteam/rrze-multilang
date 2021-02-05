@@ -10,8 +10,6 @@ class Settings
 
     protected $siteOptionName;
 
-    protected $defaultOptions;
-
     protected $options;
 
     protected $siteOptions;
@@ -27,7 +25,6 @@ class Settings
         $this->optionName = Options::getOptionName();
         $this->siteOptionName = Options::getSiteOptionName();
         $this->options = (object) Options::getOptions();
-        $this->defaultOptions = (object) Options::getDefaultOptions();
         $this->siteOptions = (object) Options::getSiteOptions();
 
         $this->currentBlogId = get_current_blog_id();
@@ -74,7 +71,7 @@ class Settings
 
         add_settings_section('rrze_multilang_general_section', false, '__return_false', $this->menuPage);
         add_settings_field('multilang_mode', __('Multilanguage Mode', 'rrze-multilang'), [$this, 'multilangModeField'], $this->menuPage, 'rrze_multilang_general_section');
-
+        
         if ($this->options->multilang_mode == 0) {
             $this->deleteMainConnection($this->currentBlogId);
         } elseif ($this->options->multilang_mode == 1) {
@@ -84,12 +81,14 @@ class Settings
         } elseif ($this->options->multilang_mode == 2) {
             $this->addMainConnection($this->currentBlogId);
             add_settings_field('main_connection', __('Connection Type', 'rrze-multilang'), [$this, 'connectionTypeField'], $this->menuPage, 'rrze_multilang_general_section');
-            add_settings_field('post_types', __('Post Types', 'rrze-multilang'), [$this, 'postTypesField'], $this->menuPage, 'rrze_multilang_general_section');
+            if (in_array($this->options->connection_type, [1, 2])) {
+                add_settings_field('post_types', __('Post Types', 'rrze-multilang'), [$this, 'postTypesField'], $this->menuPage, 'rrze_multilang_general_section');
+                add_settings_field('error_404_page', __('Error 404 Page', 'rrze-multilang'), [$this, 'Error404pageField'], $this->menuPage, 'rrze_multilang_general_section');
+            }
             if ($this->options->connection_type == 1) {
                 add_settings_field('copy_post_meta', __('Copy', 'rrze-multilang'), [$this, 'copyPostMetaField'], $this->menuPage, 'rrze_multilang_general_section');
                 add_settings_field('connections', __('Available Websites', 'rrze-multilang'), [$this, 'connectionsField'], $this->menuPage, 'rrze_multilang_general_section');
             }
-            add_settings_field('error_404_page', __('Error 404 Page', 'rrze-multilang'), [$this, 'Error404pageField'], $this->menuPage, 'rrze_multilang_general_section');
         }
     }
 
@@ -110,13 +109,15 @@ class Settings
         echo '<fieldset>';
         echo '<legend class="screen-reader-text">', __('Connection Type', 'rrze-multilang'), '</legend>';
         echo '<select class="rrze-multilang-links" name="', $this->optionName, '[connection_type]">';
+        echo '<option value="0"', selected($this->options->connection_type, 0), '>',  __('&mdash; Select &mdash;', 'rrze-multilang'), '</option>';
         echo '<option value="1"', selected($this->options->connection_type, 1), '>',  __('Main Website', 'rrze-multilang'), '</option>';
-        echo '<option value="0"', selected($this->options->connection_type, 0), '>',  __('Secondary Website', 'rrze-multilang'), '</option>';
+        echo '<option value="2"', selected($this->options->connection_type, 2), '>',  __('Secondary Website', 'rrze-multilang'), '</option>';
         echo '</select>';
         echo '</fieldset>';
 
-        if ($this->options->connection_type == 0) {
-            $blogId = array_shift($this->siteOptions->connections[$this->currentBlogId]);
+        if ($this->options->connection_type == 2) {
+            $connections = $this->siteOptions->connections[$this->currentBlogId];
+            $blogId = array_shift($connections);
             if ($blogId) {
                 echo '<p>';
                 echo __('Connected to the following main website:', 'rrze-multilang'), '<br>';
@@ -203,10 +204,10 @@ class Settings
             echo '<p class="description">', $note, '</p>';
             return;
         }
-
+        
         foreach ($availableBlogs as $blogId => $meta) {
             $mainConnection = ($meta['connection_type'] == 1) ? ' &mdash; ' . __('Main Website', 'rrze-multilang') : '';
-            $checked = checked(true, in_array($blogId, $this->siteOptions->connections[$this->currentBlogId]), false);
+            $checked = checked(in_array($blogId, $this->siteOptions->connections[$this->currentBlogId]), true, false);                       
             if ($meta['connection_type'] == 1 || !isset($currentUserBlogs[$blogId]) || !isset($this->siteOptions->connections[$blogId])) {
                 if ($checked && isset($this->siteOptions->connections[$blogId])) {
                     printf(
@@ -307,18 +308,19 @@ class Settings
     public function optionsValidate($input)
     {
         $defaultOptions = Options::getDefaultOptions();
-        $input = Functions::parseArgsRecursive($input, $defaultOptions);
 
+        // multilang_mode
         $multilangMode = !empty($input['multilang_mode']) ? absint($input['multilang_mode']) : 0;
         $input['multilang_mode'] = in_array($multilangMode, [0, 1, 2]) ? $multilangMode : 0;
-
         if ($input['multilang_mode'] == 0) {
             return $defaultOptions;
         }
 
+        // connection_type
         $connectionType = !empty($input['connection_type']) ? absint($input['connection_type']) : 0;
-        $input['connection_type'] = in_array($connectionType, [0, 1]) ? $connectionType : 0;
+        $input['connection_type'] = in_array($connectionType, [0, 1, 2]) ? $connectionType : 0;
 
+        // post_types
         $postTypes = !empty($input['post_types']) ? (array) $input['post_types'] : [];
         $allPostTypes = Functions::getPostTypes();
         foreach ($postTypes as $key => $name) {
@@ -326,17 +328,14 @@ class Settings
                 unset($postTypes[$key]);
             }
         }
-
         $input['post_types'] = array_values(array_unique($postTypes));
 
-        $copyPostMeta = !empty($input['copy_post_meta']) ? (array) $input['copy_post_meta'] : [];
-        foreach ($this->defaultOptions->copy_post_meta as $key => $value) {
-            $input['copy_post_meta'][$key] = !empty($copyPostMeta[$key]) ? 1 : 0;
-        }
+        $input['error_404_page'] = !empty($input['error_404_page']) ? absint($input['error_404_page']) : 0;
 
         if ($input['multilang_mode'] == 2 && $input['connection_type'] == 1) {
             $this->deleteSecondaryConnections($this->currentBlogId);
 
+            // connections
             $inputConnections = [];
             if (!empty($input['connections'])) {
                 $inputConnections = (array) $input['connections'];
@@ -353,16 +352,26 @@ class Settings
                 restore_current_blog();
                 if (
                     isset($this->siteOptions->connections[$blogId])
-                    && $options->connection_type == 0
+                    && $options->connection_type == 2
                 ) {
                     $connections[] = $blogId;
                     $this->siteOptions->connections[$blogId] = [$this->currentBlogId];
                 }
             }
-            $this->siteOptions->connections[$this->currentBlogId] = $connections;
+            $this->siteOptions->connections[$this->currentBlogId] = $connections;           
             update_site_option($this->siteOptionName, (array) $this->siteOptions);
 
-            $input['error_404_page'] = !empty($input['error_404_page']) ? absint($input['error_404_page']) : 0;
+            // copy_post_meta
+            $copyPostMeta = [];
+            if ($this->options->connection_type != 1) {
+                $input['copy_post_meta'] = $defaultOptions['copy_post_meta'];
+            }
+            foreach (array_keys($defaultOptions['copy_post_meta']) as $key) {
+                $copyPostMeta[$key] = !empty($input['copy_post_meta'][$key]) ? 1 : 0;
+            }
+            $input['copy_post_meta'] = $copyPostMeta;
+        } else {
+            $input['copy_post_meta'] = $defaultOptions['copy_post_meta'];
         }
 
         return $input;
