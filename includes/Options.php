@@ -116,7 +116,7 @@ class Options
 
     public static function deleteOption(): bool
     {
-        return delete_option(self::$siteOptionName);
+        return delete_option(self::$optionName);
     }
 
     public static function deleteCurrentBlogConnections()
