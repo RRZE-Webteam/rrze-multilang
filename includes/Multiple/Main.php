@@ -15,7 +15,9 @@ class Main
     {
         $this->options = (object) Options::getOptions();
 
-        if ($this->options->connection_type == 1) {
+        if ($this->options->connection_type == 0) {
+            return;
+        } elseif ($this->options->connection_type == 1) {
             new Metabox;
         }
         
