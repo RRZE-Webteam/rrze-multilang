@@ -109,7 +109,9 @@ class Settings
         echo '<fieldset>';
         echo '<legend class="screen-reader-text">', __('Connection Type', 'rrze-multilang'), '</legend>';
         echo '<select class="rrze-multilang-links" name="', $this->optionName, '[connection_type]">';
-        echo '<option value="0"', selected($this->options->connection_type, 0), '>',  __('&mdash; Select &mdash;', 'rrze-multilang'), '</option>';
+        if ($this->options->connection_type == 0) {
+            echo '<option value="0"', selected($this->options->connection_type, 0), '>',  __('&mdash; Select &mdash;', 'rrze-multilang'), '</option>';
+        }
         echo '<option value="1"', selected($this->options->connection_type, 1), '>',  __('Main Website', 'rrze-multilang'), '</option>';
         echo '<option value="2"', selected($this->options->connection_type, 2), '>',  __('Secondary Website', 'rrze-multilang'), '</option>';
         echo '</select>';
