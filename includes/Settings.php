@@ -83,7 +83,7 @@ class Settings
             add_settings_field('main_connection', __('Connection Type', 'rrze-multilang'), [$this, 'connectionTypeField'], $this->menuPage, 'rrze_multilang_general_section');
             if (in_array($this->options->connection_type, [1, 2])) {
                 add_settings_field('post_types', __('Post Types', 'rrze-multilang'), [$this, 'postTypesField'], $this->menuPage, 'rrze_multilang_general_section');
-                add_settings_field('error_404_page', __('Error 404 Page', 'rrze-multilang'), [$this, 'Error404pageField'], $this->menuPage, 'rrze_multilang_general_section');
+                add_settings_field('default_page', __('Default Page', 'rrze-multilang'), [$this, 'defaultPageField'], $this->menuPage, 'rrze_multilang_general_section');
             }
             if ($this->options->connection_type == 1) {
                 add_settings_field('copy_post_meta', __('Copy', 'rrze-multilang'), [$this, 'copyPostMetaField'], $this->menuPage, 'rrze_multilang_general_section');
@@ -110,10 +110,10 @@ class Settings
         echo '<legend class="screen-reader-text">', __('Connection Type', 'rrze-multilang'), '</legend>';
         echo '<select class="rrze-multilang-links" name="', $this->optionName, '[connection_type]">';
         if ($this->options->connection_type == 0) {
-            echo '<option value="0"', selected($this->options->connection_type, 0), '>',  __('&mdash; Select &mdash;', 'rrze-multilang'), '</option>';
+            echo '<option value="0"', selected($this->options->connection_type, 0, false), '>',  __('&mdash; Select &mdash;', 'rrze-multilang'), '</option>';
         }
-        echo '<option value="1"', selected($this->options->connection_type, 1), '>',  __('Main Website', 'rrze-multilang'), '</option>';
-        echo '<option value="2"', selected($this->options->connection_type, 2), '>',  __('Secondary Website', 'rrze-multilang'), '</option>';
+        echo '<option value="1"', selected($this->options->connection_type, 1, false), '>',  __('Main Website', 'rrze-multilang'), '</option>';
+        echo '<option value="2"', selected($this->options->connection_type, 2, false), '>',  __('Secondary Website', 'rrze-multilang'), '</option>';
         echo '</select>';
         echo '</fieldset>';
 
@@ -290,21 +290,21 @@ class Settings
         echo '<p>', sprintf('<a href="%1$s">%2$s</a>', admin_url('tools.php?page=rrze-multilang'), __('Terms Translations', 'rrze-multilang')), '</p>';
     }
 
-    public function Error404pageField()
+    public function defaultPageField()
     {
         $args = [
             'show_option_none' => __('&mdash; None &mdash;', 'rrze-multilang'),
             'option_none_value' => 0,
-            'selected' => $this->options->error_404_page,
+            'selected' => $this->options->default_page,
             'depth' => 0,
             'hierarchical' => true,
             'post_type' => 'page',
             'post_status' => 'publish',
             'sort_column' => 'name',
-            'name' => $this->optionName . '[error_404_page]'
+            'name' => $this->optionName . '[default_page]'
         ];
         wp_dropdown_pages($args);
-        echo '<p class="description">', __('The redirect page to use if the translation does not exist.', 'rrze-multilang'), '</p>';
+        echo '<p class="description">', __('The page to redirect to if the translation does not exist.', 'rrze-multilang'), '</p>';
     }
 
     public function optionsValidate($input)
@@ -340,7 +340,7 @@ class Settings
             $input['post_types'] = $defaultOptions['post_types'];
         }
 
-        $input['error_404_page'] = !empty($input['error_404_page']) ? absint($input['error_404_page']) : 0;
+        $input['default_page'] = !empty($input['default_page']) ? absint($input['default_page']) : 0;
 
         if ($input['multilang_mode'] == 2 && $input['connection_type'] == 1) {
             $this->deleteSecondaryConnections($this->currentBlogId);
