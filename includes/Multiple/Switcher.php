@@ -13,7 +13,7 @@ class Switcher
     public static function languageSwitcher($args = '')
     {
         $args = wp_parse_args($args, [
-            'echo' => false           
+            'echo' => false
         ]);
 
         $links = self::getLinks($args);
