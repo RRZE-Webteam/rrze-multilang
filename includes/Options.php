@@ -40,7 +40,7 @@ class Options
                 'categories' => 0,
                 'taxonomies' => 0
             ],
-            'error_404_page' => 0
+            'default_page' => 0
         ];
 
         return $options;
