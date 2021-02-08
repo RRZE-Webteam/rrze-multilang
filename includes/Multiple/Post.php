@@ -82,11 +82,10 @@ class Post
             return $posts;
         }
 
-        if (isset($reference[$this->currentBlogId])) {
-            unset($reference[$this->currentBlogId]);
-        }
-
         foreach ($reference as $blogId => $refPostId) {
+            if ($this->currentBlogId == $blogId) {
+                continue;
+            }
             switch_to_blog($blogId);
             $locale = Locale::getDefaultLocale();
             $title = get_the_title($refPostId);
