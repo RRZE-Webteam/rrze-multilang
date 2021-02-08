@@ -101,16 +101,17 @@ class Post
 
     public static function localizablePostTypes()
     {
+        $options = (object) Options::getOptions();
         $localizable = apply_filters(
             'rrze_multilang_localizable_post_types',
-            ['post', 'page']
+            $options->post_types
         );
-
+    
         $localizable = array_diff(
             $localizable,
             ['attachment', 'revision', 'nav_menu_item']
         );
-
+    
         return $localizable;
     }
 
