@@ -153,7 +153,7 @@ class Switcher
             }
             switch_to_blog($blogId);
             $refOptions = (object) Options::getOptions();
-            $error404Page = $refOptions->error_404_page ? get_permalink($refOptions->error_404_page) : 0;
+            $defaultPage = $refOptions->default_page ? get_permalink($refOptions->default_page) : 0;
             $refLocale = Locale::getDefaultLocale();
             $refStatus = get_post_status($refPostId);
             $refPermalink = get_permalink($refPostId);
@@ -175,12 +175,12 @@ class Switcher
 
             if ($isSingular && $refPostId) {
                 if (!in_array($postType, $refOptions->post_types)) {
-                    $link['href'] = $error404Page ? $error404Page : '';
+                    $link['href'] = $defaultPage ? $defaultPage : '';
                 } elseif ('publish' == $refStatus) {
                     $link['href'] = $refPermalink ? $refPermalink : '';
                 }
             } else {
-                $link['href'] = $error404Page ? $error404Page : '';
+                $link['href'] = $defaultPage ? $defaultPage : '';
             }
 
             $links[$refLocale] = $link;
