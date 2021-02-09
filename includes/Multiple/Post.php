@@ -22,34 +22,43 @@ class Post
 
         $this->currentBlogId = get_current_blog_id();
 
-        foreach ($this->options->post_types as $postType) {
-            add_filter('manage_edit-' . $postType . '_columns', [$this, 'customColumns']);
-            add_action('manage_' . $postType . '_posts_custom_column', [$this, 'postsCustomColumn'], 10, 2);
-        }
+        add_filter('manage_pages_columns', [$this, 'pagesColumns'], 10, 1);
+        add_filter('manage_posts_columns', [$this, 'postsColumns'], 10, 2);
+        add_action('manage_pages_custom_column', [$this, 'managePostsCustomColumn'], 10, 2);
+        add_action('manage_posts_custom_column', [$this, 'managePostsCustomColumn'], 10, 2);
     }
 
-    public function customColumns($columns)
+    public function pagesColumns($columns)
     {
-        $position = array_search('comments', array_keys($columns));
-        if ($position === false) {
-            $position = array_search('date', array_keys($columns));
-            if ($position === false) {
-                $position = array_search('last-modified', array_keys($columns));
-            }
+        return $this->postsColumns($columns, 'page');
+    }
+
+    public function postsColumns($columns, $postType)
+    {
+        if (!self::isLocalizablePostType($postType)) {
+            return $columns;
         }
 
-        if ($position !== false) {
-            $columns = array_slice($columns, 0, $position, true) + array('language' => '') + array_slice($columns, $position, count($columns) - $position, true);
+        if (!isset($columns['locale'])) {
+            $columns = array_merge(
+                array_slice($columns, 0, 3),
+                ['locale' => __('Translation', 'rrze-multilang')],
+                array_slice($columns, 3)
+            );
         }
-
-        $columns['language'] = __('Language', 'rrze-multilang');
 
         return $columns;
     }
 
-    public function postsCustomColumn($column, $postId)
+    public function managePostsCustomColumn($column, $postId)
     {
-        if ($column !== 'language') {
+        if ($column !== 'locale') {
+            return;
+        }
+
+        $postType = get_post_type($postId);
+
+        if (!self::isLocalizablePostType($postType)) {
             return;
         }
 
@@ -98,9 +107,12 @@ class Post
                 $nativeName = Locale::getShortName($nativeName);
             }
 
-            $lang = sprintf(' &mdash; <span class="translation">%s</span></a>', $nativeName);
-
-            $posts[] = sprintf('<a href="%1$s" target="__blank">%2$s%3$s', $permalink, $title, $lang);
+            $posts[] = sprintf(
+                '<a href="%1$s" target="__blank">%2$s &mdash; %3$s <span class="dashicons dashicons-external"></span></a>',
+                $permalink,
+                $title,
+                $nativeName
+            );
         }
 
         return $posts;
@@ -261,5 +273,26 @@ class Post
                 }
             }
         }
+    }
+
+    public static function localizablePostTypes()
+    {
+        $options = (object) Options::getOptions();
+        $localizable = apply_filters(
+            'rrze_multilang_localizable_post_types',
+            $options->post_types
+        );
+
+        $localizable = array_diff(
+            $localizable,
+            ['attachment', 'revision', 'nav_menu_item']
+        );
+
+        return $localizable;
+    }
+
+    public static function isLocalizablePostType($postType)
+    {
+        return !empty($postType) && in_array($postType, self::localizablePostTypes());
     }
 }
