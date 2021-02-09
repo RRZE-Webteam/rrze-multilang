@@ -4,23 +4,14 @@ namespace RRZE\Multilang\Multiple;
 
 defined('ABSPATH') || exit;
 
-use RRZE\Multilang\Options;
-use RRZE\Multilang\Functions;
 use RRZE\Multilang\Locale;
 
 class Metabox
 {
-    protected $options;
-
-    protected $siteOptions;
-
     protected $currentBlogId;
 
     public function __construct()
     {
-        $this->options = (object) Options::getOptions();
-        $this->siteOptions = (object) Options::getSiteOptions();
-
         $this->currentBlogId = get_current_blog_id();
 
         add_action('add_meta_boxes', [$this, 'addL10nMetabox'], 10, 2);
@@ -28,7 +19,7 @@ class Metabox
 
     public function addL10nMetabox($postType, $post)
     {
-        if (!in_array($postType, $this->options->post_types)) {
+        if (!Post::isLocalizablePostType($postType)) {
             return;
         }
 
@@ -51,38 +42,17 @@ class Metabox
         $postType = get_post_type($post);
 
         $reference = (array) get_post_meta($postId, '_rrze_multilang_multiple_reference', true);
-        $remoteSites = [];
-        foreach ($this->siteOptions->connections[$this->currentBlogId] as $blogId) {
-            if (!Functions::isBlogPublic($blogId)) {
-                continue;
-            }
 
-            switch_to_blog($blogId);
-            $remoteOptions = (object) Options::getOptions();
-            if (
-                in_array($postType, $remoteOptions->post_types)
-                && isset($this->siteOptions->connections[$blogId])
-                && in_array($this->currentBlogId, $this->siteOptions->connections[$blogId])
-            ) {
-                $remoteSites[$blogId] = [
-                    'blog_id' => $blogId,
-                    'name' => get_bloginfo('name'),
-                    'url' => get_bloginfo('url'),
-                    'language' => Locale::getDefaultLocale(),
-                    'posts' => Post::getPosts($postType, ['publish'])
-                ];
-            }
-            restore_current_blog();
-        }
+        $secondarySites = Sites::getSecondary($postType);
 
-        if (empty($remoteSites)) {
+        if (empty($secondarySites)) {
             echo '<p>', __('There are no websites available for translations.', 'rrze-multilang'), '</p>';
             return;
         }
 
         // Links
         echo '<div id="rrze-multilang-update-links-actions" class="descriptions">';
-        foreach ($remoteSites as $blog) {
+        foreach ($secondarySites as $blog) {
             printf(
                 '<p><strong>%1$s</strong> &mdash; %2$s</p>',
                 esc_html($blog['name']),
@@ -90,8 +60,8 @@ class Metabox
             );
 
             printf(
-                '<select class="rrze-multilang-links" name="rrze-multilang-links-to-update-%s">',
-                $blogId
+                '<select class="rrze-multilang-links" name="rrze-multilang-links-to-update-%d">',
+                $blog['blog_id']
             );
 
             printf(
@@ -150,7 +120,7 @@ class Metabox
             '<option value="0">%s</option>',
             __('&mdash; Select &mdash;', 'rrze-multilang')
         );
-        foreach ($remoteSites as $blog) {
+        foreach ($secondarySites as $blog) {
             printf(
                 '<option value="%1$s">%2$s &mdash; %3$s</option>',
                 esc_attr($blog['blog_id']),
