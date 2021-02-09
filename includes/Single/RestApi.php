@@ -88,7 +88,7 @@ class RestApi
         if (!$post) {
             return new \WP_Error(
                 'rrze_multilang_post_not_found',
-                __("The requested post was not found.", 'rrze-multilang'),
+                __('The requested post was not found.', 'rrze-multilang'),
                 ['status' => 404]
             );
         }
