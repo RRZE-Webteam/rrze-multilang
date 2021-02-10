@@ -23,7 +23,10 @@ class Main
         new RestApi;
         new Tools;
 
+        /* Enqueue Admin Scripts */
         add_action('admin_enqueue_scripts', [$this, 'adminEnqueueScripts']);
+
+        /* Enqueue Block Editor Assets */
         add_action('enqueue_block_editor_assets', [$this, 'enqueueBlockEditorAssets'], 10, 0);
 
         add_action('init', [$this, 'multilangInit'], 10, 0);
@@ -237,11 +240,11 @@ class Main
 
     public function enqueueBlockEditorAssets()
     {
-        $assetFile = include(plugin()->getPath('assets/block-editor/build') . 'single-index.asset.php');
+        $assetFile = include(plugin()->getPath('assets/block-editor/build/single') . 'index.asset.php');
 
         wp_enqueue_script(
             'rrze-multilang-block-editor-single',
-            plugins_url('assets/block-editor/build/single-index.js', plugin()->getBasename()),
+            plugins_url('assets/block-editor/build/single/index.js', plugin()->getBasename()),
             $assetFile['dependencies'],
             plugin()->getVersion()
         );
