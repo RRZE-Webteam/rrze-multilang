@@ -38,60 +38,36 @@ class Metabox
 
     public function l10nMetabox($post)
     {
-        $postId = $post->ID;
-        $postType = get_post_type($post);
-
-        $reference = (array) get_post_meta($postId, '_rrze_multilang_multiple_reference', true);
-
-        $secondarySites = Sites::getSecondary($postType);
+        $secondarySites = Sites::getSecondaryToLink($post);
 
         if (empty($secondarySites)) {
             echo '<p>', __('There are no websites available for translations.', 'rrze-multilang'), '</p>';
             return;
         }
 
-        // Links
+        /* Reffered Posts */
         echo '<div id="rrze-multilang-update-links-actions" class="descriptions">';
-        foreach ($secondarySites as $blog) {
+        foreach ($secondarySites as $blogId => $blog) {
             printf(
                 '<p><strong>%1$s</strong> &mdash; %2$s</p>',
-                esc_html($blog['name']),
-                esc_html(Locale::getLanguageNativeName($blog['language']))
+                $blog['name'],
+                $blog['language']
             );
 
             printf(
                 '<select class="rrze-multilang-links" name="rrze-multilang-links-to-update-%d">',
-                $blog['blog_id']
+                $blogId
             );
 
-            printf(
-                '<option value="0::0">%s</option>',
-                __('&mdash; Select &mdash;', 'rrze-multilang')
-            );
-
-            foreach ($blog['posts'] as $refPost) {
-                $reffered = false;
-                if (
-                    isset($reference[$blog['blog_id']])
-                    && $reference[$blog['blog_id']] == $refPost->ID
-                ) {
-                    switch_to_blog($blog['blog_id']);
-                    $remoteRef = (array) get_post_meta($refPost->ID, '_rrze_multilang_multiple_reference', true);
-                    restore_current_blog();
-                    if (
-                        isset($remoteRef[$this->currentBlogId])
-                        && $remoteRef[$this->currentBlogId] == $postId
-                    ) {
-                        $reffered = true;
-                    }
-                }
-                $selected = selected($reffered, true, false);
+            foreach ($blog['options'] as $option) {
+                $selected = $option['value'] == $blog['selected'] ? ' selected' : '';
+                $disabled = $option['disabled'] ? ' disabled' : '';
                 printf(
-                    '<option value="%1$d::%2$d" %3$s>%4$s</option>',
-                    $blog['blog_id'],
-                    $refPost->ID,
+                    '<option value="%1$s"%2$s%3$s>%4$s</option>',
+                    $option['value'],
                     $selected,
-                    esc_html($refPost->post_title)
+                    $disabled,
+                    $option['label']
                 );
             }
 
@@ -109,6 +85,12 @@ class Metabox
         echo '</div>';
 
         // Copy
+        $secondarySites = Sites::getSecondaryToCopy($post);
+
+        if (empty($secondarySites)) {
+            return;
+        }
+
         echo '<div id="rrze-multilang-add-copy-actions" class="descriptions">';
         printf(
             '<p><strong>%s</strong></p>',
@@ -116,16 +98,15 @@ class Metabox
         );
         echo '<select id="rrze-multilang-copy-to-add">';
 
-        printf(
-            '<option value="0">%s</option>',
-            __('&mdash; Select &mdash;', 'rrze-multilang')
-        );
-        foreach ($secondarySites as $blog) {
+        $firstKey = array_key_first($secondarySites);
+        $options = $secondarySites[$firstKey]['options'];
+        foreach ($options as $option) {
+            $disabled = $option['disabled'] ? ' disabled' : '';
             printf(
-                '<option value="%1$s">%2$s &mdash; %3$s</option>',
-                esc_attr($blog['blog_id']),
-                esc_html($blog['name']),
-                esc_html(Locale::getLanguageNativeName($blog['language']))
+                '<option value="%1$s"%2$s>%3$s</option>',
+                $option['value'],
+                $disabled,
+                esc_html($option['label']),
             );
         }
 
