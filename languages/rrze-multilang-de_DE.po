@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RRZE Multilang 0.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/rrze-multilang\n"
-"POT-Creation-Date: 2021-02-08T16:30:20+00:00\n"
-"PO-Revision-Date: 2021-02-08 17:32+0100\n"
+"POT-Creation-Date: 2021-02-10T16:48:18+00:00\n"
+"PO-Revision-Date: 2021-02-10 17:48+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -48,34 +48,48 @@ msgstr "Tagline"
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: includes/Multiple/Metabox.php:37 includes/Multiple/Post.php:45
-#: includes/Single/Metabox.php:28 includes/Single/Metabox.php:62
-#: includes/Single/Post.php:726 assets/block-editor/build/single-index.js:1
-#: assets/block-editor/src/single-render.js:26
-#: assets/block-editor/src/single-render.js:160
+#. translators: accessibility text
+#: includes/Multiple/Main.php:81 includes/Single/Main.php:179
+#: includes/Single/Metabox.php:91
+msgid "Opens in a new window."
+msgstr "Wird in einem neuen Fenster geöffnet."
+
+#: includes/Multiple/Main.php:82 includes/Single/Main.php:180
+msgid "The changes you made will be lost if you navigate away from this page."
+msgstr ""
+"Die von Ihnen vorgenommenen Änderungen gehen verloren, wenn Sie von dieser "
+"Seite weg navigieren."
+
+#: includes/Multiple/Metabox.php:28 includes/Single/Metabox.php:28
+#: includes/Single/Metabox.php:62
+#: assets/block-editor/src/multiple/render.js:139
+#: assets/block-editor/src/single/render.js:26
+#: assets/block-editor/src/single/render.js:160
 msgid "Language"
 msgstr "Sprache"
 
-#: includes/Multiple/Metabox.php:79
+#: includes/Multiple/Metabox.php:44
+#: assets/block-editor/src/multiple/render.js:48
 msgid "There are no websites available for translations."
 msgstr "Für Übersetzungen stehen keine Websites zur Verfügung."
 
-#: includes/Multiple/Metabox.php:99 includes/Multiple/Metabox.php:151
-#: includes/Settings.php:113
-msgid "&mdash; Select &mdash;"
-msgstr "&mdash; Auswählen &mdash;"
-
-#: includes/Multiple/Metabox.php:134
+#: includes/Multiple/Metabox.php:80
 msgid "Update Links"
 msgstr "Links aktualisieren"
 
-#: includes/Multiple/Metabox.php:145
+#: includes/Multiple/Metabox.php:97
+#: assets/block-editor/src/multiple/render.js:64
 msgid "Copy To:"
 msgstr "Kopieren nach:"
 
-#: includes/Multiple/Metabox.php:167
+#: includes/Multiple/Metabox.php:116
 msgid "Add a Copy"
 msgstr "Kopie erstellen"
+
+#: includes/Multiple/Post.php:45 includes/Single/Post.php:705
+#: includes/Single/TermsListTable.php:20
+msgid "Translation"
+msgstr "Übersetzung"
 
 #: includes/Multiple/RestApi.php:46
 msgid "You are not allowed to link posts."
@@ -109,6 +123,10 @@ msgstr "Fehler beim Kopieren eines Posts."
 #: includes/Multiple/RestApi.php:226
 msgid "A copy has been added on %s."
 msgstr "Auf %s wurde eine Kopie hinzugefügt."
+
+#: includes/Multiple/Sites.php:30 includes/Multiple/Sites.php:84
+msgid "Select"
+msgstr "Auswählen"
 
 #: includes/Multiple/Switcher.php:24 includes/Multiple/SwitcherWidget.php:19
 #: includes/Single/Switcher.php:22 includes/Single/SwitcherWidget.php:19
@@ -193,6 +211,10 @@ msgstr "Einzelne Website"
 msgid "Multiple Websites"
 msgstr "Mehrere Websites"
 
+#: includes/Settings.php:113
+msgid "&mdash; Select &mdash;"
+msgstr "&mdash; Auswählen &mdash;"
+
 #: includes/Settings.php:115 includes/Settings.php:211
 msgid "Main Website"
 msgstr "Hauptwebsite"
@@ -248,19 +270,7 @@ msgstr ""
 "Die Seite, auf die umgeleitet werden soll, wenn die Übersetzung nicht "
 "vorhanden ist."
 
-#. translators: accessibility text
-#: includes/Single/Main.php:176 includes/Single/Metabox.php:91
-msgid "Opens in a new window."
-msgstr "Wird in einem neuen Fenster geöffnet."
-
-#: includes/Single/Main.php:177
-msgid "The changes you made will be lost if you navigate away from this page."
-msgstr ""
-"Die von Ihnen vorgenommenen Änderungen gehen verloren, wenn Sie von dieser "
-"Seite weg navigieren."
-
-#: includes/Single/Metabox.php:76 assets/block-editor/build/single-index.js:1
-#: assets/block-editor/src/single-render.js:71
+#: includes/Single/Metabox.php:76 assets/block-editor/src/single/render.js:71
 msgid "Translations"
 msgstr "Übersetzungen"
 
@@ -273,17 +283,17 @@ msgstr "Übersetzung hinzufügen"
 msgid "Displayed on pages in"
 msgstr "Wird auf Seiten angezeigt"
 
-#: includes/Single/Post.php:785
+#: includes/Single/Post.php:767
 msgid "Show all locales"
 msgstr "Alle Sprachen anzeigen"
 
 #. translators: %s: The translated post language.
-#: includes/Single/Post.php:827
+#: includes/Single/Post.php:809
 msgid "Edit %s translation"
 msgstr "%s-Übersetzung bearbeiten"
 
 #. translators: %s: The translated post language.
-#: includes/Single/Post.php:831
+#: includes/Single/Post.php:813
 msgid "Translate into %s"
 msgstr "Auf %s übersetzen"
 
@@ -307,10 +317,6 @@ msgstr "Eine %s-Übersetzung wurde hinzugefügt."
 #: includes/Single/TermsListTable.php:19
 msgid "Original"
 msgstr "Original"
-
-#: includes/Single/TermsListTable.php:20
-msgid "Translation"
-msgstr "Übersetzung"
 
 #: includes/Single/TermsListTable.php:21
 msgid "Context"
@@ -365,26 +371,40 @@ msgstr ""
 msgid "Plugins: %1$s: %2$s"
 msgstr "Plugins: %1$s: %2$s"
 
-#: assets/block-editor/build/single-index.js:1
-#: assets/block-editor/src/single-render.js:64
-msgid "None"
-msgstr "Keine"
-
-#: assets/block-editor/build/single-index.js:1
-#: assets/block-editor/src/single-render.js:104
+#: assets/block-editor/src/multiple/render.js:105
+#: assets/block-editor/src/single/render.js:104
 msgid "Translation created."
 msgstr "Übersetzung erstellt."
 
-#: assets/block-editor/build/single-index.js:1
-#: assets/block-editor/src/single-render.js:112
+#: assets/block-editor/src/multiple/render.js:113
+#: assets/block-editor/src/single/render.js:112
 msgid "Edit Post"
 msgstr "Post bearbeiten"
 
+#: assets/block-editor/src/multiple/render.js:130
+msgid "Add Copy"
+msgstr "Kopie erstellen"
+
+#: assets/block-editor/src/single/render.js:64
+msgid "None"
+msgstr "Keine"
+
 #. translators: %s: Language name.
-#: assets/block-editor/build/single-index.js:3
-#: assets/block-editor/src/single-render.js:136
+#: assets/block-editor/src/single/render.js:136
 msgid "Add %s"
 msgstr "%s hinzufügen"
+
+#, fuzzy
+#~| msgid "There are no websites available for translations."
+#~ msgid ""
+#~ "There are no websites available for There are no websites available for "
+#~ "translations."
+#~ msgstr "Für Übersetzungen stehen keine Websites zur Verfügung."
+
+#, fuzzy
+#~| msgid "There are no websites available for translations."
+#~ msgid "There are no websites available for secondarySitesToCopy."
+#~ msgstr "Für Übersetzungen stehen keine Websites zur Verfügung."
 
 #~ msgid "Error 404 Page"
 #~ msgstr "Fehler-404-Seite"
