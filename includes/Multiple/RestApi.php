@@ -35,8 +35,6 @@ class RestApi
                 'callback' => [$this, 'restLinkPost'],
                 'permission_callback' => function (\WP_REST_Request $request) {
                     $postId = $request->get_param('id');
-                    $remoteBlogId = $request->get_param('blogid');
-                    $remotePostId = $request->get_param('postid');
 
                     if (current_user_can('edit_post', $postId)) {
                         return true;
@@ -115,6 +113,7 @@ class RestApi
         $remotePostId = $request->get_param('postid');
 
         switch_to_blog($remoteBlogId);
+        $remoteBlogName = get_bloginfo('name');
         $remotePost = get_post($remotePostId);
         restore_current_blog();
 
@@ -160,7 +159,12 @@ class RestApi
         }
         restore_current_blog();
 
-        $response[$remotePostId] = $remotePostId;
+        $response[$remotePostId] = [
+            'blogId' => $remoteBlogId,
+            'blogName' => $remoteBlogName,
+            'postId' => $remotePostId,
+            'postTitle' => $remotePost->post_title
+        ];
 
         return rest_ensure_response($response);
     }
@@ -230,6 +234,10 @@ class RestApi
         );
 
         $response[$blogId] = $blogId;
+        $response[$blogId] = [
+            'blogId' => $blogId,
+            'blogName' => $blogName
+        ];
 
         return rest_ensure_response($response);
     }
