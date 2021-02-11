@@ -10,12 +10,12 @@ class Terms
 {
     public function __construct()
     {
-        add_filter('bloginfo', [$this, 'bloginfoFilter'], 10, 2);
-        add_filter('get_term', [$this, 'getTermFilter'], 10, 2);
+        add_filter('bloginfo', [__CLASS__, 'bloginfoFilter'], 10, 2);
+        add_filter('get_term', [__CLASS__, 'getTermFilter'], 10, 2);
         add_action('load-edit-tags.php', [__CLASS__, 'removeGetTermFilter'], 10, 0);
     }
 
-    public function bloginfoFilter($output, $show)
+    public static function bloginfoFilter($output, $show)
     {
         if (!Translation::isReady()) {
             return $output;
@@ -30,7 +30,7 @@ class Terms
         return $output;
     }
 
-    public function getTermFilter($term, $taxonomy)
+    public static function getTermFilter($term, $taxonomy)
     {
         if (!Translation::isReady()) {
             return $term;
