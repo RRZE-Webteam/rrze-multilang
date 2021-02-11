@@ -18,6 +18,10 @@ export default function LanguagePanel() {
         return (<></>);
     }
 
+    if ('auto-draft' == currentPost.status) {
+        return (<></>);
+    }
+
     const [secondarySitesToLink, setSecondarySitesToLink]
         = useState(currentPost.secondarySitesToLink);
 
@@ -27,13 +31,43 @@ export default function LanguagePanel() {
     const SecondarySitesToLink = () => {
         const listItems = [];
         Object.entries(secondarySitesToLink).forEach(([key, value]) => {
+            let mainLabel = value.name + ' \u2014 ' + value.language;
+            let selected = value.selected;
+            const LinkSelectControl = withState({
+                link: selected,
+            })(({ link, setState }) => (
+                <SelectControl
+                    label={mainLabel}
+                    value={link}
+                    options={value.options}
+                    onChange={(link, value) => {
+                        setState({ link });
+                        let val = link.split(':');
+                        let blogId = val[0];
+                        let postId = val[1];
+                        apiFetch({
+                            path: '/rrze-multilang/v1/link/' + currentPost.id +
+                                '/blog/' + blogId + '/post/' + postId,
+                            method: 'POST',
+                        }).then((response) => {
+                            let blogName = response[postId].blogName;
+                            let postTitle = response[postId].postTitle;
+                            dispatch('core/notices').createInfoNotice(
+                                __(`Linked to ${postTitle} on ${blogName}.`, 'rrze-multilang'),
+                                {
+                                    isDismissible: true,
+                                    type: 'snackbar',
+                                    speak: true
+                                }
+                            );
+                        });
+                    }}
+                />
+            ));
+
             listItems.push(
                 <PanelRow>
-                    <SelectControl
-                        label={value.name + ' \u2014 ' + value.language}
-                        value={value.selected}
-                        options={value.options}
-                    />
+                    <LinkSelectControl />
                 </PanelRow>
             );
         });
@@ -56,15 +90,68 @@ export default function LanguagePanel() {
     }
 
     const SecondarySitesToCopy = () => {
+        let blogIdVal = 0;
+        let copying = false;
+
+        const Copying = (props) => {
+            if (props.copying) {
+                return (<Spinner />);
+            } else {
+                return (<></>);
+            }
+        }
+
+        const addSecondarySitesToCopy = (blogId) => {
+            copying = true;
+            apiFetch({
+                path: '/rrze-multilang/v1/copy/' + currentPost.id +
+                    '/blog/' + blogId,
+                method: 'POST',
+            }).then((response) => {
+                copying = false;
+                let blogName = response[blogId].blogName;
+                dispatch('core/notices').createInfoNotice(
+                    __(`A copy has been added to ${blogName}.`, 'rrze-multilang'),
+                    {
+                        isDismissible: true,
+                        type: 'snackbar',
+                        speak: true
+                    }
+                );
+            });
+        }
+
         const listItems = [];
         Object.entries(secondarySitesToCopy).forEach(([key, value]) => {
+            const CopySelectControl = withState({
+                blogId: '0',
+            })(({ blogId, setState }) => (
+                <SelectControl
+                    label={__('Copy To:', 'rrze-multilang')}
+                    value={blogId}
+                    options={value.options}
+                    onChange={(blogId) => {
+                        setState({ blogId });
+                        blogIdVal = blogId;
+                    }}
+                />
+            ));
+
             listItems.push(
                 <PanelRow>
-                    <SelectControl
-                        label={__('Copy To:', 'rrze-multilang')}
-                        value='0'
-                        options={value.options}
-                    />
+                    <CopySelectControl />
+                </PanelRow>
+            );
+
+            listItems.push(
+                <PanelRow>
+                    <Button
+                        isDefault
+                        onClick={() => { addSecondarySitesToCopy(blogIdVal) }}
+                    >
+                        {__('Add Copy', 'rrze-multilang')}
+                    </Button>
+                    <Copying />
                 </PanelRow>
             );
         });
@@ -84,55 +171,6 @@ export default function LanguagePanel() {
         );
     }
 
-    const AddSecondarySitesToCopy = () => {
-        const addSecondarySitesToCopy = (blogId) => {
-            const secondarySitesToCopyAlt = Object.assign({}, secondarySitesToCopy);
-
-            secondarySitesToCopyAlt[blogId] = {
-                creating: true,
-            };
-
-            setSecondarySitesToCopy(secondarySitesToCopyAlt);
-
-            apiFetch({
-                path: '/rrze-multilang/v1/posts/' + currentPost.id +
-                    '/copy/' + blogId,
-                method: 'POST',
-            }).then((response) => {
-                const secondarySitesToCopyAlt = Object.assign({}, secondarySitesToCopy);
-
-                dispatch('core/notices').createInfoNotice(
-                    __('Translation created.', 'rrze-multilang'),
-                    {
-                        isDismissible: true,
-                        type: 'snackbar',
-                        speak: true,
-                        actions: [
-                            {
-                                url: secondarySitesToCopyAlt[blogId].editLink,
-                                label: __('Edit Post', 'rrze-multilang'),
-                            }
-                        ]
-                    }
-                );
-            });
-        }
-
-        if ('auto-draft' == currentPost.status) {
-            return (<></>);
-        }
-
-        return (
-            <PanelRow>
-                <Button
-                    isDefault
-                >
-                    {__('Add Copy', 'rrze-multilang')}
-                </Button>
-            </PanelRow>
-        );
-    }
-
     return (
         <PluginDocumentSettingPanel
             name="rrze-multilang-language-panel"
@@ -141,7 +179,6 @@ export default function LanguagePanel() {
         >
             <SecondarySitesToLink />
             <SecondarySitesToCopy />
-            <AddSecondarySitesToCopy />
         </PluginDocumentSettingPanel>
     );
 }
