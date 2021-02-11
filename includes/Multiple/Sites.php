@@ -28,7 +28,7 @@ class Sites
             $options = [];
             $options[] = [
                 'label' => sprintf('%1$s %2$s %1$s', $emdash, __('Select', 'rrze-multilang')),
-                'value' => 0,
+                'value' => '0:0',
                 'disabled' => false
             ];
 
@@ -49,7 +49,7 @@ class Sites
                     }
                 }
                 $label = esc_html($refPost->post_title);
-                $value = sprintf('%1$d::%2$d', $blogId, $refPost->ID);
+                $value = sprintf('%1$d:%2$d', $blogId, $refPost->ID);
                 if ($reffered) {
                     $selectedValue = $value;
                 }
