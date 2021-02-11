@@ -13,7 +13,7 @@
             }
             $('select.rrze-multilang-links').each(function () {
                 var select = $(this);
-                var value = select.val().split('::');
+                var value = select.val().split(':');
                 var blogId = value[0];
                 var postId = value[1];
                 var restUrl = rrzeMultilang.apiSettings.getRoute(
