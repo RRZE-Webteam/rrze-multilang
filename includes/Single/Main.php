@@ -41,7 +41,7 @@ class Main
         add_filter('widget_display_callback', [$this, 'widgetDisplayCallback'], 10, 3);
 
         /* Language Switcher Shortcode */
-        add_shortcode('rrze_multilang_switcher', ['\RRZE\Multilang\Single\Switcher::languageSwitcher']);
+        add_shortcode('rrze_multilang_switcher', ['RRZE\Multilang\Single\Switcher', 'languageSwitcher']);
     }
 
     public function widgetsInit()
@@ -124,7 +124,7 @@ class Main
             $home = trailingslashit($home);
 
             $availableLocales = Locale::availableLocales();
-            $availableLocales = array_map('\RRZE\Multilang\Locale::langSlug', $availableLocales);
+            $availableLocales = array_map(['RRZE\Multilang\Locale', 'langSlug'], $availableLocales);
             $availableLocales = implode('|', $availableLocales);
 
             $pattern = '#^'
