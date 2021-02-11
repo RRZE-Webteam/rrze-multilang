@@ -261,15 +261,24 @@ class Post
         if (empty($metaValues)) {
             return;
         }
-        foreach ($metaValues as $key => $values) {
-            if ($key[0] == '_') {
+        foreach ($metaValues as $metaKey => $metaValues) {
+            if (
+                in_array(
+                    $metaKey,
+                    [
+                        '_rrze_multilang_single_locale',
+                        '_rrze_multilang_single_source',
+                        '_rrze_multilang_multiple_reference'
+                    ]
+                )
+            ) {
                 continue;
             }
-            foreach ($values as $value) {
-                if (is_serialized($value)) {
-                    update_post_meta($postId, $key, unserialize($value));
+            foreach ((array) $metaValues as $metaValue) {
+                if (is_serialized($metaValue)) {
+                    update_post_meta($postId, $metaKey, unserialize($metaValue));
                 } else {
-                    update_post_meta($postId, $key, $value);
+                    update_post_meta($postId, $metaKey, $metaValue);
                 }
             }
         }
