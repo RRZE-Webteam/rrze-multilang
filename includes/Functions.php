@@ -140,7 +140,7 @@ class Functions
             'cap' => 'manage_options',
         ];
 
-        remove_filter('get_term', ['RRZE\Multilang\Terms', 'removeGetTermFilter']);
+        remove_filter('get_term', ['RRZE\Multilang\Single\Terms', 'getTermFilter']);
 
         foreach ((array) get_taxonomies([], 'objects') as $taxonomy) {
             $tax_labels = get_taxonomy_labels($taxonomy);
@@ -166,7 +166,7 @@ class Functions
             }
         }
 
-        add_filter('get_term', ['RRZE\Multilang\Terms', 'removeGetTermFilter'], 10, 2);
+        add_filter('get_term', ['RRZE\Multilang\Single\Terms', 'getTermFilter'], 10, 2);
 
         $items = apply_filters('rrze_multilang_terms_translation', $items, $locale);
 
