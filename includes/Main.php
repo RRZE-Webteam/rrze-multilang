@@ -32,7 +32,9 @@ class Main
                 new \RRZE\Multilang\Single\Main;
                 break;
             case 2:
-                new \RRZE\Multilang\Multiple\Main;
+                if (is_multisite()) {
+                    new \RRZE\Multilang\Multiple\Main;
+                }
             default:
                 return;
         }
