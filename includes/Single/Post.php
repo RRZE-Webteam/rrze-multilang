@@ -367,13 +367,26 @@ class Post
             }
 
             if ($postMetas) {
-                foreach ($postMetas as $meta_key => $meta_values) {
-                    if (in_array($meta_key, ['_rrze_multilang_single_locale', '_rrze_multilang_single_source'])) {
+                foreach ($postMetas as $metaKey => $metaValues) {
+                    if (
+                        in_array(
+                            $metaKey,
+                            [
+                                '_rrze_multilang_single_locale',
+                                '_rrze_multilang_single_source',
+                                '_rrze_multilang_multiple_reference'
+                            ]
+                        )
+                    ) {
                         continue;
                     }
 
-                    foreach ((array) $meta_values as $meta_value) {
-                        add_post_meta($newPostId, $meta_key, $meta_value);
+                    foreach ((array) $metaValues as $metaValue) {
+                        if (is_serialized($metaValue)) {
+                            add_post_meta($newPostId, $metaKey, unserialize($metaValue));
+                        } else {
+                            add_post_meta($newPostId, $metaKey, $metaValue);
+                        }
                     }
                 }
             }
