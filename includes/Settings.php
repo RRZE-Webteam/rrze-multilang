@@ -72,6 +72,11 @@ class Settings
         add_settings_section('rrze_multilang_general_section', false, '__return_false', $this->menuPage);
         add_settings_field('multilang_mode', __('Multilanguage Mode', 'rrze-multilang'), [$this, 'multilangModeField'], $this->menuPage, 'rrze_multilang_general_section');
 
+        if (!is_multisite() && $this->options->multilang_mode == 2) {
+            $this->options->multilang_mode = 0;
+            update_option($this->optionName, (array) $this->options);
+        }
+
         if ($this->options->multilang_mode == 0) {
             $this->deleteMainConnection($this->currentBlogId);
         } elseif ($this->options->multilang_mode == 1) {
