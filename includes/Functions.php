@@ -249,4 +249,17 @@ class Functions
 
         delete_transient($transient);
     }
+
+    public static function isCmsWorkflowPluginModuleActivated(string $modName = ''): bool
+    {
+        global $cms_workflow;
+        if (
+            is_a($cms_workflow, '\CMS_Workflow')
+            && isset($cms_workflow->$modName)
+            && isset($cms_workflow->$modName->module->options->activated)
+        ) {
+            return $cms_workflow->$modName->module->options->activated;
+        }
+        return false;
+    }
 }
