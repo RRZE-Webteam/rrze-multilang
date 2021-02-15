@@ -23,6 +23,9 @@ class Main
         new RestApi;
         new Tools;
 
+        /* Enqueue Frontend Style */
+        add_action('wp_enqueue_scripts', [$this, 'enqueueScripts']);
+
         /* Enqueue Admin Scripts */
         add_action('admin_enqueue_scripts', [$this, 'adminEnqueueScripts']);
 
@@ -157,6 +160,16 @@ class Main
         $query_vars[] = 'lang';
 
         return $query_vars;
+    }
+
+    public function enqueueScripts()
+    {
+        wp_register_style(
+            'rrze-multilang-frontend',
+            plugins_url('assets/css/default.css', plugin()->getBasename()),
+            [],
+            plugin()->getVersion()
+        );
     }
 
     public function adminEnqueueScripts($hookSuffix)
