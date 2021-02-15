@@ -9,7 +9,7 @@ class SwitcherWidget extends \WP_Widget
     function __construct()
     {
         $widgetOps = [
-            'description' => __('Language switcher widget.', 'rrze-multilang'),
+            'description' => __('Language switcher widget.', 'rrze-multilang')
         ];
 
         $controlOps = [];
@@ -32,8 +32,6 @@ class SwitcherWidget extends \WP_Widget
             $instance,
             $this->id_base
         );
-
-        $defaultPage = absint($instance['default_page']);
 
         echo $args['before_widget'];
 
