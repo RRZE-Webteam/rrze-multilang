@@ -83,7 +83,10 @@ class Settings
             $this->deleteMainConnection($this->currentBlogId);
             add_settings_field('post_types', __('Post Types', 'rrze-multilang'), [$this, 'postTypesField'], $this->menuPage, 'rrze_multilang_general_section');
             add_settings_field('languages', __('Available languages', 'rrze-multilang'), [$this, 'languagesField'], $this->menuPage, 'rrze_multilang_general_section');
-        } elseif ($this->options->multilang_mode == 2) {
+        } elseif (
+            $this->options->multilang_mode == 2
+            && !Functions::isCmsWorkflowPluginModuleActivated('network')
+        ) {
             $this->addMainConnection($this->currentBlogId);
             add_settings_field('main_connection', __('Connection Type', 'rrze-multilang'), [$this, 'connectionTypeField'], $this->menuPage, 'rrze_multilang_general_section');
             if (in_array($this->options->connection_type, [1, 2])) {
@@ -107,6 +110,10 @@ class Settings
             echo '<label><input type="radio" name="', $this->optionName, '[multilang_mode]" id="rrze-multilang-multilang-mode" value="2" ', checked($this->options->multilang_mode, 2), '>', __('Multiple Websites', 'rrze-multilang'), '</label>';
         }
         echo '</fieldset>';
+
+        if (Functions::isCmsWorkflowPluginModuleActivated('network')) {
+            printf('<p>%s</p>', __('Warning: The Network module of the CMS Workflow plugin is activated! Multiple Websites mode cannot be used if this module is enabled.', 'rrze-multilang'));
+        }
     }
 
     public function connectionTypeField()
