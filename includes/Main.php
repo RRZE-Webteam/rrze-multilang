@@ -21,10 +21,6 @@ class Main
 
         add_action('admin_notices', [$this, 'adminNotices']);
 
-        // CMS Workflow Plugin
-        add_filter('cms_workflow_register_module_network', '__return_false');
-        add_filter('cms_workflow_register_module_translation', '__return_false');
-
         $this->settings = new Settings;
 
         switch ($this->options->multilang_mode) {
@@ -32,9 +28,13 @@ class Main
                 new \RRZE\Multilang\Single\Main;
                 break;
             case 2:
-                if (is_multisite()) {
+                if (
+                    is_multisite()
+                    && !Functions::isCmsWorkflowPluginModuleActivated('network')
+                ) {
                     new \RRZE\Multilang\Multiple\Main;
                 }
+                break;
             default:
                 return;
         }
