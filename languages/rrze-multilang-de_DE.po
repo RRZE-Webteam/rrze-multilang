@@ -2,10 +2,10 @@
 # This file is distributed under the same license as the RRZE Multilang plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: RRZE Multilang 0.1.0\n"
+"Project-Id-Version: RRZE Multilang 1.0.0-alpha\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/rrze-multilang\n"
-"POT-Creation-Date: 2021-02-10T16:48:18+00:00\n"
-"PO-Revision-Date: 2021-02-10 17:48+0100\n"
+"POT-Creation-Date: 2021-02-14T17:57:33+00:00\n"
+"PO-Revision-Date: 2021-02-14 18:59+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -44,7 +44,7 @@ msgstr "Website-Titel"
 msgid "Tagline"
 msgstr "Tagline"
 
-#: includes/Main.php:46
+#: includes/Main.php:48
 msgid "Settings"
 msgstr "Einstellungen"
 
@@ -61,15 +61,17 @@ msgstr ""
 "Seite weg navigieren."
 
 #: includes/Multiple/Metabox.php:28 includes/Single/Metabox.php:28
-#: includes/Single/Metabox.php:62
-#: assets/block-editor/src/multiple/render.js:139
+#: includes/Single/Metabox.php:62 assets/block-editor/build/multiple/index.js:1
+#: assets/block-editor/build/single/index.js:1
+#: assets/block-editor/src/multiple/render.js:189
 #: assets/block-editor/src/single/render.js:26
 #: assets/block-editor/src/single/render.js:160
 msgid "Language"
 msgstr "Sprache"
 
 #: includes/Multiple/Metabox.php:44
-#: assets/block-editor/src/multiple/render.js:48
+#: assets/block-editor/build/multiple/index.js:1
+#: assets/block-editor/src/multiple/render.js:82
 msgid "There are no websites available for translations."
 msgstr "Für Übersetzungen stehen keine Websites zur Verfügung."
 
@@ -78,49 +80,50 @@ msgid "Update Links"
 msgstr "Links aktualisieren"
 
 #: includes/Multiple/Metabox.php:97
-#: assets/block-editor/src/multiple/render.js:64
+#: assets/block-editor/build/multiple/index.js:1
+#: assets/block-editor/src/multiple/render.js:139
 msgid "Copy To:"
 msgstr "Kopieren nach:"
 
-#: includes/Multiple/Metabox.php:116
+#: includes/Multiple/Metabox.php:118
 msgid "Add a Copy"
 msgstr "Kopie erstellen"
 
-#: includes/Multiple/Post.php:45 includes/Single/Post.php:705
+#: includes/Multiple/Post.php:45 includes/Single/Post.php:718
 #: includes/Single/TermsListTable.php:20
 msgid "Translation"
 msgstr "Übersetzung"
 
-#: includes/Multiple/RestApi.php:46
+#: includes/Multiple/RestApi.php:44
 msgid "You are not allowed to link posts."
 msgstr "Sie dürfen keine Posts verlinken."
 
-#: includes/Multiple/RestApi.php:68
+#: includes/Multiple/RestApi.php:66
 msgid "You are not allowed to access posts in the requested copy."
 msgstr "Sie dürfen nicht auf Posts in der angeforderten Kopie zugreifen."
 
-#: includes/Multiple/RestApi.php:87 includes/Multiple/RestApi.php:124
-#: includes/Multiple/RestApi.php:178 includes/Single/RestApi.php:91
+#: includes/Multiple/RestApi.php:85 includes/Multiple/RestApi.php:123
+#: includes/Multiple/RestApi.php:182 includes/Single/RestApi.php:91
 #: includes/Single/RestApi.php:113 includes/Single/RestApi.php:202
 msgid "The requested post was not found."
 msgstr "Der angeforderte Post wurde nicht gefunden."
 
-#: includes/Multiple/RestApi.php:95 includes/Multiple/RestApi.php:132
-#: includes/Multiple/RestApi.php:186 includes/Single/RestApi.php:99
+#: includes/Multiple/RestApi.php:93 includes/Multiple/RestApi.php:131
+#: includes/Multiple/RestApi.php:190 includes/Single/RestApi.php:99
 #: includes/Single/RestApi.php:210
 msgid "The requested post type is not localizable."
 msgstr "Der angeforderte Post-Type ist nicht übersetzbar."
 
-#: includes/Multiple/RestApi.php:110 includes/Multiple/RestApi.php:201
+#: includes/Multiple/RestApi.php:108 includes/Multiple/RestApi.php:205
 msgid "The requested website is not available."
 msgstr "Die angeforderte Website ist nicht verfügbar."
 
-#: includes/Multiple/RestApi.php:211
+#: includes/Multiple/RestApi.php:215
 msgid "Failed to copy a post."
 msgstr "Fehler beim Kopieren eines Posts."
 
 #. translators: %s: The blog name.
-#: includes/Multiple/RestApi.php:226
+#: includes/Multiple/RestApi.php:230
 msgid "A copy has been added on %s."
 msgstr "Auf %s wurde eine Kopie hinzugefügt."
 
@@ -171,67 +174,76 @@ msgstr "Mehrsprachig"
 msgid "Multilanguage Settings"
 msgstr "Mehrsprachige Einstellungen"
 
-#: includes/Settings.php:73 includes/Settings.php:98
+#: includes/Settings.php:73 includes/Settings.php:106
 msgid "Multilanguage Mode"
 msgstr "Mehrsprachiger Modus"
 
-#: includes/Settings.php:79 includes/Settings.php:85
+#: includes/Settings.php:84 includes/Settings.php:93
 msgid "Post Types"
 msgstr "Post-Types"
 
-#: includes/Settings.php:80
+#: includes/Settings.php:85
 msgid "Available languages"
 msgstr "Verfügbare Sprachen"
 
-#: includes/Settings.php:83 includes/Settings.php:110
+#: includes/Settings.php:91 includes/Settings.php:122
 msgid "Connection Type"
 msgstr "Verbindungstyp"
 
-#: includes/Settings.php:86
+#: includes/Settings.php:94
 msgid "Default Page"
 msgstr "Standardseite"
 
-#: includes/Settings.php:89
+#: includes/Settings.php:97
 msgid "Copy"
 msgstr "Kopieren"
 
-#: includes/Settings.php:90
+#: includes/Settings.php:98
 msgid "Available Websites"
 msgstr "Verfügbare Websites"
 
-#: includes/Settings.php:99
+#: includes/Settings.php:107
 msgid "Disabled"
 msgstr "Deaktiviert"
 
-#: includes/Settings.php:100
+#: includes/Settings.php:108
 msgid "Single Website"
 msgstr "Einzelne Website"
 
-#: includes/Settings.php:102
+#: includes/Settings.php:110
 msgid "Multiple Websites"
 msgstr "Mehrere Websites"
 
-#: includes/Settings.php:113
+#: includes/Settings.php:115
+msgid ""
+"Warning: The Network module of the CMS Workflow plugin is activated! "
+"Multiple Websites mode cannot be used if this module is enabled."
+msgstr ""
+"Warnung: Das Netzwerkmodul des CMS Workflow Plugins ist aktiviert! Der Modus "
+"“Mehrere Websites” kann nicht verwendet werden, wenn dieses Modul aktiviert "
+"ist."
+
+#: includes/Settings.php:125
 msgid "&mdash; Select &mdash;"
 msgstr "&mdash; Auswählen &mdash;"
 
-#: includes/Settings.php:115 includes/Settings.php:211
+#: includes/Settings.php:127 includes/Settings.php:223
 msgid "Main Website"
 msgstr "Hauptwebsite"
 
-#: includes/Settings.php:116
+#: includes/Settings.php:128
 msgid "Secondary Website"
 msgstr "Sekundäre Website"
 
-#: includes/Settings.php:125
+#: includes/Settings.php:137
 msgid "Connected to the following main website:"
 msgstr "Verbunden mit der folgenden Haupt-Website:"
 
-#: includes/Settings.php:136
+#: includes/Settings.php:148
 msgid "There is no main website connected yet."
 msgstr "Es ist noch keine Haupt-Website verbunden."
 
-#: includes/Settings.php:203
+#: includes/Settings.php:215
 msgid ""
 "Note: It is only possible to connect the websites that have activated the "
 "plugin in \"Multiple Websites\" mode and in which you are an administrator."
@@ -239,38 +251,39 @@ msgstr ""
 "Hinweis: Es ist nur möglich, Websites zu verbinden, die das Plugin im Modus "
 "“Mehrere Websites” aktiviert haben und in denen Sie Administrator sind."
 
-#: includes/Settings.php:205
+#: includes/Settings.php:217
 msgid "There are no websites available."
 msgstr "Es sind keine Websites verfügbar."
 
-#: includes/Settings.php:252
+#: includes/Settings.php:264
 msgid "Select the websites that should be connected."
 msgstr "Wählen Sie die Websites aus, die verbunden werden sollen."
 
-#: includes/Settings.php:275
+#: includes/Settings.php:287
 msgid "Website Default"
 msgstr "Website-Einstellung"
 
-#: includes/Settings.php:288
+#: includes/Settings.php:300
 msgid "Select the languages available for the website."
 msgstr "Wählen Sie die für die Website verfügbaren Sprachen aus."
 
-#: includes/Settings.php:290 includes/Single/Tools.php:30
+#: includes/Settings.php:302 includes/Single/Tools.php:30
 #: includes/Single/Tools.php:31 includes/Single/Tools.php:61
 msgid "Terms Translations"
 msgstr "Begriffe Übersetzungen"
 
-#: includes/Settings.php:296
+#: includes/Settings.php:308
 msgid "&mdash; None &mdash;"
 msgstr "&mdash; Keiner &mdash;"
 
-#: includes/Settings.php:307
+#: includes/Settings.php:319
 msgid "The page to redirect to if the translation does not exist."
 msgstr ""
 "Die Seite, auf die umgeleitet werden soll, wenn die Übersetzung nicht "
 "vorhanden ist."
 
-#: includes/Single/Metabox.php:76 assets/block-editor/src/single/render.js:71
+#: includes/Single/Metabox.php:76 assets/block-editor/build/single/index.js:1
+#: assets/block-editor/src/single/render.js:71
 msgid "Translations"
 msgstr "Übersetzungen"
 
@@ -283,17 +296,17 @@ msgstr "Übersetzung hinzufügen"
 msgid "Displayed on pages in"
 msgstr "Wird auf Seiten angezeigt"
 
-#: includes/Single/Post.php:767
+#: includes/Single/Post.php:780
 msgid "Show all locales"
 msgstr "Alle Sprachen anzeigen"
 
 #. translators: %s: The translated post language.
-#: includes/Single/Post.php:809
+#: includes/Single/Post.php:822
 msgid "Edit %s translation"
 msgstr "%s-Übersetzung bearbeiten"
 
 #. translators: %s: The translated post language.
-#: includes/Single/Post.php:813
+#: includes/Single/Post.php:826
 msgid "Translate into %s"
 msgstr "Auf %s übersetzen"
 
@@ -371,25 +384,28 @@ msgstr ""
 msgid "Plugins: %1$s: %2$s"
 msgstr "Plugins: %1$s: %2$s"
 
-#: assets/block-editor/src/multiple/render.js:105
-#: assets/block-editor/src/single/render.js:104
-msgid "Translation created."
-msgstr "Übersetzung erstellt."
-
-#: assets/block-editor/src/multiple/render.js:113
-#: assets/block-editor/src/single/render.js:112
-msgid "Edit Post"
-msgstr "Post bearbeiten"
-
-#: assets/block-editor/src/multiple/render.js:130
+#: assets/block-editor/build/multiple/index.js:1
+#: assets/block-editor/src/multiple/render.js:161
 msgid "Add Copy"
 msgstr "Kopie erstellen"
 
+#: assets/block-editor/build/single/index.js:1
 #: assets/block-editor/src/single/render.js:64
 msgid "None"
 msgstr "Keine"
 
+#: assets/block-editor/build/single/index.js:1
+#: assets/block-editor/src/single/render.js:104
+msgid "Translation created."
+msgstr "Übersetzung erstellt."
+
+#: assets/block-editor/build/single/index.js:1
+#: assets/block-editor/src/single/render.js:112
+msgid "Edit Post"
+msgstr "Post bearbeiten"
+
 #. translators: %s: Language name.
+#: assets/block-editor/build/single/index.js:3
 #: assets/block-editor/src/single/render.js:136
 msgid "Add %s"
 msgstr "%s hinzufügen"
