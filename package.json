@@ -1,7 +1,7 @@
 {
     "_comment": "This is purely the result of trial and error...",
     "name": "rrze-multilang",
-    "version": "0.1.11",
+    "version": "1.0.0-alpha",
     "description": "Multilanguage plugin for WordPress.",
     "private": true,
     "scripts": {
