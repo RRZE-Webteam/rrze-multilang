@@ -33,6 +33,9 @@ class Main
         new Terms;
         new RestApi;
 
+        /* Enqueue Frontend Style */
+        add_action('wp_enqueue_scripts', [$this, 'enqueueScripts']);
+
         /* Language Switcher Widget */
         add_action('widgets_init', [$this, 'widgetsInit'], 10, 0);
 
@@ -59,6 +62,16 @@ class Main
         }
 
         return $instance;
+    }
+
+    public function enqueueScripts()
+    {
+        wp_register_style(
+            'rrze-multilang-frontend',
+            plugins_url('assets/css/default.css', plugin()->getBasename()),
+            [],
+            plugin()->getVersion()
+        );
     }
 
     public function adminEnqueueScripts($hookSuffix)

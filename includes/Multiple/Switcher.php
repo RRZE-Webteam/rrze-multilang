@@ -16,6 +16,8 @@ class Switcher
             'echo' => false
         ]);
 
+        wp_enqueue_style('rrze-multilang-frontend');
+
         $links = self::getLinks($args);
         ksort($links, SORT_NATURAL);
         $total = count($links);
