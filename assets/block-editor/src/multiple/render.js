@@ -1,5 +1,5 @@
 import { PluginDocumentSettingPanel } from '@wordpress/edit-post';
-import { PanelRow, Button, ExternalLink, SelectControl, Spinner } from '@wordpress/components';
+import { PanelRow, Button, SelectControl, Spinner } from '@wordpress/components';
 import { withState } from '@wordpress/compose';
 import { useState } from '@wordpress/element';
 import { dispatch, useSelect } from '@wordpress/data';
@@ -90,26 +90,33 @@ export default function LanguagePanel() {
     }
 
     const SecondarySitesToCopy = () => {
-        let blogIdVal = 0;
-        let copying = false;
-
-        const Copying = (props) => {
-            if (props.copying) {
-                return (<Spinner />);
-            } else {
-                return (<></>);
-            }
-        }
 
         const addSecondarySitesToCopy = (blogId) => {
-            copying = true;
+            const secondarySitesToCopyAlt = Object.assign({}, secondarySitesToCopy);
+
+            secondarySitesToCopyAlt[blogId] = {
+                creating: true,
+            };
+
+            setSecondarySitesToCopy(secondarySitesToCopyAlt);
+
             apiFetch({
                 path: '/rrze-multilang/v1/copy/' + currentPost.id +
                     '/blog/' + blogId,
                 method: 'POST',
             }).then((response) => {
-                copying = false;
-                let blogName = response[blogId].blogName;
+                const secondarySitesToCopyAlt = Object.assign({}, secondarySitesToCopy);
+
+                secondarySitesToCopyAlt[blogId] = {
+                    blogId: response[blogId].blogId,
+                    blogName: response[blogId].blogName,
+                    creating: false,
+                };
+
+                setSecondarySitesToCopy(secondarySitesToCopyAlt);
+
+                let blogName = secondarySitesToCopyAlt[blogId].blogName;
+
                 dispatch('core/notices').createInfoNotice(
                     __(`A copy has been added to ${blogName}.`, 'rrze-multilang'),
                     {
@@ -122,9 +129,11 @@ export default function LanguagePanel() {
         }
 
         const listItems = [];
+        let blogIdVal = 0;
+
         Object.entries(secondarySitesToCopy).forEach(([key, value]) => {
             const CopySelectControl = withState({
-                blogId: '0',
+                blogId: key,
             })(({ blogId, setState }) => (
                 <SelectControl
                     label={__('Copy To:', 'rrze-multilang')}
@@ -137,23 +146,26 @@ export default function LanguagePanel() {
                 />
             ));
 
-            listItems.push(
-                <PanelRow>
-                    <CopySelectControl />
-                </PanelRow>
-            );
+            if (value.creating == undefined) {
+                listItems.push(
+                    <PanelRow>
+                        <CopySelectControl />
+                    </PanelRow>
+                );
 
-            listItems.push(
-                <PanelRow>
+                listItems.push(
                     <Button
                         isDefault
                         onClick={() => { addSecondarySitesToCopy(blogIdVal) }}
                     >
                         {__('Add Copy', 'rrze-multilang')}
                     </Button>
-                    <Copying />
-                </PanelRow>
-            );
+                );
+            } else if (value.creating) {
+                listItems.push(
+                    <Spinner />
+                );
+            }
         });
 
         const ListItems = (props) => {
