@@ -1,8 +1,10 @@
 {
     "_comment": "This is purely the result of trial and error...",
     "name": "rrze-multilang",
-    "version": "1.0.0-alpha",
+    "version": "1.0.0-beta",
     "description": "Multilanguage plugin for WordPress.",
+    "main": "rrze-multilang.php",
+    "textdomain": "rrze-multilang",
     "private": true,
     "scripts": {
         "build-single": "wp-scripts build assets/block-editor/src/single/index.js --output-path=assets/block-editor/build/single",
@@ -30,7 +32,25 @@
         "url": "https://github.com/RRZE-Webteam/rrze-multilang/issues"
     },
     "homepage": "https://github.com/RRZE-Webteam/rrze-multilang",
+    "browserslist": [
+        "last 3 years",
+        "ie 11"
+    ],
     "devDependencies": {
-        "@wordpress/scripts": "~13.0"
+        "@babel/core": "^7.11.1",
+        "@babel/preset-env": "^7.11.0",
+        "@wordpress/scripts": "~13.0",
+        "autoprefixer": "^9.8.6",
+        "gulp": "^4.0.2",
+        "gulp-babel": "^8.0.0",
+        "gulp-bump": "^3.2.0",
+        "gulp-clean-css": "^4.3.0",
+        "gulp-csso": "^3.0.1",
+        "gulp-postcss": "^8.0.0",
+        "gulp-sass": "^4.1.0",
+        "gulp-touch-cmd": "0.0.1",
+        "gulp-uglify": "^3.0.2",
+        "node-sass": "^4.14.1",
+        "semver": "^6.3.0"
     }
 }
