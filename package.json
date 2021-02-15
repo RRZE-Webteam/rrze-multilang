@@ -1,0 +1,36 @@
+{
+    "_comment": "This is purely the result of trial and error...",
+    "name": "rrze-multilang",
+    "version": "1.0.0-alpha",
+    "description": "Multilanguage plugin for WordPress.",
+    "private": true,
+    "scripts": {
+        "build-single": "wp-scripts build assets/block-editor/src/single/index.js --output-path=assets/block-editor/build/single",
+        "build-multiple": "wp-scripts build assets/block-editor/src/multiple/index.js --output-path=assets/block-editor/build/multiple",
+        "check-engines": "wp-scripts check-engines",
+        "check-licenses": "wp-scripts check-licenses",
+        "format:js": "wp-scripts format-js",
+        "lint:css": "wp-scripts lint-style",
+        "lint:js": "wp-scripts lint-js",
+        "lint:md:docs": "wp-scripts lint-md-docs",
+        "lint:md:js": "wp-scripts lint-md-js",
+        "lint:pkg-json": "wp-scripts lint-pkg-json",
+        "packages-update": "wp-scripts packages-update",
+        "start": "wp-scripts start",
+        "test:e2e": "wp-scripts test-e2e",
+        "test:unit": "wp-scripts test-unit-js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/RRZE-Webteam/rrze-multilang.git"
+    },
+    "author": "RRZE-Webteam",
+    "license": "GPL-2.0-or-later",
+    "bugs": {
+        "url": "https://github.com/RRZE-Webteam/rrze-multilang/issues"
+    },
+    "homepage": "https://github.com/RRZE-Webteam/rrze-multilang",
+    "devDependencies": {
+        "@wordpress/scripts": "~13.0"
+    }
+}
