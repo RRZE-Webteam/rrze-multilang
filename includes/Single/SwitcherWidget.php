@@ -20,6 +20,8 @@ class SwitcherWidget extends \WP_Widget
             $widgetOps,
             $controlOps
         );
+
+        add_filter('rrze_multilang_widget_enabled', '__return_true');
     }
 
     function widget($args, $instance)
