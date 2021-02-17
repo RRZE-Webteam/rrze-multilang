@@ -17,43 +17,33 @@ class Switcher
 
         wp_enqueue_style('rrze-multilang-frontend');
 
-        $links = self::getLinks($args);
-        $total = count($links);
-        $count = 0;
+        $links = self::getLinks();
 
-        $output = sprintf('<nav role="navigation" aria-label="%s">', __('Language Switcher', 'rrze-multilang')) . PHP_EOL;
+        $nav = sprintf('<nav aria-label="%s">', __('Language Switcher', 'rrze-multilang'));
 
         foreach ($links as $link) {
-            $count += 1;
+            $languageTag = Locale::languageTag($link['locale']);
+            $langSlug = Locale::langSlug($link['locale']);
+
             $class = [];
-            $class[] = Locale::languageTag($link['locale']);
-            $class[] = Locale::langSlug($link['locale']);
+            $class[] = $languageTag;
+            $class[] = $langSlug;
 
             if (get_locale() === $link['locale']) {
                 continue;
             }
 
-            if (1 == $count) {
-                $class[] = 'first';
-            }
-
-            if ($total == $count) {
-                $class[] = 'last';
-            }
-
             $class = implode(' ', array_unique($class));
 
             $label = $link['native_name'] ? $link['native_name'] : $link['title'];
-            $title = $link['title'];
 
             if (empty($link['href'])) {
                 $li = esc_html($label);
             } else {
                 $atts = [
                     'rel' => 'alternate',
-                    'hreflang' => $link['lang'],
-                    'href' => esc_url($link['href']),
-                    'title' => esc_attr($title)
+                    'hreflang' => $langSlug,
+                    'href' => esc_url($link['href'])
                 ];
 
                 if (get_locale() === $link['locale']) {
@@ -72,11 +62,14 @@ class Switcher
 
             $li = sprintf('<li class="%1$s">%2$s</li>', $class, $li);
 
-            $output .= $li . PHP_EOL;
+            $nav .= $li;
         }
 
-        $output = '<ul class="rrze-multilang-language-switcher">' . $output . '</ul>' . PHP_EOL;
-        $output .= '</nav>' . PHP_EOL;
+        $nav .= '</nav>';
+
+        $output = '<div class="rrze-multilang"> <ul class="language-switcher">' . PHP_EOL;
+        $output .= $nav . PHP_EOL;
+        $output .= '</ul> </div>' . PHP_EOL;
 
         $output = apply_filters('rrze_multilang_language_switcher', $output, $args);
 
@@ -87,11 +80,9 @@ class Switcher
         }
     }
 
-    protected static function getLinks($args = '')
+    protected static function getLinks()
     {
         global $wp_query;
-
-        $args = wp_parse_args($args, []);
 
         $locale = get_locale();
 
