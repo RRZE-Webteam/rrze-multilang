@@ -155,7 +155,7 @@ export default function LanguagePanel() {
 
                 listItems.push(
                     <Button
-                        isDefault
+                        isSecondary
                         onClick={() => { addSecondarySitesToCopy(blogIdVal) }}
                     >
                         {__('Add Copy', 'rrze-multilang')}

@@ -127,7 +127,7 @@ export default function LanguagePanel() {
             listItems.push(
                 <li key={key}>
                     <Button
-                        isDefault
+                        isSecondary
                         onClick={() => { addTranslation(key) }}
                     >
                         {
