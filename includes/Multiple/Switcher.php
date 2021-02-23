@@ -93,9 +93,10 @@ class Switcher
         $connections = $siteOptions->connections[$currentBlogId];
         $isMain = $options->connection_type == 1 ? true : false;
         if (!$isMain) {
-            $connections = $siteOptions->connections[$currentBlogId];
             $mainBlogId = array_shift($connections);
-            $connections = array_merge($siteOptions->connections[$mainBlogId], [$mainBlogId]);
+            $connections = !empty($siteOptions->connections[$mainBlogId])
+                ? array_merge($siteOptions->connections[$mainBlogId], [$mainBlogId])
+                : [$mainBlogId];
             $connections = array_unique($connections);
             $key = array_search($currentBlogId, $connections);
             if ($key !== false) {
