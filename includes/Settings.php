@@ -20,6 +20,8 @@ class Settings
 
     protected $copyPostMetaLabels;
 
+    protected $workflowModuleActivated = false;
+
     public function __construct()
     {
         $this->optionName = Options::getOptionName();
@@ -37,6 +39,21 @@ class Settings
             'taxonomies' => __('Taxonomies', 'rrze-multilang')
         ];
 
+        if (
+            Functions::isCmsWorkflowPluginModuleActivated('network')
+            || Functions::isCmsWorkflowPluginModuleActivated('translation')
+        ) {
+            $this->workflowModuleActivated = true;
+        }
+
+        if (
+            (!is_multisite() && $this->options->multilang_mode == 2)
+            || $this->workflowModuleActivated
+        ) {
+            $this->options->multilang_mode = 0;
+            update_option($this->optionName, (array) $this->options);
+        }
+
         add_action('admin_menu', [$this, 'adminMenu']);
         add_action('admin_init', [$this, 'adminInit']);
     }
@@ -53,29 +70,30 @@ class Settings
 
     public function optionsPage()
     {
-?>
-        <div class="wrap">
-            <h1><?php echo esc_html(__('Multilanguage Settings', 'rrze-multilang')); ?></h1>
-            <form method="post" action="options.php">
-                <?php do_settings_sections($this->menuPage); ?>
-                <?php settings_fields($this->menuPage); ?>
-                <?php submit_button(); ?>
-            </form>
-        </div>
-<?php
+        echo '<div class="wrap">',
+        '<h1>', esc_html(__('Multilanguage Settings', 'rrze-multilang')), '</h1>',
+        '<form method="post" action="options.php">';
+        do_settings_sections($this->menuPage);
+        settings_fields($this->menuPage);
+        submit_button();
+        echo '</form>',
+        '</div>';
     }
 
     public function adminInit()
     {
+        if ($this->workflowModuleActivated) {
+            add_action('admin_notices', function () {
+                echo '<div class="notice notice-warning"><p>',
+                __('Warning: The Network module or the Translation module of the Workflow plugin is enabled! Multilanguage mode of the Multilang plugin will be disabled automatically if one of these modules is enabled.', 'rrze-multilang'),
+                '</p></div>';
+            });
+        }
+
         register_setting($this->menuPage, $this->optionName, [$this, 'optionsValidate']);
 
         add_settings_section('rrze_multilang_general_section', false, '__return_false', $this->menuPage);
         add_settings_field('multilang_mode', __('Multilanguage Mode', 'rrze-multilang'), [$this, 'multilangModeField'], $this->menuPage, 'rrze_multilang_general_section');
-
-        if (!is_multisite() && $this->options->multilang_mode == 2) {
-            $this->options->multilang_mode = 0;
-            update_option($this->optionName, (array) $this->options);
-        }
 
         if ($this->options->multilang_mode == 0) {
             $this->deleteMainConnection($this->currentBlogId);
@@ -84,10 +102,7 @@ class Settings
             add_settings_field('post_types', __('Post Types', 'rrze-multilang'), [$this, 'postTypesField'], $this->menuPage, 'rrze_multilang_general_section');
             add_settings_field('default_page', __('Default Page', 'rrze-multilang'), [$this, 'defaultPageField'], $this->menuPage, 'rrze_multilang_general_section');
             add_settings_field('languages', __('Available languages', 'rrze-multilang'), [$this, 'languagesField'], $this->menuPage, 'rrze_multilang_general_section');
-        } elseif (
-            $this->options->multilang_mode == 2
-            && !Functions::isCmsWorkflowPluginModuleActivated('network')
-        ) {
+        } elseif ($this->options->multilang_mode == 2) {
             $this->addMainConnection($this->currentBlogId);
             add_settings_field('main_connection', __('Connection Type', 'rrze-multilang'), [$this, 'connectionTypeField'], $this->menuPage, 'rrze_multilang_general_section');
             if (in_array($this->options->connection_type, [1, 2])) {
@@ -111,10 +126,6 @@ class Settings
             echo '<label><input type="radio" name="', $this->optionName, '[multilang_mode]" id="rrze-multilang-multilang-mode" value="2" ', checked($this->options->multilang_mode, 2), '>', __('Multiple Websites', 'rrze-multilang'), '</label>';
         }
         echo '</fieldset>';
-
-        if (Functions::isCmsWorkflowPluginModuleActivated('network')) {
-            printf('<p>%s</p>', __('Warning: The Network module of the CMS Workflow plugin is activated! Multiple Websites mode cannot be used if this module is enabled.', 'rrze-multilang'));
-        }
     }
 
     public function connectionTypeField()

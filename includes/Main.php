@@ -23,15 +23,19 @@ class Main
 
         $this->settings = new Settings;
 
+        if (
+            Functions::isCmsWorkflowPluginModuleActivated('network')
+            || Functions::isCmsWorkflowPluginModuleActivated('translation')
+        ) {
+            return;
+        }
+
         switch ($this->options->multilang_mode) {
             case 1:
                 new \RRZE\Multilang\Single\Main;
                 break;
             case 2:
-                if (
-                    is_multisite()
-                    && !Functions::isCmsWorkflowPluginModuleActivated('network')
-                ) {
+                if (is_multisite()) {
                     new \RRZE\Multilang\Multiple\Main;
                 }
                 break;

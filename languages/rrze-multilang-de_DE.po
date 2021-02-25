@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RRZE Multilang 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/rrze-multilang\n"
-"POT-Creation-Date: 2021-02-14T17:57:33+00:00\n"
-"PO-Revision-Date: 2021-02-22 10:06+0100\n"
+"POT-Creation-Date: 2021-02-25T16:43:13+00:00\n"
+"PO-Revision-Date: 2021-02-25 17:44+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -44,17 +44,17 @@ msgstr "Website-Titel"
 msgid "Tagline"
 msgstr "Tagline"
 
-#: includes/Main.php:48
+#: includes/Main.php:52
 msgid "Settings"
 msgstr "Einstellungen"
 
 #. translators: accessibility text
-#: includes/Multiple/Main.php:81 includes/Single/Main.php:179
+#: includes/Multiple/Main.php:94 includes/Single/Main.php:192
 #: includes/Single/Metabox.php:91
 msgid "Opens in a new window."
 msgstr "Wird in einem neuen Fenster geöffnet."
 
-#: includes/Multiple/Main.php:82 includes/Single/Main.php:180
+#: includes/Multiple/Main.php:95 includes/Single/Main.php:193
 msgid "The changes you made will be lost if you navigate away from this page."
 msgstr ""
 "Die von Ihnen vorgenommenen Änderungen gehen verloren, wenn Sie von dieser "
@@ -63,7 +63,7 @@ msgstr ""
 #: includes/Multiple/Metabox.php:28 includes/Single/Metabox.php:28
 #: includes/Single/Metabox.php:62 assets/block-editor/build/multiple/index.js:1
 #: assets/block-editor/build/single/index.js:1
-#: assets/block-editor/src/multiple/render.js:189
+#: assets/block-editor/src/multiple/render.js:188
 #: assets/block-editor/src/single/render.js:26
 #: assets/block-editor/src/single/render.js:160
 msgid "Language"
@@ -71,7 +71,7 @@ msgstr "Sprache"
 
 #: includes/Multiple/Metabox.php:44
 #: assets/block-editor/build/multiple/index.js:1
-#: assets/block-editor/src/multiple/render.js:82
+#: assets/block-editor/src/multiple/render.js:81
 msgid "There are no websites available for translations."
 msgstr "Für Übersetzungen stehen keine Websites zur Verfügung."
 
@@ -81,7 +81,7 @@ msgstr "Links aktualisieren"
 
 #: includes/Multiple/Metabox.php:97
 #: assets/block-editor/build/multiple/index.js:1
-#: assets/block-editor/src/multiple/render.js:139
+#: assets/block-editor/src/multiple/render.js:138
 msgid "Copy To:"
 msgstr "Kopieren nach:"
 
@@ -131,8 +131,8 @@ msgstr "Auf %s wurde eine Kopie hinzugefügt."
 msgid "Select"
 msgstr "Auswählen"
 
-#: includes/Multiple/Switcher.php:24 includes/Multiple/SwitcherWidget.php:19
-#: includes/Single/Switcher.php:22 includes/Single/SwitcherWidget.php:19
+#: includes/Multiple/Switcher.php:75 includes/Multiple/SwitcherWidget.php:19
+#: includes/Single/Switcher.php:74 includes/Single/SwitcherWidget.php:19
 msgid "Language Switcher"
 msgstr "Sprachwechsler"
 
@@ -146,104 +146,105 @@ msgstr "Sprachwechsler-Widget."
 msgid "Title:"
 msgstr "Titel:"
 
-#: includes/Settings.php:33
+#: includes/Settings.php:35
 msgid "Content Images"
 msgstr "Inhaltsbilder"
 
-#: includes/Settings.php:34
+#: includes/Settings.php:36
 msgid "Featured Image"
 msgstr "Beitragsbild"
 
-#: includes/Settings.php:35
+#: includes/Settings.php:37
 msgid "Tags"
 msgstr "Schlagwörter"
 
-#: includes/Settings.php:36
+#: includes/Settings.php:38
 msgid "Categories"
 msgstr "Kategorien"
 
-#: includes/Settings.php:37
+#: includes/Settings.php:39
 msgid "Taxonomies"
 msgstr "Taxonomien"
 
-#: includes/Settings.php:51
+#: includes/Settings.php:68
 msgid "Multilanguage"
 msgstr "Mehrsprachig"
 
-#: includes/Settings.php:58
+#: includes/Settings.php:74
 msgid "Multilanguage Settings"
 msgstr "Mehrsprachige Einstellungen"
 
-#: includes/Settings.php:73 includes/Settings.php:106
+#: includes/Settings.php:88
+msgid ""
+"Warning: The Network module or the Translation module of the Workflow plugin "
+"is enabled! Multilanguage mode of the Multilang plugin will be disabled "
+"automatically if one of these modules is enabled."
+msgstr ""
+"Warnung: Das Netzwerkmodul oder das Übersetzungsmodul des Workflow-Plugins "
+"ist aktiviert! Der mehrsprachige Modus des Multilang-Plugins wird "
+"automatisch deaktiviert, wenn eines dieser Module aktiviert ist."
+
+#: includes/Settings.php:96 includes/Settings.php:122
 msgid "Multilanguage Mode"
 msgstr "Mehrsprachiger Modus"
 
-#: includes/Settings.php:84 includes/Settings.php:93
+#: includes/Settings.php:102 includes/Settings.php:109
 msgid "Post Types"
 msgstr "Post-Types"
 
-#: includes/Settings.php:85
-msgid "Available languages"
-msgstr "Verfügbare Sprachen"
-
-#: includes/Settings.php:91 includes/Settings.php:122
-msgid "Connection Type"
-msgstr "Verbindungstyp"
-
-#: includes/Settings.php:94
+#: includes/Settings.php:103 includes/Settings.php:110
 msgid "Default Page"
 msgstr "Standardseite"
 
-#: includes/Settings.php:97
+#: includes/Settings.php:104
+msgid "Available languages"
+msgstr "Verfügbare Sprachen"
+
+#: includes/Settings.php:107 includes/Settings.php:134
+msgid "Connection Type"
+msgstr "Verbindungstyp"
+
+#: includes/Settings.php:113
 msgid "Copy"
 msgstr "Kopieren"
 
-#: includes/Settings.php:98
+#: includes/Settings.php:114
 msgid "Available Websites"
 msgstr "Verfügbare Websites"
 
-#: includes/Settings.php:107
+#: includes/Settings.php:123
 msgid "Disabled"
 msgstr "Deaktiviert"
 
-#: includes/Settings.php:108
+#: includes/Settings.php:124
 msgid "Single Website"
 msgstr "Einzelne Website"
 
-#: includes/Settings.php:110
+#: includes/Settings.php:126
 msgid "Multiple Websites"
 msgstr "Mehrere Websites"
 
-#: includes/Settings.php:115
-msgid ""
-"Warning: The Network module of the CMS Workflow plugin is activated! "
-"Multiple Websites mode cannot be used if this module is enabled."
-msgstr ""
-"Warnung: Das Netzwerkmodul des CMS Workflow Plugins ist aktiviert! Der Modus "
-"“Mehrere Websites” kann nicht verwendet werden, wenn dieses Modul aktiviert "
-"ist."
-
-#: includes/Settings.php:125
+#: includes/Settings.php:137
 msgid "&mdash; Select &mdash;"
 msgstr "&mdash; Auswählen &mdash;"
 
-#: includes/Settings.php:127 includes/Settings.php:223
+#: includes/Settings.php:139 includes/Settings.php:235
 msgid "Main Website"
 msgstr "Hauptwebsite"
 
-#: includes/Settings.php:128
+#: includes/Settings.php:140
 msgid "Secondary Website"
 msgstr "Sekundäre Website"
 
-#: includes/Settings.php:137
+#: includes/Settings.php:149
 msgid "Connected to the following main website:"
 msgstr "Verbunden mit der folgenden Haupt-Website:"
 
-#: includes/Settings.php:148
+#: includes/Settings.php:160
 msgid "There is no main website connected yet."
 msgstr "Es ist noch keine Haupt-Website verbunden."
 
-#: includes/Settings.php:215
+#: includes/Settings.php:227
 msgid ""
 "Note: It is only possible to connect the websites that have activated the "
 "plugin in \"Multiple Websites\" mode and in which you are an administrator."
@@ -251,32 +252,32 @@ msgstr ""
 "Hinweis: Es ist nur möglich, Websites zu verbinden, die das Plugin im Modus "
 "“Mehrere Websites” aktiviert haben und in denen Sie Administrator sind."
 
-#: includes/Settings.php:217
+#: includes/Settings.php:229
 msgid "There are no websites available."
 msgstr "Es sind keine Websites verfügbar."
 
-#: includes/Settings.php:264
+#: includes/Settings.php:276
 msgid "Select the websites that should be connected."
 msgstr "Wählen Sie die Websites aus, die verbunden werden sollen."
 
-#: includes/Settings.php:287
+#: includes/Settings.php:299
 msgid "Website Default"
 msgstr "Website-Einstellung"
 
-#: includes/Settings.php:300
+#: includes/Settings.php:312
 msgid "Select the languages available for the website."
 msgstr "Wählen Sie die für die Website verfügbaren Sprachen aus."
 
-#: includes/Settings.php:302 includes/Single/Tools.php:30
+#: includes/Settings.php:314 includes/Single/Tools.php:30
 #: includes/Single/Tools.php:31 includes/Single/Tools.php:61
 msgid "Terms Translations"
 msgstr "Begriffe Übersetzungen"
 
-#: includes/Settings.php:308
+#: includes/Settings.php:320
 msgid "&mdash; None &mdash;"
 msgstr "&mdash; Keiner &mdash;"
 
-#: includes/Settings.php:319
+#: includes/Settings.php:331
 msgid "The page to redirect to if the translation does not exist."
 msgstr ""
 "Die Seite, auf die umgeleitet werden soll, wenn die Übersetzung nicht "
@@ -385,7 +386,7 @@ msgid "Plugins: %1$s: %2$s"
 msgstr "Plugins: %1$s: %2$s"
 
 #: assets/block-editor/build/multiple/index.js:1
-#: assets/block-editor/src/multiple/render.js:161
+#: assets/block-editor/src/multiple/render.js:160
 msgid "Add Copy"
 msgstr "Kopie erstellen"
 
