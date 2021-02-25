@@ -1,5 +1,5 @@
 import { PluginDocumentSettingPanel } from '@wordpress/edit-post';
-import { PanelRow, Button, ExternalLink, Spinner } from '@wordpress/components';
+import { PanelRow, Button, Spinner } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { dispatch, useSelect } from '@wordpress/data';
 import { sprintf, __ } from '@wordpress/i18n';
