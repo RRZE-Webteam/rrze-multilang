@@ -65,7 +65,7 @@ class Switcher
                 );
             }
 
-            $li = sprintf('<li class="%1$s">%2$s</li>', $class, $li);
+            $li = sprintf('<li class="%1$s" lang="%2$s">%3$s</li>', $class, $langSlug, $li);
 
             $nav .= $li;
         }
