@@ -35,6 +35,10 @@ class Switcher
                 $class[] = 'current';
             }
 
+            if (empty($link['href'])) {
+                $class[] = 'notranslation';
+            }
+
             $class = implode(' ', array_unique($class));
 
             $label = $link['native_name'] ? $link['native_name'] : $link['title'];

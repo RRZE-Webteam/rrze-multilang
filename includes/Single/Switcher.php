@@ -4,6 +4,7 @@ namespace RRZE\Multilang\Single;
 
 defined('ABSPATH') || exit;
 
+use RRZE\Multilang\Options;
 use RRZE\Multilang\Functions;
 use RRZE\Multilang\Locale;
 
@@ -31,6 +32,10 @@ class Switcher
 
             if (get_locale() === $link['locale']) {
                 continue;
+            }
+
+            if (empty($link['href'])) {
+                $class[] = 'notranslation';
             }
 
             $class = implode(' ', array_unique($class));
@@ -84,6 +89,8 @@ class Switcher
     {
         global $wp_query;
 
+        $options = (object) Options::getOptions();
+
         $locale = get_locale();
 
         $availableLanguages = Locale::getAvailableLanguages();
@@ -116,6 +123,8 @@ class Switcher
                 'href' => '',
             ];
 
+            $defaultPage = $options->default_page ? get_permalink($options->default_page) : false;
+
             if ($isSingular) {
                 if ($locale === $code) {
                     $link['href'] = get_permalink(get_queried_object_id());
@@ -124,6 +133,8 @@ class Switcher
                     && 'publish' == get_post_status($translations[$code])
                 ) {
                     $link['href'] = get_permalink($translations[$code]);
+                } elseif ($defaultPage) {
+                    $link['href'] = $defaultPage;
                 }
             } else {
                 $link['href'] = Locale::url(null, $code);
