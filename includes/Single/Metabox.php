@@ -84,7 +84,7 @@ class Metabox
 
             if ($editLink) {
                 printf(
-                    '<a href="%1$s" target="_blank" rel="noopener noreferrer">%2$s <span class="screen-reader-text">%3$s</span></a>',
+                    '<a href="%1$s" rel="noopener noreferrer">%2$s <span class="screen-reader-text">%3$s</span></a>',
                     esc_url($editLink),
                     get_the_title($translation->ID),
                     /* translators: accessibility text */
