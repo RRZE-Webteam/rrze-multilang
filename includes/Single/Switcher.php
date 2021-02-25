@@ -20,7 +20,7 @@ class Switcher
 
         $links = self::getLinks();
 
-        $nav = sprintf('<nav aria-label="%s">', __('Language Switcher', 'rrze-multilang'));
+        $ul = '<ul>';
 
         foreach ($links as $link) {
             $languageTag = Locale::languageTag($link['locale']);
@@ -67,14 +67,14 @@ class Switcher
 
             $li = sprintf('<li class="%1$s" lang="%2$s">%3$s</li>', $class, $langSlug, $li);
 
-            $nav .= $li;
+            $ul .= $li;
         }
 
-        $nav .= '</nav>';
-
-        $output = '<div class="rrze-multilang"> <ul class="language-switcher">' . PHP_EOL;
-        $output .= $nav . PHP_EOL;
-        $output .= '</ul> </div>' . PHP_EOL;
+        $output = '<div class="rrze-multilang"><ul class="language-switcher">' . PHP_EOL;
+        $output .= sprintf('<nav aria-label="%s">', __('Language Switcher', 'rrze-multilang')) . PHP_EOL;
+        $output .= $ul . PHP_EOL;
+        $output .= '</nav>' . PHP_EOL;
+        $output .= '</div>' . PHP_EOL;
 
         $output = apply_filters('rrze_multilang_language_switcher', $output, $args);
 
