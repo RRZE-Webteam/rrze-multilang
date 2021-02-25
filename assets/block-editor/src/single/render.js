@@ -36,9 +36,9 @@ export default function LanguagePanel() {
             if (value.editLink && value.postTitle) {
                 listItems.push(
                     <li key={key}>
-                        <ExternalLink href={value.editLink}>
+                        <a href={value.editLink} rel="noopener noreferrer">
                             {value.postTitle}
-                        </ExternalLink>
+                        </a>
                         <br />
                         <em>{getLanguage(key)}</em>
                     </li>
