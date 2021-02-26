@@ -166,7 +166,7 @@ class Main
     {
         wp_register_style(
             'rrze-multilang-frontend',
-            plugins_url('assets/css/default.css', plugin()->getBasename()),
+            plugins_url('assets/css/rrze-multilang.css', plugin()->getBasename()),
             [],
             plugin()->getVersion()
         );
