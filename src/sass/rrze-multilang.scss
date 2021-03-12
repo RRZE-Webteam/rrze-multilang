@@ -1,9 +1,9 @@
-@import "mixins";
+/*
+ CSS for RRZE Multilang
+*/
 
-.widget_rrze_multilang_language_switcher {
-    ul {
-        li {
-            @include no-list();
-        }        
-    }
-}
+@import "variables";
+@import "icons";
+@import "widget";
+
+@import "fau-theme";

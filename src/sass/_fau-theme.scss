@@ -1,0 +1,88 @@
+/*
+    Use of the rrz4e multilang plugin in FAU Themes
+    Created on : 12.03.2021, 15:22:17
+*/
+
+.fau-theme .rrze-multilang-widget {
+    position: absolute;
+    top: 50px;	
+    left: 0;
+    background: $colorMetaBackground;
+    margin: 1px 0;
+
+    @media (min-width: $screen-sm) {
+	position: relative;
+	top: inherit;
+	left: inherit;
+	background: inherit;
+	border: none;
+	margin: 5px 0 0 0;
+    }
+	
+    
+    
+    ul {
+	margin: 0 0 0 10px;
+    }
+    li {
+	list-style-type: none;
+	display: inline-block;
+	padding: 0;
+	a {
+
+	    display: inline-block;
+	    padding: 10px 0;
+	    color: $colorMeta;
+
+	    text-align: center;
+	    text-decoration: none;
+	    text-transform: uppercase;
+	    font-weight: bold;
+
+
+	    border-radius: 20px;
+	    height: 30px;
+	    padding: 0 4px;
+	    line-height: 30px;
+	    overflow: hidden;
+	    width: 38px;
+		   
+	    @media (min-width: $screen-lg) {
+		min-width: 40px;
+		width: auto;
+		background: #fff;
+		padding: 0 5px;
+		margin-right: 5px;
+	    }    
+	     &::before {
+			content: attr(hreflang);
+			display: inline-block;
+
+			@media (min-width: $screen-lg) {
+				content: "";
+				margin-right: 0px;
+				display: none;
+			}
+		    }
+	    &:hover,
+	    &:focus {
+		    background: $colorMetaHover; 
+		    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+	    }
+	    
+	}
+    }
+    li:first-child::before {
+	@media (min-width: $screen-lg) {
+		    content: svg-icon-langswitch($colorMeta);
+		    display: inline-block;
+		    width: 18px;
+		    height: 18px;
+		    position: relative;
+		    top: -5px;
+		    margin-right: 5px;
+		}
+    }
+   
+    
+}
