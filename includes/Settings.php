@@ -202,10 +202,12 @@ class Settings
     {
         $currentUserId = get_current_user_id();
         $currentUserBlogs = get_blogs_of_user($currentUserId);
+        $currentBlogConnections = !empty($this->siteOptions->connections[$this->currentBlogId]) ? (array) $this->siteOptions->connections[$this->currentBlogId] : [];
+
         $allBlogs = array_unique(
             array_merge(
                 array_keys($currentUserBlogs),
-                $this->siteOptions->connections[$this->currentBlogId]
+                $currentBlogConnections
             )
         );
 
