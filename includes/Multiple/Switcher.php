@@ -72,11 +72,11 @@ class Switcher
         }
 
         $output = '<div class="rrze-multilang">' . PHP_EOL;
-	if ($args['title']) {
-	    $output .= sprintf('<nav aria-label="%s">', $args['title']) . PHP_EOL;
-	} else { 
-	    $output .= sprintf('<nav aria-label="%s">', __('Language Switcher', 'rrze-multilang')) . PHP_EOL;
-	}	
+        if ($args['title']) {
+            $output .= sprintf('<nav aria-label="%s">', $args['title']) . PHP_EOL;
+        } else {
+            $output .= sprintf('<nav aria-label="%s">', __('Language Switcher', 'rrze-multilang')) . PHP_EOL;
+        }
         $output .= $ul . PHP_EOL;
         $output .= '</nav>' . PHP_EOL;
         $output .= '</div>' . PHP_EOL;
@@ -98,7 +98,10 @@ class Switcher
         $options = (object) Options::getOptions();
         $siteOptions = (object) Options::getSiteOptions();
 
-        $connections = $siteOptions->connections[$currentBlogId];
+        $connections = !empty($siteOptions->connections[$currentBlogId])
+            ? $siteOptions->connections[$currentBlogId]
+            : [];
+
         $isMain = $options->connection_type == 1 ? true : false;
         if (!$isMain) {
             $mainBlogId = array_shift($connections);
