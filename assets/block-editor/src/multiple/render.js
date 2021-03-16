@@ -3,6 +3,7 @@ import { PanelRow, Button, SelectControl, Spinner } from '@wordpress/components'
 import { withState } from '@wordpress/compose';
 import { useState } from '@wordpress/element';
 import { dispatch, useSelect } from '@wordpress/data';
+import { __ } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
 
 export default function LanguagePanel() {
