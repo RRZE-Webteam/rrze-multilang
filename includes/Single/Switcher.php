@@ -70,8 +70,13 @@ class Switcher
             $ul .= $li;
         }
 
-        $output = '<div class="rrze-multilang"><ul class="language-switcher">' . PHP_EOL;
-        $output .= sprintf('<nav aria-label="%s">', __('Language Switcher', 'rrze-multilang')) . PHP_EOL;
+        $output = '<div class="rrze-multilang">' . PHP_EOL;
+	if ($args['title']) {
+	    $output .= sprintf('<nav aria-label="%s">', $args['title']) . PHP_EOL;
+	} else { 
+	    $output .= sprintf('<nav aria-label="%s">', __('Language Switcher', 'rrze-multilang')) . PHP_EOL;
+	}
+        
         $output .= $ul . PHP_EOL;
         $output .= '</nav>' . PHP_EOL;
         $output .= '</div>' . PHP_EOL;

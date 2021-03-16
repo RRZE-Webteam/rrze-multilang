@@ -71,8 +71,12 @@ class Switcher
             $ul .= $li;
         }
 
-        $output = '<div class="rrze-multilang"><ul class="language-switcher">' . PHP_EOL;
-        $output .= sprintf('<nav aria-label="%s">', __('Language Switcher', 'rrze-multilang')) . PHP_EOL;
+        $output = '<div class="rrze-multilang">' . PHP_EOL;
+        if ($args['title']) {
+            $output .= sprintf('<nav aria-label="%s">', $args['title']) . PHP_EOL;
+        } else {
+            $output .= sprintf('<nav aria-label="%s">', __('Language Switcher', 'rrze-multilang')) . PHP_EOL;
+        }
         $output .= $ul . PHP_EOL;
         $output .= '</nav>' . PHP_EOL;
         $output .= '</div>' . PHP_EOL;
@@ -90,11 +94,15 @@ class Switcher
     {
         global $wp_query;
 
+        $links = [];
         $currentBlogId = get_current_blog_id();
         $options = (object) Options::getOptions();
         $siteOptions = (object) Options::getSiteOptions();
 
-        $connections = $siteOptions->connections[$currentBlogId];
+        $connections = !empty($siteOptions->connections[$currentBlogId])
+            ? $siteOptions->connections[$currentBlogId]
+            : [];
+
         $isMain = $options->connection_type == 1 ? true : false;
         if (!$isMain) {
             $mainBlogId = array_shift($connections);
@@ -106,6 +114,10 @@ class Switcher
             if ($key !== false) {
                 unset($connections[$key]);
             }
+        }
+
+        if (empty($connections)) {
+            return $links;
         }
 
         $postId = 0;
@@ -123,8 +135,6 @@ class Switcher
             $reference = get_post_meta($postId, '_rrze_multilang_multiple_reference', true);
             $isSingular = true;
         }
-
-        $links = [];
 
         if (!$isMain && is_array($reference)) {
             $refBlogId = array_key_first($reference);

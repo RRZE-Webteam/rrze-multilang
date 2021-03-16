@@ -1,9 +1,0 @@
-@import "mixins";
-
-.widget_rrze_multilang_language_switcher {
-    ul {
-        li {
-            @include no-list();
-        }        
-    }
-}

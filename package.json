@@ -1,7 +1,7 @@
 {
     "_comment": "This is purely the result of trial and error...",
     "name": "rrze-multilang",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "description": "Multilanguage plugin for WordPress.",
     "main": "rrze-multilang.php",
     "textdomain": "rrze-multilang",
@@ -31,6 +31,14 @@
     "bugs": {
         "url": "https://github.com/RRZE-Webteam/rrze-multilang/issues"
     },
+    "source": {
+        "js": "./src/js/",
+        "sass": "./src/sass/"
+    },
+    "target": {
+        "js": "./assets/js/",
+        "sass": "./assets/css/"
+    },
     "homepage": "https://github.com/RRZE-Webteam/rrze-multilang",
     "browserslist": [
         "last 3 years",
@@ -47,6 +55,7 @@
         "gulp-clean-css": "^4.3.0",
         "gulp-csso": "^3.0.1",
         "gulp-postcss": "^8.0.0",
+        "gulp-rename": "^2.0.0",
         "gulp-sass": "^4.1.0",
         "gulp-touch-cmd": "0.0.1",
         "gulp-uglify": "^3.0.2",

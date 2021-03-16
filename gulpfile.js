@@ -11,27 +11,29 @@ const
     bump = require('gulp-bump'),
     semver = require('semver'),
     info = require('./package.json'),
+    rename = require('gulp-rename'),
     touch = require('gulp-touch-cmd');
 
 function css() {
-    return src('./assets/css/sass/*.scss', {
-        sourcemaps: false
-    })
+    return src(info.source.sass + 'rrze-multilang.scss', {
+            sourcemaps: false
+        })
         .pipe(sass())
         .pipe(postcss([autoprefixer()]))
         .pipe(cleancss())
-        .pipe(dest('./assets/css/'))
-        .pipe(touch());
+	.pipe(rename(info.name + '.css'))
+	.pipe(dest(info.target.sass))
+	.pipe(touch());
 }
 
+
+
+
 function js() {
-    return src(['./assets/js/dev/*.js', '!./assets/js/**/*.min.js'])
-        .pipe(babel({
-            presets: ['@babel/env']
-        }))
+    return src([info.source.js + '*.js', '!./assets/js/**/*.min.js'])
         .pipe(uglify())
-        .pipe(dest('./assets/js/'))
-        .pipe(touch());
+        .pipe(dest(info.target.js))
+	.pipe(touch());
 }
 
 function patchPackageVersion() {
