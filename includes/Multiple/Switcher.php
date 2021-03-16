@@ -94,6 +94,7 @@ class Switcher
     {
         global $wp_query;
 
+        $links = [];
         $currentBlogId = get_current_blog_id();
         $options = (object) Options::getOptions();
         $siteOptions = (object) Options::getSiteOptions();
@@ -115,6 +116,10 @@ class Switcher
             }
         }
 
+        if (empty($connections)) {
+            return $links;
+        }
+
         $postId = 0;
         $postType = null;
         $reference = [];
@@ -130,8 +135,6 @@ class Switcher
             $reference = get_post_meta($postId, '_rrze_multilang_multiple_reference', true);
             $isSingular = true;
         }
-
-        $links = [];
 
         if (!$isMain && is_array($reference)) {
             $refBlogId = array_key_first($reference);
