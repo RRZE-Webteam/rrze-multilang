@@ -43,7 +43,7 @@ class Switcher
             $label = $link['native_name'] ? $link['native_name'] : $link['title'];
 
             if (empty($link['href'])) {
-                $li = esc_html($label);
+                $li = '<span>'.esc_html($label).'</span>';
             } else {
                 $atts = [
                     'rel' => 'alternate',

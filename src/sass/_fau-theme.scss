@@ -1,5 +1,5 @@
 /*
-    Use of the rrz4e multilang plugin in FAU Themes
+    Use of the rrze multilang plugin in FAU Themes
     Created on : 12.03.2021, 15:22:17
 */
 
@@ -28,6 +28,7 @@
 	list-style-type: none;
 	display: inline-block;
 	padding: 0;
+	span,
 	a {
 
 	    display: inline-block;
@@ -83,6 +84,8 @@
 		    margin-right: 5px;
 		}
     }
-   
+    li.notranslation {
+	display: none;
+    }
     
 }
