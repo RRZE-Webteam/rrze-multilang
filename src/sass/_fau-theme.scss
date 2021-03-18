@@ -1,20 +1,18 @@
 /*
-    Use of the rrz4e multilang plugin in FAU Themes
+    Use of the rrze multilang plugin in FAU Themes
     Created on : 12.03.2021, 15:22:17
 */
 
 .fau-theme .rrze-multilang-widget {
     position: absolute;
     top: 50px;	
-    left: 0;
-    background: $colorMetaBackground;
+    right: 0;   
     margin: 1px 0;
 
     @media (min-width: $screen-sm) {
 	position: relative;
 	top: inherit;
-	left: inherit;
-	background: inherit;
+	right: inherit;
 	border: none;
 	margin: 5px 0 0 0;
     }
@@ -22,54 +20,76 @@
     
     
     ul {
-	margin: 0 0 0 10px;
+	margin: 0;
+	width: 42px;
+	@media (min-width: $screen-sm) {
+	      width: auto;
+	      min-width: 50px;
+	}
+	@media (min-width: $screen-lg) {
+	     margin: 0 0 0 20px;
+	    
+	}
     }
     li {
 	list-style-type: none;
 	display: inline-block;
 	padding: 0;
+	span,
 	a {
 
 	    display: inline-block;
 	    padding: 10px 0;
 	    color: $colorMeta;
-
+	    background: $colorMetaBackground;
+	    
 	    text-align: center;
 	    text-decoration: none;
 	    text-transform: uppercase;
 	    font-weight: bold;
 
-
-	    border-radius: 20px;
-	    height: 30px;
+	    height: 34px;
 	    padding: 0 4px;
-	    line-height: 30px;
+	    line-height: 34px;
 	    overflow: hidden;
-	    width: 38px;
+	    width: 42px;
 		   
 	    @media (min-width: $screen-lg) {
-		min-width: 40px;
+		min-width: 42px;
 		width: auto;
 		background: #fff;
 		padding: 0 5px;
 		margin-right: 5px;
+		border-radius: 20px;
+		
+		height: 30px;
+		line-height: 30px;
 	    }    
-	     &::before {
-			content: attr(hreflang);
-			display: inline-block;
-
-			@media (min-width: $screen-lg) {
-				content: "";
-				margin-right: 0px;
-				display: none;
-			}
+	    &::before {
+		    display: inline-block;
+		    @media (min-width: $screen-lg) {
+			    margin-right: 0px;
+			    display: none;
 		    }
+	    }
 	    &:hover,
 	    &:focus {
 		    background: $colorMetaHover; 
 		    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 	    }
 	    
+	}
+	a::before {
+	    content: attr(hreflang);
+	   
+	}
+	span::before {
+	    content: attr(data-lang);
+	}
+	a::before, span::before {
+	    @media (min-width: $screen-lg) {
+	       content: "";
+	    }
 	}
     }
     li:first-child::before {
@@ -79,10 +99,14 @@
 		    width: 18px;
 		    height: 18px;
 		    position: relative;
-		    top: -5px;
-		    margin-right: 5px;
+		    margin: 8px 10px 0 0;
+		    text-align: center;
+		    vertical-align: top;
 		}
     }
-   
+
+    .notranslation {
+	display: none;
+    }
     
 }
