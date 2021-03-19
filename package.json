@@ -1,7 +1,7 @@
 {
     "_comment": "This is purely the result of trial and error...",
     "name": "rrze-multilang",
-    "version": "1.0.8",
+    "version": "1.0.9",
     "description": "Multilanguage plugin for WordPress.",
     "main": "rrze-multilang.php",
     "textdomain": "rrze-multilang",
@@ -47,7 +47,7 @@
     "devDependencies": {
         "@babel/core": "^7.11.1",
         "@babel/preset-env": "^7.11.0",
-        "@wordpress/scripts": "~13.0",
+        "@wordpress/scripts": "^13.0.3",
         "autoprefixer": "^9.8.6",
         "gulp": "^4.0.2",
         "gulp-babel": "^8.0.0",
