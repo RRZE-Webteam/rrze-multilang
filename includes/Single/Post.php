@@ -24,6 +24,7 @@ class Post
         add_filter('get_pages', [$this, 'getPages'], 10, 2);
         add_action('save_post', [$this, 'savePost'], 10, 2);
         add_filter('pre_wp_unique_post_slug', [$this, 'uniquePostSlug'], 10, 6);
+        add_filter('wp_sitemaps_posts_query_args', [$this, 'sitemapsPostsQueryArgs'], 10, 2);
 
         /* Posts List Table */
         add_filter('manage_pages_columns', [$this, 'pagesColumns'], 10, 1);
@@ -40,6 +41,10 @@ class Post
     {
         $postTypes = self::localizablePostTypes();
 
+        $authCallback = function ($allowed, $metaKey, $objectId, $userId) {
+            return user_can($userId, 'edit_post', $objectId);
+        };
+
         foreach ($postTypes as $postType) {
             register_post_meta(
                 $postType,
@@ -47,6 +52,7 @@ class Post
                 [
                     'type' => 'string',
                     'single' => true,
+                    'auth_callback' => $authCallback,
                     'show_in_rest' => true,
                 ]
             );
@@ -57,6 +63,7 @@ class Post
                 [
                     'type' => 'string',
                     'single' => true,
+                    'auth_callback' => $authCallback,
                     'show_in_rest' => true,
                 ]
             );
@@ -684,6 +691,15 @@ class Post
         }
 
         return $overrideSlug;
+    }
+
+    public function sitemapsPostsQueryArgs($args, $post_type)
+    {
+        if ($this->isLocalizablePostType($post_type)) {
+            $args['rrze_multilang_suppress_locale_query'] = true;
+        }
+
+        return $args;
     }
 
     protected function truncatePostSlug($slug, $length = 200)

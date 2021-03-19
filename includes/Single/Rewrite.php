@@ -19,16 +19,6 @@ class Rewrite
         $this->options = (object) Options::getOptions();
 
         add_action('init', [$this, 'addRewriteTags'], 10, 0);
-        add_filter('root_rewrite_rules', [$this, 'rootRewriteRules'], 10, 1);
-        add_filter('post_rewrite_rules', [$this, 'postRewriteRules'], 10, 1);
-        add_filter('date_rewrite_rules', [$this, 'dateRewriteRules'], 10, 1);
-        add_filter('comments_rewrite_rules', [$this, 'commentsRewriteRules'], 10, 1);
-        add_filter('search_rewrite_rules', [$this, 'searchRewriteRules'], 10, 1);
-        add_filter('author_rewrite_rules', [$this, 'authorRewriteRules'], 10, 1);
-        add_filter('page_rewrite_rules', [$this, 'pageRewriteRules'], 10, 1);
-        add_filter('category_rewrite_rules', [$this, 'categoryRewriteRules'], 10, 1);
-        add_filter('post_tag_rewrite_rules', [$this, 'postTagRewriteRules'], 10, 1);
-        add_filter('post_format_rewrite_rules', [$this, 'postFormatRewriteRules'], 10, 1);
         add_filter('rewrite_rules_array', [$this, 'rewriteRulesArray'], 10, 1);
     }
 
@@ -51,368 +41,223 @@ class Rewrite
         }
     }
 
-    public function rootRewriteRules($rootRewrite)
-    {
-        global $wp_rewrite;
-
-        $permastruct = trailingslashit($wp_rewrite->root) . '%lang%/';
-
-        $extra = $this->generateRewriteRules($permastruct, [
-            'ep_mask' => EP_ROOT,
-        ]);
-
-        return array_merge($extra, $rootRewrite);
-    }
-
-    public function postRewriteRules($postRewrite)
-    {
-        global $wp_rewrite;
-
-        $permastruct = $wp_rewrite->permalink_structure;
-
-        // wp-admin/includes/misc.php
-        $got_rewrite = apply_filters(
-            'got_rewrite',
-            apache_mod_loaded('mod_rewrite', true)
-        );
-
-        $got_url_rewrite = apply_filters(
-            'got_url_rewrite',
-            $got_rewrite || $GLOBALS['is_nginx'] || iis7_supports_permalinks()
-        );
-
-        if (!$got_url_rewrite) {
-            $permastruct = preg_replace(
-                '#^/index\.php#',
-                '/index.php/%lang%',
-                $permastruct
-            );
-        } elseif (
-            is_multisite()
-            && !is_subdomain_install()
-            && is_main_site()
-        ) {
-            $permastruct = preg_replace(
-                '#^/blog#',
-                '/%lang%/blog',
-                $permastruct
-            );
-        } else {
-            $permastruct = preg_replace(
-                '#^/#',
-                '/%lang%/',
-                $permastruct
-            );
-        }
-
-        $extra = $this->generateRewriteRules($permastruct, [
-            'ep_mask' => EP_PERMALINK,
-            'paged' => false,
-        ]);
-
-        return array_merge($extra, $postRewrite);
-    }
-
-    public function dateRewriteRules($dateRewrite)
-    {
-        global $wp_rewrite;
-
-        $permastruct = $wp_rewrite->get_date_permastruct();
-
-        $permastruct = preg_replace(
-            '#^' . $wp_rewrite->front . '#',
-            '/%lang%' . $wp_rewrite->front,
-            $permastruct
-        );
-
-        $extra = $this->generateRewriteRules($permastruct, [
-            'ep_mask' => EP_DATE,
-        ]);
-
-        return array_merge($extra, $dateRewrite);
-    }
-
-    public function commentsRewriteRules($commentsRewrite)
-    {
-        global $wp_rewrite;
-
-        $permastruct = trailingslashit($wp_rewrite->root)
-            . '%lang%/' . $wp_rewrite->comments_base;
-
-        $extra = $this->generateRewriteRules($permastruct, [
-            'ep_mask' => EP_COMMENTS,
-            'forcomments' => true,
-            'walk_dirs' => false,
-        ]);
-
-        return array_merge($extra, $commentsRewrite);
-    }
-
-    public function searchRewriteRules($searchRewrite)
-    {
-        global $wp_rewrite;
-
-        $permastruct = trailingslashit($wp_rewrite->root) . '%lang%/'
-            . $wp_rewrite->search_base . '/%search%';
-
-        $extra = $this->generateRewriteRules($permastruct, [
-            'ep_mask' => EP_SEARCH,
-        ]);
-
-        return array_merge($extra, $searchRewrite);
-    }
-
-    public function authorRewriteRules($authorRewrite)
-    {
-        global $wp_rewrite;
-
-        $permastruct = $wp_rewrite->get_author_permastruct();
-
-        $permastruct = preg_replace(
-            '#^' . $wp_rewrite->front . '#',
-            '/%lang%' . $wp_rewrite->front,
-            $permastruct
-        );
-
-        $extra = $this->generateRewriteRules($permastruct, [
-            'ep_mask' => EP_AUTHORS,
-        ]);
-
-        return array_merge($extra, $authorRewrite);
-    }
-
-    public function pageRewriteRules($pageRewrite)
-    {
-        global $wp_rewrite;
-
-        $wp_rewrite->add_rewrite_tag('%pagename%', '(.?.+?)', 'pagename=');
-        $permastruct = trailingslashit($wp_rewrite->root) . '%lang%/%pagename%';
-
-        $extra = $this->generateRewriteRules($permastruct, [
-            'ep_mask' => EP_PAGES,
-            'walk_dirs' => false,
-        ]);
-
-        return array_merge($extra, $pageRewrite);
-    }
-
-    public function categoryRewriteRules($categoryRewrite)
-    {
-        return $this->taxonomyRewriteRules(
-            $categoryRewrite,
-            'category',
-            EP_CATEGORIES
-        );
-    }
-
-    public function postTagRewriteRules($postTagRewrite)
-    {
-        return $this->taxonomyRewriteRules($postTagRewrite, 'post_tag', EP_TAGS);
-    }
-
-    public function postFormatRewriteRules($postFormatRewrite)
-    {
-        return $this->taxonomyRewriteRules($postFormatRewrite, 'post_format');
-    }
-
     public function rewriteRulesArray($rules)
     {
         global $wp_rewrite;
 
-        $lang_regex = Locale::getLangRegex();
+        $langRegex = Locale::getLangRegex();
 
-        // REST rewrite rules
-        if (function_exists('rest_get_url_prefix')) {
-            $rest_url_prefix = rest_get_url_prefix();
+        $extraRules = [];
+        $localizablePostTypes = Post::localizablePostTypes();
 
-            $extra_rules = [
-                "^{$lang_regex}/{$rest_url_prefix}/?$"
-                => 'index.php?lang=$matches[1]&rest_route=/',
-                "^{$lang_regex}/{$rest_url_prefix}/(.*)?"
-                => 'index.php?lang=$matches[1]&rest_route=/$matches[2]',
-            ];
-
-            $rules = $extra_rules + $rules;
-        }
-
-        $postTypes = array_diff(
-            (array) Post::localizablePostTypes(),
-            get_post_types(array('_builtin' => true))
-        );
-
-        if (empty($postTypes)) {
-            return $rules;
-        }
-
-        foreach ($postTypes as $postType) {
-            if (!$postType_obj = get_post_type_object($postType)) {
-                continue;
-            }
-
-            if (false === $postType_obj->rewrite) {
+        foreach ($localizablePostTypes as $postType) {
+            if (
+                !$postTypeObj = get_post_type_object($postType)
+                or false === $postTypeObj->rewrite
+            ) {
                 continue;
             }
 
             $permastruct = $wp_rewrite->get_extra_permastruct($postType);
+            $permastruct = $this->addLangToPermastruct($permastruct);
 
-            if ($postType_obj->rewrite['with_front']) {
-                $permastruct = preg_replace(
-                    '#^' . $wp_rewrite->front . '#',
-                    '/%lang%' . $wp_rewrite->front,
-                    $permastruct
-                );
-            } else {
-                $permastruct = preg_replace(
-                    '#^' . $wp_rewrite->root . '#',
-                    '/%lang%/' . $wp_rewrite->root,
-                    $permastruct
-                );
-            }
-
-            $rules = array_merge(
-                $this->generateRewriteRules($permastruct, $postType_obj->rewrite),
-                $rules
+            $extraRules += $this->generateRewriteRules(
+                $permastruct,
+                $postTypeObj->rewrite
             );
 
-            if ($postType_obj->has_archive) {
-                if ($postType_obj->has_archive === true) {
-                    $archive_slug = $postType_obj->rewrite['slug'];
+            if ($postTypeObj->has_archive) {
+                if ($postTypeObj->has_archive === true) {
+                    $archiveSlug = $postTypeObj->rewrite['slug'];
                 } else {
-                    $archive_slug = $postType_obj->has_archive;
+                    $archiveSlug = $postTypeObj->has_archive;
                 }
 
-                if ($postType_obj->rewrite['with_front']) {
-                    $archive_slug = substr($wp_rewrite->front, 1) . $archive_slug;
+                if ($postTypeObj->rewrite['with_front']) {
+                    $archiveSlug = substr($wp_rewrite->front, 1) . $archiveSlug;
                 } else {
-                    $archive_slug = $wp_rewrite->root . $archive_slug;
+                    $archiveSlug = $wp_rewrite->root . $archiveSlug;
                 }
 
-                $extra_rules = [
-                    "{$lang_regex}/{$archive_slug}/?$"
+                $extraRules += [
+                    "{$langRegex}/{$archiveSlug}/?$"
                     => 'index.php?lang=$matches[1]&post_type=' . $postType,
                 ];
 
-                $rules = $extra_rules + $rules;
-
-                if ($postType_obj->rewrite['feeds'] && $wp_rewrite->feeds) {
+                if ($postTypeObj->rewrite['feeds'] and $wp_rewrite->feeds) {
                     $feeds = '(' . trim(implode('|', $wp_rewrite->feeds)) . ')';
 
-                    $extra_rules = [
-                        "{$lang_regex}/{$archive_slug}/feed/$feeds/?$"
+                    $extraRules += [
+                        "{$langRegex}/{$archiveSlug}/feed/$feeds/?$"
                         => 'index.php?lang=$matches[1]&post_type=' . $postType . '&feed=$matches[2]',
-                        "{$lang_regex}/{$archive_slug}/$feeds/?$"
+                        "{$langRegex}/{$archiveSlug}/$feeds/?$"
                         => 'index.php?lang=$matches[1]&post_type=' . $postType . '&feed=$matches[2]',
                     ];
-
-                    $rules = $extra_rules + $rules;
                 }
 
-                if ($postType_obj->rewrite['pages']) {
-                    $extra_rules = [
-                        "{$lang_regex}/{$archive_slug}/{$wp_rewrite->pagination_base}/([0-9]{1,})/?$" => 'index.php?lang=$matches[1]&post_type=' . $postType . '&paged=$matches[2]',
+                if ($postTypeObj->rewrite['pages']) {
+                    $extraRules += [
+                        "{$langRegex}/{$archiveSlug}/{$wp_rewrite->pagination_base}/([0-9]{1,})/?$"
+                        => 'index.php?lang=$matches[1]&post_type=' . $postType . '&paged=$matches[2]',
                     ];
-
-                    $rules = $extra_rules + $rules;
                 }
             }
+        }
 
-            foreach (get_object_taxonomies($postType) as $tax) {
-                if (!$tax_obj = get_taxonomy($tax)) {
-                    continue;
-                }
+        $localizableTaxonomies = get_object_taxonomies(
+            $localizablePostTypes,
+            'objects'
+        );
 
-                if (false === $tax_obj->rewrite) {
-                    continue;
-                }
-
-                $permastruct = $wp_rewrite->get_extra_permastruct($tax);
-
-                if ($tax_obj->rewrite['with_front']) {
-                    $permastruct = preg_replace(
-                        '#^' . $wp_rewrite->front . '#',
-                        '/%lang%' . $wp_rewrite->front,
-                        $permastruct
-                    );
-                } else {
-                    $permastruct = preg_replace(
-                        '#^' . $wp_rewrite->root . '#',
-                        '/%lang%/' . $wp_rewrite->root,
-                        $permastruct
-                    );
-                }
-
-                $rules = array_merge(
-                    $this->generateRewriteRules($permastruct, $tax_obj->rewrite),
-                    $rules
-                );
+        foreach ($localizableTaxonomies as $taxonomy) {
+            if (empty($taxonomy->rewrite)) {
+                continue;
             }
+
+            $permastruct = $wp_rewrite->get_extra_permastruct($taxonomy->name);
+            $permastruct = $this->addLangToPermastruct($permastruct);
+
+            $extraRules += $this->generateRewriteRules(
+                $permastruct,
+                $taxonomy->rewrite
+            );
+        }
+
+        $rootRules = $this->generateRewriteRules(
+            $this->addLangToPermastruct($wp_rewrite->root),
+            ['ep_mask' => EP_ROOT]
+        );
+
+        $commentsRules = $this->generateRewriteRules(
+            $this->addLangToPermastruct(
+                $wp_rewrite->root . $wp_rewrite->comments_base
+            ),
+            [
+                'ep_mask' => EP_COMMENTS,
+                'forcomments' => true,
+                'walk_dirs' => false,
+            ]
+        );
+
+        $searchRules = $this->generateRewriteRules(
+            $this->addLangToPermastruct($wp_rewrite->get_search_permastruct()),
+            ['ep_mask' => EP_SEARCH]
+        );
+
+        $authorRules = $this->generateRewriteRules(
+            $this->addLangToPermastruct($wp_rewrite->get_author_permastruct()),
+            ['ep_mask' => EP_AUTHORS]
+        );
+
+        $dateRules = $this->generateRewriteRules(
+            $this->addLangToPermastruct($wp_rewrite->get_date_permastruct()),
+            ['ep_mask' => EP_DATE]
+        );
+
+        $postRules = $this->generateRewriteRules(
+            $this->addLangToPermastruct($wp_rewrite->permalink_structure),
+            [
+                'ep_mask' => EP_PERMALINK,
+                'paged' => false,
+            ]
+        );
+
+        $wp_rewrite->add_rewrite_tag('%pagename%', '(.?.+?)', 'pagename=');
+
+        $pageRules = $this->generateRewriteRules(
+            $this->addLangToPermastruct($wp_rewrite->get_page_permastruct()),
+            [
+                'ep_mask' => EP_PAGES,
+                'walk_dirs' => false,
+            ]
+        );
+
+        if ($wp_rewrite->use_verbose_page_rules) {
+            $rules = array_merge(
+                $extraRules,
+                $rootRules,
+                $commentsRules,
+                $searchRules,
+                $authorRules,
+                $dateRules,
+                $pageRules,
+                $postRules,
+                $rules
+            );
+        } else {
+            $rules = array_merge(
+                $extraRules,
+                $rootRules,
+                $commentsRules,
+                $searchRules,
+                $authorRules,
+                $dateRules,
+                $postRules,
+                $pageRules,
+                $rules
+            );
         }
 
         return $rules;
     }
 
-    public function taxonomyRewriteRules($taxonomy_rewrite, $taxonomy, $ep_mask = EP_NONE)
+    protected function addLangToPermastruct($permastruct)
     {
         global $wp_rewrite;
 
-        $permastruct = $wp_rewrite->get_extra_permastruct($taxonomy);
+        $rootQuoted = preg_quote($wp_rewrite->root);
 
-        $permastruct = preg_replace(
-            '#^' . $wp_rewrite->front . '#',
-            '/%lang%' . $wp_rewrite->front,
-            $permastruct
-        );
+        $remains = preg_replace("#^{$rootQuoted}#", '', $permastruct);
+        $remains = path_join('%lang%', ltrim($remains, '/'));
 
-        $extra = $this->generateRewriteRules($permastruct, [
-            'ep_mask' => $ep_mask,
-        ]);
-
-        return array_merge($extra, $taxonomy_rewrite);
+        return path_join($wp_rewrite->root, $remains);
     }
 
-    public function generateRewriteRules($permalink_structure, $args = '')
+    protected function generateRewriteRules($permalinkStructure, $args = '')
     {
         global $wp_rewrite;
 
-        $defaults = [
+        $args = wp_parse_args($args, [
             'ep_mask' => EP_NONE,
             'paged' => true,
             'feed' => true,
             'forcomments' => false,
             'walk_dirs' => true,
             'endpoints' => true,
-        ];
+        ]);
 
-        $args = wp_parse_args($args, $defaults);
-
-        extract($args, EXTR_SKIP);
+        if (strpos($permalinkStructure, '%lang%') === false) {
+            return [];
+        }
 
         $feedregex2 = '(' . implode('|', $wp_rewrite->feeds) . ')/?$';
         $feedregex = $wp_rewrite->feed_base . '/' . $feedregex2;
         $trackbackregex = 'trackback/?$';
         $pageregex = $wp_rewrite->pagination_base . '/?([0-9]{1,})/?$';
-        $commentregex = 'comment-page-([0-9]{1,})/?$';
+        $commentregex = $wp_rewrite->comments_pagination_base . '-([0-9]{1,})/?$';
         $embedregex = 'embed/?$';
 
-        if ($endpoints) {
-            $ep_query_append = [];
-
+        if ($args['endpoints']) {
+            $epQueryAppend = [];
             foreach ((array) $wp_rewrite->endpoints as $endpoint) {
                 $epmatch = $endpoint[1] . '(/(.*))?/?$';
-                $epquery = '&' . $endpoint[1] . '=';
-                $ep_query_append[$epmatch] = [$endpoint[0], $epquery];
+                $epquery = '&' . $endpoint[2] . '=';
+                $epQueryAppend[$epmatch] = [$endpoint[0], $epquery];
             }
         }
 
-        $front = substr($permalink_structure, 0, strpos($permalink_structure, '%'));
-        preg_match_all('/%.+?%/', $permalink_structure, $tokens);
-        $num_tokens = count($tokens[0]);
+        $front = substr($permalinkStructure, 0, strpos($permalinkStructure, '%'));
+
+        preg_match_all('/%.+?%/', $permalinkStructure, $tokens);
+
+        $queries = [];
+
         $index = $wp_rewrite->index;
         $feedindex = $index;
         $trackbackindex = $index;
         $embedindex = $index;
 
-        for ($i = 0; $i < $num_tokens; ++$i) {
+        for ($i = 0; $i < count($tokens[0]); ++$i) {
             if (0 < $i) {
                 $queries[$i] = $queries[$i - 1] . '&';
             } else {
@@ -426,23 +271,22 @@ class Rewrite
             $queries[$i] .= $query_token;
         }
 
-        $structure = $permalink_structure;
+        $structure = $permalinkStructure;
 
-        if ($front != '/') {
+        if ($front !== '/') {
             $structure = str_replace($front, '', $structure);
         }
 
         $structure = trim($structure, '/');
 
-        $dirs = $walk_dirs ? explode('/', $structure) : [$structure];
-        $num_dirs = count($dirs);
+        $dirs = $args['walk_dirs'] ? explode('/', $structure) : [$structure];
 
         $front = preg_replace('|^/+|', '', $front);
 
         $postRewrite = [];
         $struct = $front;
 
-        for ($j = 0; $j < $num_dirs; ++$j) {
+        for ($j = 0; $j < count($dirs); ++$j) {
             $struct .= $dirs[$j] . '/';
             $struct = ltrim($struct, '/');
             $match = str_replace($wp_rewrite->rewritecode, $wp_rewrite->rewritereplace, $struct);
@@ -453,16 +297,16 @@ class Rewrite
 
             switch ($dirs[$j]) {
                 case '%year%':
-                    $ep_mask_specific = EP_YEAR;
+                    $epMaskSpecific = EP_YEAR;
                     break;
                 case '%monthnum%':
-                    $ep_mask_specific = EP_MONTH;
+                    $epMaskSpecific = EP_MONTH;
                     break;
                 case '%day%':
-                    $ep_mask_specific = EP_DAY;
+                    $epMaskSpecific = EP_DAY;
                     break;
                 default:
-                    $ep_mask_specific = EP_NONE;
+                    $epMaskSpecific = EP_NONE;
             }
 
             $pagematch = $match . $pageregex;
@@ -488,31 +332,35 @@ class Rewrite
             $feedquery2 = $feedindex . '?' . $query
                 . '&feed=' . $wp_rewrite->preg_index($num_toks + 1);
 
-            if ($forcomments) {
+            $embedmatch = $match . $embedregex;
+            $embedquery = $embedindex . '?' . $query . '&embed=true';
+
+            if ($args['forcomments']) {
                 $feedquery .= '&withcomments=1';
                 $feedquery2 .= '&withcomments=1';
             }
 
             $rewrite = [];
 
-            if ($feed) {
+            if ($args['feed']) {
                 $rewrite = [
                     $feedmatch => $feedquery,
-                    $feedmatch2 => $feedquery2
+                    $feedmatch2 => $feedquery2,
+                    $embedmatch => $embedquery
                 ];
             }
 
-            if ($paged) {
+            if ($args['paged']) {
                 $rewrite = array_merge($rewrite, [$pagematch => $pagequery]);
             }
 
             if (
-                EP_PAGES & $ep_mask
-                || EP_PERMALINK & $ep_mask
+                EP_PAGES & $args['ep_mask']
+                || EP_PERMALINK & $args['ep_mask']
             ) {
                 $rewrite = array_merge($rewrite, [$commentmatch => $commentquery]);
             } elseif (
-                EP_ROOT & $ep_mask
+                EP_ROOT & $args['ep_mask']
                 && get_option('page_on_front')
             ) {
                 $rewrite = array_merge(
@@ -521,11 +369,11 @@ class Rewrite
                 );
             }
 
-            if ($endpoints) {
-                foreach ((array) $ep_query_append as $regex => $ep) {
+            if ($args['endpoints']) {
+                foreach ((array) $epQueryAppend as $regex => $ep) {
                     if (
-                        $ep[0] & $ep_mask
-                        || $ep[0] & $ep_mask_specific
+                        $ep[0] & $args['ep_mask']
+                        || $ep[0] & $epMaskSpecific
                     ) {
                         $rewrite[$match . $regex] = $index . '?' . $query
                             . $ep[1] . $wp_rewrite->preg_index($num_toks + 2);
@@ -595,13 +443,13 @@ class Rewrite
                     $subcommentquery = $subquery . '&cpage=' . $wp_rewrite->preg_index(2);
                     $subembedquery = $subquery . '&embed=true';
 
-                    if (!empty($endpoints)) {
-                        foreach ((array) $ep_query_append as $regex => $ep) {
+                    if (!empty($args['endpoints'])) {
+                        foreach ((array) $epQueryAppend as $regex => $ep) {
                             if ($ep[0] & EP_ATTACHMENT) {
                                 $rewrite[$sub1 . $regex] =
-                                    $subquery . $ep[1] . $wp_rewrite->preg_index(2);
+                                    $subquery . $ep[1] . $wp_rewrite->preg_index(3);
                                 $rewrite[$sub2 . $regex] =
-                                    $subquery . $ep[1] . $wp_rewrite->preg_index(2);
+                                    $subquery . $ep[1] . $wp_rewrite->preg_index(3);
                             }
                         }
                     }
@@ -609,7 +457,7 @@ class Rewrite
                     $sub1 .= '?$';
                     $sub2 .= '?$';
 
-                    $match = $match . '(/[0-9]+)?/?$';
+                    $match = $match . '(?:/([0-9]+))?/?$';
                     $query = $index . '?' . $query
                         . '&page=' . $wp_rewrite->preg_index($num_toks + 1);
                 } else {
@@ -625,24 +473,30 @@ class Rewrite
                     $rewrite = array_merge([$embedmatch => $embedquery], $rewrite);
 
                     if (!$page) {
-                        $rewrite = array_merge($rewrite, [
-                            $sub1 => $subquery,
-                            $sub1tb => $subtbquery,
-                            $sub1feed => $subfeedquery,
-                            $sub1feed2 => $subfeedquery,
-                            $sub1comment => $subcommentquery,
-                            $sub1embed => $subembedquery
-                        ]);
+                        $rewrite = array_merge(
+                            $rewrite,
+                            [
+                                $sub1 => $subquery,
+                                $sub1tb => $subtbquery,
+                                $sub1feed => $subfeedquery,
+                                $sub1feed2 => $subfeedquery,
+                                $sub1comment => $subcommentquery,
+                                $sub1embed => $subembedquery
+                            ]
+                        );
                     }
 
-                    $rewrite = array_merge([
-                        $sub2 => $subquery,
-                        $sub2tb => $subtbquery,
-                        $sub2feed => $subfeedquery,
-                        $sub2feed2 => $subfeedquery,
-                        $sub2comment => $subcommentquery,
-                        $sub2embed => $subembedquery
-                    ], $rewrite);
+                    $rewrite = array_merge(
+                        [
+                            $sub2 => $subquery,
+                            $sub2tb => $subtbquery,
+                            $sub2feed => $subfeedquery,
+                            $sub2feed2 => $subfeedquery,
+                            $sub2comment => $subcommentquery,
+                            $sub2embed => $subembedquery
+                        ],
+                        $rewrite
+                    );
                 }
             }
 
