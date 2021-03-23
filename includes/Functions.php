@@ -202,7 +202,7 @@ class Functions
         return $res;
     }
 
-    public static function isBlogPublic(int $blogId): bool
+    public static function isBlogPublic($blogId): bool
     {
         return (bool) get_blog_status($blogId, 'public');
     }
