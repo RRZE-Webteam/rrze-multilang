@@ -112,7 +112,7 @@ class Tools
     {
         check_admin_referer('rrze_multilang_edit_terms_translations');
 
-        if (!current_user_can('rrze_multilang_edit_terms_translationss')) {
+        if (!current_user_can('rrze_multilang_edit_terms_translations')) {
             wp_die(__('You are not allowed to edit terms translations.', 'rrze-multilang'));
         }
 
@@ -142,7 +142,7 @@ class Tools
     {
         check_admin_referer('rrze_multilang_edit_terms_translations');
 
-        if (!current_user_can('rrze_multilang_edit_terms_translationss')) {
+        if (!current_user_can('rrze_multilang_edit_terms_translations')) {
             wp_die(__('You are not allowed to edit terms translations.', 'rrze-multilang'));
         }
 
