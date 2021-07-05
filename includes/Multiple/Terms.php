@@ -15,7 +15,7 @@ class Terms
 
     public static function getPostTaxonomyTerms($postId, $categoryOnly, $targetId)
     {
-        $sourceTaxonomyTermsObj = array();
+        $sourceTaxonomyTermsObj = [];
 
         $postTaxonomies = get_object_taxonomies(get_post_type($postId), 'names');
 
@@ -29,15 +29,15 @@ class Terms
                 $postTerms = wp_get_post_terms($postId, $postTaxonomy);
 
                 if (self::hasParentTerms($postTerms)) {
-                    $allTerms = get_terms($postTaxonomy, array(
+                    $allTerms = get_terms($postTaxonomy, [
                         'type' => get_post_type($postId),
                         'hide_empty' => 0
-                    ));
+                    ]);
                 } else {
                     $allTerms = null;
                 }
 
-                $sourceTaxonomyTermsObj[$postTaxonomy] = array($postTerms, $allTerms);
+                $sourceTaxonomyTermsObj[$postTaxonomy] = [$postTerms, $allTerms];
             }
         }
 
@@ -67,17 +67,17 @@ class Terms
 
             $origPostTerms = $taxData[0];
 
-            $origAllTerms = array_key_exists(1, $taxData) ? $taxData[1] : array();
+            $origAllTerms = array_key_exists(1, $taxData) ? $taxData[1] : [];
 
-            $allTerms = get_terms($tax, array(
+            $allTerms = get_terms($tax, [
                 'type' => get_post_type($postId),
                 'hide_empty' => 0
-            ));
+            ]);
 
             $origAllTermsById = &Functions::hashObjBy($origAllTerms, 'term_id');
             $allTermsBySlug = &Functions::hashObjBy($allTerms, 'slug');
 
-            $targetPostTermIds = array();
+            $targetPostTermIds = [];
 
             foreach ($origPostTerms as &$postTerm) {
 

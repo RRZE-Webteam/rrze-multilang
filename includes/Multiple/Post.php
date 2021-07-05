@@ -165,7 +165,7 @@ class Post
 
         $title  = get_the_title($sourcePost);
 
-        $sourcetags = wp_get_post_tags($processInfo['source_post_id'], array('fields' => 'names'));
+        $sourcetags = wp_get_post_tags($processInfo['source_post_id'], ['fields' => 'names']);
 
         $sourceBlogId  = get_current_blog_id();
 

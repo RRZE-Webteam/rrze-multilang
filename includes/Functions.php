@@ -212,7 +212,7 @@ class Functions
         if (!($currentUser = get_current_user_id())) {
             return;
         }
-        $defaultAllowedClasses = array('error', 'updated');
+        $defaultAllowedClasses = ['error', 'updated'];
         $allowedClasses = apply_filters('admin_notices_allowed_classes', $defaultAllowedClasses);
         $defaultClass = apply_filters('admin_notices_default_class', 'updated');
 
