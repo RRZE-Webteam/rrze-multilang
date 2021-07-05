@@ -48,6 +48,20 @@ class Rewrite
         $langRegex = Locale::getLangRegex();
 
         $extraRules = [];
+
+        if ($restUrlPrefix = rest_get_url_prefix()) {
+            $extraRules += [
+                "{$langRegex}/{$restUrlPrefix}/?$"
+                => 'index.php?lang=$matches[1]&rest_route=/',
+                "{$langRegex}/{$restUrlPrefix}/(.*)?"
+                => 'index.php?lang=$matches[1]&rest_route=/$matches[2]',
+                "{$wp_rewrite->index}/{$langRegex}/{$restUrlPrefix}/?$"
+                => 'index.php?lang=$matches[1]&rest_route=/',
+                "{$wp_rewrite->index}/{$langRegex}/{$restUrlPrefix}/(.*)?"
+                => 'index.php?lang=$matches[1]&rest_route=/$matches[2]',
+            ];
+        }
+
         $localizablePostTypes = Post::localizablePostTypes();
 
         foreach ($localizablePostTypes as $postType) {
@@ -57,14 +71,6 @@ class Rewrite
             ) {
                 continue;
             }
-
-            $permastruct = $wp_rewrite->get_extra_permastruct($postType);
-            $permastruct = $this->addLangToPermastruct($permastruct);
-
-            $extraRules += $this->generateRewriteRules(
-                $permastruct,
-                $postTypeObj->rewrite
-            );
 
             if ($postTypeObj->has_archive) {
                 if ($postTypeObj->has_archive === true) {
@@ -102,6 +108,14 @@ class Rewrite
                     ];
                 }
             }
+
+            $permastruct = $wp_rewrite->get_extra_permastruct($postType);
+            $permastruct = $this->addLangToPermastruct($permastruct);
+
+            $extraRules += $this->generateRewriteRules(
+                $permastruct,
+                $postTypeObj->rewrite
+            );
         }
 
         $localizableTaxonomies = get_object_taxonomies(
