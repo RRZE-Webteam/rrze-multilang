@@ -126,13 +126,10 @@ class Main
             $home = set_url_scheme(get_option('home'));
             $home = trailingslashit($home);
 
-            $availableLocales = Locale::availableLocales();
-            $availableLocales = array_map(['RRZE\Multilang\Locale', 'langSlug'], $availableLocales);
-            $availableLocales = implode('|', $availableLocales);
-
             $pattern = '#^'
                 . preg_quote($home)
-                . '(' . $availableLocales . ')'
+                . '(?:' . preg_quote(trailingslashit($wp_rewrite->index)) . ')?'
+                . Locale::getLangRegex()
                 . '(/|$)#';
 
             if (
