@@ -400,6 +400,8 @@ class Locale
 
     public static function getUrlWithLang($url = null, $lang = null, $args = '')
     {
+        global $wp_rewrite;
+
         $defaults = [
             'using_permalinks' => true,
         ];
@@ -453,15 +455,53 @@ class Locale
             return $url;
         }
 
-        $availableLanguages = array_map([__CLASS__, 'langSlug'], self::availableLocales());
-
         $tailSlashed = ('/' == substr($url, -1));
 
-        $url = preg_replace(
-            '#^' . preg_quote($home) . '((' . implode('|', $availableLanguages) . ')/)?#',
-            $home . ($langSlug ? trailingslashit($langSlug) : ''),
-            trailingslashit($url)
-        );
+        $home = set_url_scheme(get_option('home'));
+        $home = untrailingslashit($home);
+
+        if ($wp_rewrite->using_index_permalinks()) {
+            $pattern = '#^'
+                . preg_quote($home)
+                . '(?:/' . preg_quote($wp_rewrite->index) . ')?'
+                . '(?:/' . self::getLangRegex() . '(?![0-9A-Za-z%_-]))?'
+                . '#';
+
+            $replacement = $home . '/' . $wp_rewrite->index;
+
+            if ($langSlug) {
+                $replacement .= '/' . $langSlug;
+            }
+
+            $url = preg_replace(
+                $pattern,
+                $replacement,
+                $url
+            );
+
+            $url = preg_replace(
+                '#' . preg_quote($wp_rewrite->index) . '/?$#',
+                '',
+                $url
+            );
+        } else {
+            $pattern = '#^'
+                . preg_quote($home)
+                . '(?:/' . self::getLangRegex() . '(?![0-9A-Za-z%_-]))?'
+                . '#';
+
+            $replacement = $home;
+
+            if ($langSlug) {
+                $replacement .= '/' . $langSlug;
+            }
+
+            $url = preg_replace(
+                $pattern,
+                $replacement,
+                $url
+            );
+        }
 
         if (!$tailSlashed) {
             $url = untrailingslashit($url);
