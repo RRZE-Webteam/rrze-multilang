@@ -69,7 +69,7 @@ class Locale
         static $locale;
 
         if (defined('WPLANG')) {
-            $locale = \WPLANG;
+            $locale = WPLANG;
         }
 
         if (is_multisite()) {
