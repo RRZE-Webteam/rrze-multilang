@@ -1,26 +1,12 @@
 {
-    "_comment": "This is purely the result of trial and error...",
     "name": "rrze-multilang",
-    "version": "1.0.12",
+    "version": "1.0.13",
     "description": "Multilanguage plugin for WordPress.",
     "main": "rrze-multilang.php",
     "textdomain": "rrze-multilang",
     "private": true,
     "scripts": {
-        "build-single": "wp-scripts build assets/block-editor/src/single/index.js --output-path=assets/block-editor/build/single",
-        "build-multiple": "wp-scripts build assets/block-editor/src/multiple/index.js --output-path=assets/block-editor/build/multiple",
-        "check-engines": "wp-scripts check-engines",
-        "check-licenses": "wp-scripts check-licenses",
-        "format:js": "wp-scripts format-js",
-        "lint:css": "wp-scripts lint-style",
-        "lint:js": "wp-scripts lint-js",
-        "lint:md:docs": "wp-scripts lint-md-docs",
-        "lint:md:js": "wp-scripts lint-md-js",
-        "lint:pkg-json": "wp-scripts lint-pkg-json",
-        "packages-update": "wp-scripts packages-update",
-        "start": "wp-scripts start",
-        "test:e2e": "wp-scripts test-e2e",
-        "test:unit": "wp-scripts test-unit-js"
+        "build": "wp-scripts build assets/block-editor/src/single/index.js --output-path=assets/block-editor/build/single && wp-scripts build assets/block-editor/src/multiple/index.js --output-path=assets/block-editor/build/multiple"
     },
     "repository": {
         "type": "git",
@@ -45,21 +31,21 @@
         "ie 11"
     ],
     "devDependencies": {
-        "@babel/core": "^7.11.1",
-        "@babel/preset-env": "^7.11.0",
-        "@wordpress/scripts": "^13.0.3",
-        "autoprefixer": "^9.8.6",
+        "@babel/core": "^7.14.6",
+        "@babel/preset-env": "^7.14.7",
+        "@wordpress/scripts": "^16.1.4",
+        "autoprefixer": "^10.3.1",
         "gulp": "^4.0.2",
         "gulp-babel": "^8.0.0",
         "gulp-bump": "^3.2.0",
         "gulp-clean-css": "^4.3.0",
-        "gulp-csso": "^3.0.1",
-        "gulp-postcss": "^8.0.0",
+        "gulp-csso": "^4.0.1",
+        "gulp-postcss": "^9.0.0",
         "gulp-rename": "^2.0.0",
-        "gulp-sass": "^4.1.0",
+        "gulp-sass": "^5.0.0",
         "gulp-touch-cmd": "0.0.1",
         "gulp-uglify": "^3.0.2",
-        "node-sass": "^4.14.1",
-        "semver": "^6.3.0"
+        "node-sass": "^6.0.1",
+        "semver": "^7.3.5"
     }
 }
