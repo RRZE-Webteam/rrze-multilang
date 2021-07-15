@@ -173,11 +173,11 @@ class Query
             return $join;
         }
 
-        if (!$meta_table = _get_meta_table('post')) {
+        if (!$metaTable = _get_meta_table('post')) {
             return $join;
         }
 
-        $join .= " LEFT JOIN $meta_table AS postmeta_locale ON ($wpdb->posts.ID = postmeta_locale.post_id AND postmeta_locale.meta_key = '_rrze_multilang_single_locale')";
+        $join .= " LEFT JOIN $metaTable AS postmeta_locale ON ($wpdb->posts.ID = postmeta_locale.post_id AND postmeta_locale.meta_key = '_rrze_multilang_single_locale')";
 
         return $join;
     }
@@ -198,7 +198,7 @@ class Query
             return $where;
         }
 
-        if (!$meta_table = _get_meta_table('post')) {
+        if (!$metaTable = _get_meta_table('post')) {
             return $where;
         }
 
