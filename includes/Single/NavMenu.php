@@ -12,9 +12,7 @@ class NavMenu
     {
         add_filter('wp_get_nav_menu_items', [$this, 'getNavMenuItems'], 10, 3);
         add_filter('wp_setup_nav_menu_item', [$this, 'setupNavMenuItem'], 10, 1);
-
-        /* Edit Nav Menu Walker */
-        add_filter('wp_edit_nav_menu_walker', [$this, 'editNavMenuWalker'], 10, 2);
+        add_action('wp_nav_menu_item_custom_fields', [$this, 'customFields'], 10, 2);
         add_action('wp_update_nav_menu_item', [$this, 'updateNavMenuItem'], 10, 2);
     }
 
@@ -59,18 +57,87 @@ class NavMenu
         return $menuItem;
     }
 
-    public function editNavMenuWalker($class, $menuId)
+    public function customFields($menuItemId, $menuItem)
     {
-        return '\RRZE\Multilang\Single\NavMenuEdit';
+        wp_nonce_field('rrze_multilang_custom_nav_fields_nonce', '_rrze_multilang_custom_nav_fields_nonce_name');
+        $availableLanguages = Locale::getAvailableLanguages([
+            'orderby' => 'value',
+        ]);
+
+        if (!$availableLanguages) {
+            return '';
+        }
+
+        $output = '';
+
+        $output .= '<fieldset class="field-rrze-multilang-language description rrze-multilang-locale-options">';
+
+        $output .= sprintf(
+            '<legend>%s</legend>',
+            /* translators: followed by available languages list */
+            esc_html(__('Displayed on pages in', 'rrze-multilang'))
+        );
+
+        $nameAttr = sprintf(
+            'rrze-multilang-menu-item-locale[%s][]',
+            $menuItemId
+        );
+
+        $dummy = sprintf(
+            '<input type="hidden" name="%1$s" value="%2$s" />',
+            esc_attr($nameAttr),
+            'zxx' // special code in ISO 639-2
+        );
+
+        $output .= $dummy;
+
+        foreach ($availableLanguages as $locale => $language) {
+            $selected = in_array($locale, (array) $menuItem->rrze_multilang_locales);
+
+            $idAttr = sprintf(
+                'rrze-multilang-edit-menu-item-locale-%1$s-%2$s',
+                $menuItemId,
+                $locale
+            );
+
+            $input = sprintf(
+                '<input type="checkbox" id="%1$s" name="%2$s" value="%3$s"%4$s />',
+                esc_attr($idAttr),
+                esc_attr($nameAttr),
+                esc_attr($locale),
+                $selected ? ' checked="checked"' : ''
+            );
+
+            $label = sprintf(
+                '<label for="%1$s" class="rrze-multilang-locale-option%2$s">%3$s %4$s</label>',
+                esc_attr($idAttr),
+                $selected ? ' checked' : '',
+                $input,
+                esc_html($language)
+            );
+
+            $output .= $label . '<br>';
+        }
+
+        $output .= '</fieldset>';
+
+        echo $output;
     }
 
     public function updateNavMenuItem($menuId, $menuItemId)
     {
-        if (!isset($_POST['menu-item-rrze-multilang-locale'][$menuItemId])) {
+        if (
+            !isset($_POST['_rrze_multilang_custom_nav_fields_nonce_name'])
+            || !wp_verify_nonce($_POST['_rrze_multilang_custom_nav_fields_nonce_name'], 'rrze_multilang_custom_nav_fields_nonce')
+        ) {
             return;
         }
 
-        $requestedLocales = (array) $_POST['menu-item-rrze-multilang-locale'][$menuItemId];
+        if (!isset($_POST['rrze-multilang-menu-item-locale'][$menuItemId])) {
+            return;
+        }
+
+        $requestedLocales = (array) $_POST['rrze-multilang-menu-item-locale'][$menuItemId];
         $currentLocales = (array) get_post_meta($menuItemId, '_rrze_multilang_single_locale');
 
         foreach ((array) Locale::availableLocales() as $locale) {
