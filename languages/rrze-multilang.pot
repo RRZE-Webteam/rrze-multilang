@@ -2,14 +2,14 @@
 # This file is distributed under the GNU General Public License v2.
 msgid ""
 msgstr ""
-"Project-Id-Version: RRZE Multilang 1.0.11\n"
+"Project-Id-Version: RRZE Multilang 1.0.13\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/rrze-multilang\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-06-11T09:44:20+00:00\n"
+"POT-Creation-Date: 2021-10-07T19:14:24+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.5.0\n"
 "X-Domain: rrze-multilang\n"
@@ -48,13 +48,13 @@ msgstr ""
 
 #. translators: accessibility text
 #: includes/Multiple/Main.php:94
-#: includes/Single/Main.php:192
+#: includes/Single/Main.php:189
 #: includes/Single/Metabox.php:91
 msgid "Opens in a new window."
 msgstr ""
 
 #: includes/Multiple/Main.php:95
-#: includes/Single/Main.php:193
+#: includes/Single/Main.php:190
 msgid "The changes you made will be lost if you navigate away from this page."
 msgstr ""
 
@@ -302,7 +302,7 @@ msgid "Add Translation"
 msgstr ""
 
 #. translators: followed by available languages list
-#: includes/Single/NavMenuEdit.php:46
+#: includes/Single/NavMenu.php:78
 msgid "Displayed on pages in"
 msgstr ""
 
