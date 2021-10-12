@@ -4,7 +4,7 @@
 Plugin Name:     RRZE Multilang
 Plugin URI:      https://github.com/RRZE-Webteam/rrze-multilang
 Description:     Multilanguage plugin for WordPress.
-Version:         1.0.14
+Version:         1.0.15
 Author:          RRZE-Webteam
 Author URI:      https://blogs.fau.de/webworking/
 License:         GNU General Public License v2
@@ -40,7 +40,7 @@ const RRZE_WP_VERSION = '5.6';
 
 register_activation_hook(__FILE__, __NAMESPACE__ . '\activation');
 register_deactivation_hook(__FILE__, __NAMESPACE__ . '\deactivation');
-add_action('plugins_loaded', __NAMESPACE__ . '\loaded');
+add_action('plugins_loaded', __NAMESPACE__ . '\loaded', 9);
 
 /**
  * Loads a plugin’s translated strings.
@@ -128,10 +128,10 @@ function loaded()
                 $tag = is_plugin_active_for_network(plugin()->getBaseName()) ? 'network_admin_notices' : 'admin_notices';
                 add_action($tag, function () use ($pluginName, $error) {
                     printf(
-                        '<div class="notice notice-error"><p>' . 
-                        /* translators: 1: The plugin name, 2: The error string. */
-                        __('Plugins: %1$s: %2$s', 'rrze-multilang') . 
-                        '</p></div>',
+                        '<div class="notice notice-error"><p>' .
+                            /* translators: 1: The plugin name, 2: The error string. */
+                            __('Plugins: %1$s: %2$s', 'rrze-multilang') .
+                            '</p></div>',
                         esc_html($pluginName),
                         esc_html($error)
                     );
