@@ -1,6 +1,6 @@
 {
     "name": "rrze-multilang",
-    "version": "1.0.14",
+    "version": "1.0.15",
     "description": "Multilanguage plugin for WordPress.",
     "main": "rrze-multilang.php",
     "textdomain": "rrze-multilang",
