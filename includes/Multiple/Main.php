@@ -38,6 +38,7 @@ class Main
 
         /* Language Switcher Widget */
         add_action('widgets_init', [$this, 'widgetsInit'], 10, 0);
+        add_filter('rrze_multilang_widget_enabled', '__return_true');
 
         /* Locale Option */
         add_filter('widget_display_callback', [$this, 'widgetDisplayCallback'], 10, 3);
