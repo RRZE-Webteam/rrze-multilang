@@ -10,7 +10,8 @@ use RRZE\Multilang\Locale;
 
 class Switcher
 {
-    public static function languageSwitcher($args = '') {
+    public static function languageSwitcher($args = '')
+    {
         $args = wp_parse_args($args, [
             'echo' => false
         ]);
@@ -21,7 +22,7 @@ class Switcher
         ksort($links, SORT_NATURAL);
 
         $ul = '<ul>';
-	$linkfound = false;
+        $linkfound = false;
         foreach ($links as $link) {
             $languageTag = Locale::languageTag($link['locale']);
             $langSlug = Locale::langSlug($link['locale']);
@@ -32,12 +33,12 @@ class Switcher
 
             if (get_locale() === $link['locale']) {
                 $class[] = 'current';
-            }	
-	   
+            }
+
             if (empty($link['href'])) {
                 $class[] = 'notranslation';
-	    } else {
-		$linkfound = true;
+            } else {
+                $linkfound = true;
             }
 
             $class = implode(' ', array_unique($class));
@@ -45,7 +46,7 @@ class Switcher
             $label = $link['native_name'] ? $link['native_name'] : $link['title'];
 
             if (empty($link['href'])) {
-                $li = '<span data-lang="'.esc_attr($langSlug).'">'.esc_html($label).'</span>';
+                $li = '<span data-lang="' . esc_attr($langSlug) . '">' . esc_html($label) . '</span>';
             } else {
                 $atts = [
                     'rel' => 'alternate',
@@ -71,32 +72,32 @@ class Switcher
 
             $ul .= $li;
         }
-	$ul .= '</ul>'; 
+        $ul .= '</ul>';
         $output = '<div class="rrze-multilang">' . PHP_EOL;
-	
-	
-	if ($linkfound) {
-	    // use <nav> and set aria-label
-	    if ($args['title']) {
-		$output .= sprintf('<nav aria-label="%s">', $args['title']) . PHP_EOL;
-	    } else { 
-		$output .= sprintf('<nav aria-label="%s">', __('Language Switcher', 'rrze-multilang')) . PHP_EOL;
-	    }
-	} else {
-	    // use <div> and set aria-hidden
-	    if ($args['title']) {
-		$output .= sprintf('<div class="notranslation" aria-hidden="true" role="presentation" title="%s">', $args['title']) . PHP_EOL;
-	    } else { 
-		$output .= sprintf('<div class="notranslation" aria-hidden="true" role="presentation" title="%s">', __('Language Switcher', 'rrze-multilang')) . PHP_EOL;
-	    }
-	}
-	
+
+
+        if ($linkfound) {
+            // use <nav> and set aria-label
+            if ($args['title']) {
+                $output .= sprintf('<nav aria-label="%s">', $args['title']) . PHP_EOL;
+            } else {
+                $output .= sprintf('<nav aria-label="%s">', __('Language Switcher', 'rrze-multilang')) . PHP_EOL;
+            }
+        } else {
+            // use <div> and set aria-hidden
+            if ($args['title']) {
+                $output .= sprintf('<div class="notranslation" aria-hidden="true" role="presentation" title="%s">', $args['title']) . PHP_EOL;
+            } else {
+                $output .= sprintf('<div class="notranslation" aria-hidden="true" role="presentation" title="%s">', __('Language Switcher', 'rrze-multilang')) . PHP_EOL;
+            }
+        }
+
         $output .= $ul . PHP_EOL;
         if ($linkfound) {
-	    $output .= '</nav>' . PHP_EOL;
-	} else {
-	    $output .= '</div>' . PHP_EOL;    
-	}
+            $output .= '</nav>' . PHP_EOL;
+        } else {
+            $output .= '</div>' . PHP_EOL;
+        }
         $output .= '</div>' . PHP_EOL;
 
         $output = apply_filters('rrze_multilang_language_switcher', $output, $args);
