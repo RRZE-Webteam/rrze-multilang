@@ -4,7 +4,7 @@
 Plugin Name:     RRZE Multilang
 Plugin URI:      https://github.com/RRZE-Webteam/rrze-multilang
 Description:     Multilanguage plugin for WordPress.
-Version:         1.0.16
+Version:         1.1.0
 Author:          RRZE-Webteam
 Author URI:      https://blogs.fau.de/webworking/
 License:         GNU General Public License v2
@@ -17,10 +17,17 @@ namespace RRZE\Multilang;
 
 defined('ABSPATH') || exit;
 
-// Autoloader (PSR-4)
+const RRZE_PHP_VERSION = '7.4';
+const RRZE_WP_VERSION = '6.0';
+
+/**
+ * SPL Autoloader (PSR-4).
+ * @param string $class The fully-qualified class name.
+ * @return void
+ */
 spl_autoload_register(function ($class) {
     $prefix = __NAMESPACE__;
-    $base_dir = __DIR__ . '/includes/';
+    $baseDir = __DIR__ . '/includes/';
 
     $len = strlen($prefix);
     if (strncmp($prefix, $class, $len) !== 0) {
@@ -28,15 +35,12 @@ spl_autoload_register(function ($class) {
     }
 
     $relativeClass = substr($class, $len);
-    $file = $base_dir . str_replace('\\', '/', $relativeClass) . '.php';
+    $file = $baseDir . str_replace('\\', '/', $relativeClass) . '.php';
 
     if (file_exists($file)) {
         require $file;
     }
 });
-
-const RRZE_PHP_VERSION = '7.4';
-const RRZE_WP_VERSION = '5.8';
 
 register_activation_hook(__FILE__, __NAMESPACE__ . '\activation');
 register_deactivation_hook(__FILE__, __NAMESPACE__ . '\deactivation');
@@ -51,13 +55,11 @@ function loadTextdomain()
 }
 
 /**
- * [systemRequirements description]
- * @return string [description]
+ * System requirements verification.
+ * @return string Return an error message.
  */
 function systemRequirements(): string
 {
-    loadTextdomain();
-
     $error = '';
     if (version_compare(PHP_VERSION, RRZE_PHP_VERSION, '<')) {
         $error = sprintf(
@@ -78,13 +80,21 @@ function systemRequirements(): string
 }
 
 /**
- * [activation description]
+ * Activation callback function.
  */
 function activation()
 {
+    loadTextdomain();
     if ($error = systemRequirements()) {
         deactivate_plugins(plugin_basename(__FILE__));
-        wp_die(sprintf(__('Plugins: %s: %s', 'rrze-log'), plugin_basename(__FILE__), $error));
+        wp_die(
+            sprintf(
+                /* translators: 1: The plugin name, 2: The error string. */
+                __('Plugins: %1$s: %2$s', 'rrze-multilang'),
+                plugin_basename(__FILE__),
+                $error
+            )
+        );
     }
 }
 
@@ -99,10 +109,10 @@ function deactivation()
 }
 
 /**
- * [plugin description]
- * @return object
+ * Instantiate Plugin class.
+ * @return object Plugin
  */
-function plugin(): object
+function plugin()
 {
     static $instance;
     if (null === $instance) {
@@ -112,14 +122,13 @@ function plugin(): object
 }
 
 /**
- * [loaded description]
+ * Execute on 'plugins_loaded' API/action.
  * @return void
  */
 function loaded()
 {
-    add_action('init', __NAMESPACE__ . '\loadTextdomain');
-    plugin()->onLoaded();
-
+    loadTextdomain();
+    plugin()->loaded();
     if ($error = systemRequirements()) {
         add_action('admin_init', function () use ($error) {
             if (current_user_can('activate_plugins')) {
@@ -140,7 +149,6 @@ function loaded()
         });
         return;
     }
-
     $main = new Main;
     $main->onLoaded();
 }

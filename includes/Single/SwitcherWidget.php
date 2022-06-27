@@ -36,7 +36,7 @@ class SwitcherWidget extends \WP_Widget
         echo $args['before_widget'];
 
         echo Switcher::languageSwitcher(['title' => $title]);
-	
+
         echo $args['after_widget'];
     }
 
