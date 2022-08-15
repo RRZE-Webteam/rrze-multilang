@@ -15,7 +15,7 @@ class Capabilities
     {
         $metaCaps = [
             'rrze_multilang_edit_terms_translations' => 'manage_categories',
-            'rrze_multilang_access_all_locales' => 'manage_options',
+            'rrze_multilang_access_all_locales' => 'edit_published_posts',
             'rrze_multilang_access_locale' => 'read'
         ];
 
