@@ -190,10 +190,10 @@ class Functions
         return $tablename;
     }
 
-    public static function &hashObjBy($objArray = false, $key)
+    public static function &hashObjBy($objArray = false, $key = '')
     {
         $res = [];
-        if ($objArray && is_array($objArray)) {
+        if ($objArray && $key && is_array($objArray)) {
             foreach ($objArray as &$obj) {
                 $res[$obj->$key] = $obj;
             }
