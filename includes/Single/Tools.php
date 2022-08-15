@@ -29,7 +29,7 @@ class Tools
             'tools.php',
             __('Terms Translations', 'rrze-multilang'),
             __('Terms Translations', 'rrze-multilang'),
-            'manage_options',
+            'rrze_multilang_edit_terms_translations',
             $this->menuPage,
             [$this, 'subMenuPage']
         );
