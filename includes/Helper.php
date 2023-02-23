@@ -54,10 +54,9 @@ class Helper
                 'title' => $name,
                 'native_name' => trim($nativeName),
                 'lang_tag' => '',
-                'href' => ''
+                'href' => '',
+                'default' => $options->default_page ? get_permalink($options->default_page) : ''
             ];
-
-            $defaultPage = $options->default_page ? get_permalink($options->default_page) : false;
 
             if ($isSingular) {
                 if ($locale === $code) {
@@ -67,8 +66,6 @@ class Helper
                     && 'publish' == get_post_status($translations[$code])
                 ) {
                     $link['href'] = get_permalink($translations[$code]);
-                } elseif ($defaultPage) {
-                    $link['href'] = $defaultPage;
                 }
             } else {
                 $link['href'] = Locale::url(null, $code);
