@@ -73,7 +73,7 @@ class Helper
 
             $link['lang_tag'] = $link['href'] ? Locale::getLangFromUrl($link['href']) : '';
 
-            $links[] = $link;
+            $links[$code] = $link;
         }
 
         return $links;
