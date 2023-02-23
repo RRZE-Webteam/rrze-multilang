@@ -4,6 +4,7 @@ namespace RRZE\Multilang;
 
 defined('ABSPATH') || exit;
 
+use RRZE\Multilang\Options;
 use RRZE\Multilang\Locale;
 use RRZE\Multilang\Single\Post;
 
@@ -20,6 +21,8 @@ class Helper
         if (!isset($wp_query)) {
             return null;
         }
+
+        $options = (object) Options::getOptions();
 
         $locale = get_locale();
 
@@ -50,8 +53,11 @@ class Helper
                 'lang' => Locale::languageTag($code),
                 'title' => $name,
                 'native_name' => trim($nativeName),
+                'lang_tag' => '',
                 'href' => ''
             ];
+
+            $defaultPage = $options->default_page ? get_permalink($options->default_page) : false;
 
             if ($isSingular) {
                 if ($locale === $code) {
@@ -61,12 +67,14 @@ class Helper
                     && 'publish' == get_post_status($translations[$code])
                 ) {
                     $link['href'] = get_permalink($translations[$code]);
+                } elseif ($defaultPage) {
+                    $link['href'] = $defaultPage;
                 }
             } else {
                 $link['href'] = Locale::url(null, $code);
             }
 
-            $link['lang'] = $link['href'] ? Locale::getLangFromUrl($link['href']) : '';
+            $link['lang_tag'] = $link['href'] ? Locale::getLangFromUrl($link['href']) : '';
 
             $links[] = $link;
         }
