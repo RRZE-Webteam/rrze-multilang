@@ -1,4 +1,15 @@
+### vscode ###
+.vscode/
+### NetBeans ###
+**/nbproject/
+### PhpStorm ###
+.idea/
+### macOS ###
 .DS_Store
-.vscode
-node_modules
+### Node ###
+node_modules/
 package-lock.json
+### Composer ###
+composer.lock
+### Tmp ###
+_tmp/
