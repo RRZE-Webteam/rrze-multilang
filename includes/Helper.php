@@ -80,6 +80,17 @@ class Helper
     }
 
     /**
+     * Get post translations.
+     *
+     * @param integer $postId
+     * @return array|bool
+     */
+    public static function getPostTranslations($postId = 0)
+    {
+        return Post::getPostTranslations($postId);
+    }
+
+    /**
      * Debug
      *
      * @param $input
