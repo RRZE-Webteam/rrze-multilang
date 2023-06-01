@@ -218,7 +218,7 @@ class Settings
                 continue;
             }
 
-            if (!Functions::isBlogPublic($blogId)) {
+            if (!Functions::isBlogAvailable($blogId)) {
                 $this->deleteMainConnection($blogId);
                 continue;
             }
@@ -379,7 +379,7 @@ class Settings
             }
             $connections = [];
             foreach ($inputConnections as $key => $blogId) {
-                if (!Functions::isBlogPublic($blogId)) {
+                if (!Functions::isBlogAvailable($blogId)) {
                     $this->deleteMainConnection($blogId);
                     continue;
                 }
