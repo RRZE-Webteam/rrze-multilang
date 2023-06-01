@@ -118,7 +118,7 @@ class Sites
 
         $secondarySites = [];
         foreach ($siteOptions->connections[$currentBlogId] as $blogId) {
-            if (!Functions::isBlogPublic($blogId)) {
+            if (!Functions::isBlogAvailable($blogId)) {
                 continue;
             }
 

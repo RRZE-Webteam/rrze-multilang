@@ -202,9 +202,12 @@ class Functions
         return $res;
     }
 
-    public static function isBlogPublic($blogId): bool
+    public static function isBlogAvailable($blogId): bool
     {
-        return (bool) get_blog_status($blogId, 'public');
+        $archived = get_blog_status($blogId, 'archived');
+        $spam = get_blog_status($blogId, 'spam');
+        $deleted = get_blog_status($blogId, 'deleted');
+        return (!$archived && !$spam && !$deleted);
     }
 
     public static function flashAdminNotice($message, $class = '')

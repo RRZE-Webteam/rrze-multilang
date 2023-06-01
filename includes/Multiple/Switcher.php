@@ -171,7 +171,7 @@ class Switcher
         }
 
         foreach ($connections as $blogId) {
-            if (!Functions::isBlogPublic($blogId)) {
+            if (!Functions::isBlogAvailable($blogId)) {
                 continue;
             }
             $refPostId = 0;
