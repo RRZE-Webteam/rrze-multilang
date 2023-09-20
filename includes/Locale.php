@@ -154,7 +154,7 @@ class Locale
         return apply_filters('rrze_multilang_lang_slug', $slug, $locale);
     }
 
-    public static function getLanguage(string $locale)
+    public static function getLanguage($locale)
     {
         $defaultLocale = self::getDefaultLocale();
         $availableLanguages = self::getAvailableLanguages([
@@ -342,7 +342,7 @@ class Locale
         return false;
     }
 
-    public static function url($url = null, $lang = null)
+    public static function url($url = '', $lang = '')
     {
         if (!$lang) {
             $lang = determine_locale();
@@ -398,7 +398,7 @@ class Locale
         return false;
     }
 
-    public static function getUrlWithLang($url = null, $lang = null, $args = '')
+    public static function getUrlWithLang($url = '', $lang = '', $args = '')
     {
         global $wp_rewrite;
 
