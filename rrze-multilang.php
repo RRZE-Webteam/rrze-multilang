@@ -1,24 +1,27 @@
 <?php
 
 /*
-Plugin Name:     RRZE Multilang
-Plugin URI:      https://github.com/RRZE-Webteam/rrze-multilang
-Description:     Multilanguage plugin for WordPress.
-Version:         1.1.6
-Author:          RRZE-Webteam
-Author URI:      https://blogs.fau.de/webworking/
-License:         GNU General Public License v2
-License URI:     http://www.gnu.org/licenses/gpl-2.0.html
-Domain Path:     /languages
-Text Domain:     rrze-multilang
+Plugin Name:        RRZE Multilang
+Plugin URI:         https://github.com/RRZE-Webteam/rrze-multilang
+Description:        Multilanguage plugin for WordPress.
+Version:            1.1.7
+Requires at least:  6.3
+Requires PHP:       8.0
+Author:             RRZE-Webteam
+Author URI:         https://blogs.fau.de/webworking/
+License:            GNU General Public License v3
+License URI:        https://www.gnu.org/licenses/gpl-3.0.html
+Text Domain:        rrze-multilang
+Domain Path:        /languages
+Update URI:         https://github.com/RRZE-Webteam/rrze-multilang
 */
 
 namespace RRZE\Multilang;
 
 defined('ABSPATH') || exit;
 
-const RRZE_PHP_VERSION = '7.4';
-const RRZE_WP_VERSION = '6.0';
+const RRZE_PHP_VERSION = '8.0';
+const RRZE_WP_VERSION = '6.3';
 
 /**
  * SPL Autoloader (PSR-4).

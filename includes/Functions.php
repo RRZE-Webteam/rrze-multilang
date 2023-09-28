@@ -99,10 +99,7 @@ class Functions
         static $items = [];
         static $locale = null;
 
-        if (
-            !empty($items)
-            && $locale === $localeToEdit
-        ) {
+        if (!empty($items) && $locale === $localeToEdit) {
             return $items;
         }
 
@@ -142,8 +139,19 @@ class Functions
 
         remove_filter('get_term', ['\RRZE\Multilang\Single\Terms', 'getTermFilter']);
 
+        $options = (object) Options::getOptions();
         foreach ((array) get_taxonomies([], 'objects') as $taxonomy) {
-            $tax_labels = get_taxonomy_labels($taxonomy);
+            if (!count(array_intersect($taxonomy->object_type, $options->post_types))) {
+                continue;
+            }
+            // $excludedTaxonomies = [];
+            // if (in_array($taxonomy->name, $excludedTaxonomies)) {
+            //     continue;
+            // }
+            $taxLabels = get_taxonomy_labels($taxonomy);
+            if (!$taxLabels->name) {
+                continue;
+            }
             $terms = get_terms([
                 'taxonomy' => $taxonomy->name,
                 'orderby' => 'slug',
@@ -160,7 +168,8 @@ class Functions
                         $taxonomy->name,
                         $term->name
                     ),
-                    'context' => $tax_labels->name,
+                    'context' => $taxLabels->name,
+                    // 'context' => sprintf('%s (%s: %s)', $taxLabels->name, implode(' | ', $taxonomy->object_type), $taxonomy->name),
                     'cap' => $taxonomy->cap->edit_terms,
                 ];
             }

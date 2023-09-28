@@ -34,6 +34,7 @@ class Tools
             [$this, 'subMenuPage']
         );
 
+        Terms::removeGetTermFilter();
         add_action('load-' . $tools, [$this, 'loadToolsPage'], 10, 0);
         $this->listTable = new TermsListTable;
     }
@@ -146,8 +147,7 @@ class Tools
             wp_die(__('You are not allowed to edit terms translations.', 'rrze-multilang'));
         }
 
-        $locale = isset($_POST['locale']) ? $_POST['locale'] : null;
-
+        $locale = $_POST['locale'] ?? '';
         if (!Locale::isAvailableLocale($locale)) {
             return;
         }
@@ -165,11 +165,10 @@ class Tools
                 ? $item['cap']
                 : 'rrze_multilang_edit_terms_translations';
 
-            if (
-                isset($_POST[$item['name']])
-                && current_user_can($cap)
-            ) {
-                $translation = $_POST[$item['name']];
+            $name = $_POST[$item['name']] ?? '';
+
+            if ($name && current_user_can($cap)) {
+                $translation = $name;
             }
 
             $entries[] = [

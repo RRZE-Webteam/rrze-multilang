@@ -704,6 +704,8 @@ class Post
 
     protected function truncatePostSlug($slug, $length = 200)
     {
+        $slug = $slug ?? '';
+
         if (strlen($slug) > $length) {
             $decoded_slug = urldecode($slug);
 
