@@ -67,8 +67,6 @@ class Helper
                 ) {
                     $link['href'] = get_permalink($translations[$code]);
                 }
-            } else {
-                $link['href'] = Locale::url(null, $code);
             }
 
             $link['lang_tag'] = $link['href'] ? Locale::getLangFromUrl($link['href']) : '';
