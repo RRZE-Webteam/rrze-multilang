@@ -12,7 +12,7 @@ class Terms
     {
         add_filter('bloginfo', [__CLASS__, 'bloginfoFilter'], 10, 2);
         add_filter('get_term', [__CLASS__, 'getTermFilter'], 10, 2);
-        add_action('load-edit-tags.php', [__CLASS__, 'removeGetTermFilter'], 10, 0);
+        add_action('load-edit-tags.php', [__CLASS__, 'removeGetTermFilter']);
     }
 
     public static function bloginfoFilter($output, $show)
