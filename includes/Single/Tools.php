@@ -35,7 +35,7 @@ class Tools
         );
 
         Terms::removeGetTermFilter();
-        add_action('load-' . $tools, [$this, 'loadToolsPage'], 10, 0);
+        add_action('load-' . $tools, [$this, 'loadToolsPage']);
         $this->listTable = new TermsListTable;
     }
 
