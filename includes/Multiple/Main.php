@@ -6,11 +6,12 @@ defined('ABSPATH') || exit;
 
 use function RRZE\Multilang\plugin;
 use RRZE\Multilang\Options;
-use RRZE\Multilang\Locale;
 
 class Main
 {
     protected $options;
+
+    private $localizeArgs = [];
 
     public function __construct()
     {
@@ -25,7 +26,7 @@ class Main
             add_action('admin_enqueue_scripts', [$this, 'adminEnqueueScripts']);
 
             /* Enqueue Block Editor Assets */
-            add_action('enqueue_block_editor_assets', [$this, 'enqueueBlockEditorAssets'], 10, 0);
+            add_action('enqueue_block_editor_assets', [$this, 'enqueueBlockEditorAssets']);
         }
 
         new Post;
@@ -37,7 +38,7 @@ class Main
         add_action('wp_enqueue_scripts', [$this, 'enqueueScripts']);
 
         /* Language Switcher Widget */
-        add_action('widgets_init', [$this, 'widgetsInit'], 10, 0);
+        add_action('widgets_init', [$this, 'widgetsInit']);
         add_filter('rrze_multilang_widget_enabled', '__return_true');
 
         /* Locale Option */
@@ -67,29 +68,64 @@ class Main
 
     public function enqueueScripts()
     {
+        $assetFile = include plugin()->getPath('build') . 'frontend.asset.php';
+
         wp_register_style(
             'rrze-multilang-frontend',
-            plugins_url('assets/css/rrze-multilang.css', plugin()->getBasename()),
-            [],
-            plugin()->getVersion()
+            plugins_url('build/frontend.css', plugin()->getBasename()),
+            $assetFile['dependencies'] ?? [],
+            $assetFile['version'] ?? plugin()->getVersion(),
         );
     }
 
-    public function adminEnqueueScripts($hookSuffix)
+    public function adminEnqueueScripts($hook)
     {
+        if (
+            $hook !== 'post.php' &&
+            $hook !== 'post-new.php' &&
+            !in_array(get_post_type(), Post::localizablePostTypes())
+        ) {
+            return;
+        }
+
+        $assetFile = include plugin()->getPath('build') . 'classic-editor-multiple.asset.php';
+
         wp_enqueue_script(
-            'rrze-multilang-admin',
-            plugins_url('assets/js/multiple-admin.js', plugin()->getBasename()),
-            ['jquery'],
-            plugin()->getVersion(),
+            'rrze-multilang-classic-editor-multiple',
+            plugins_url('build/classic-editor-multiple.js', plugin()->getBasename()),
+            $assetFile['dependencies'] ?? [],
+            $assetFile['version'] ?? plugin()->getVersion(),
             true
         );
 
-        $availableLanguages = Locale::getAvailableLanguages([
-            'orderby' => 'value',
-        ]);
+        if (empty($this->localizeArgs)) $this->setLocalizeArgs();
+        wp_localize_script('rrze-multilang-classic-editor-multiple', 'rrzeMultilang', $this->localizeArgs);
+    }
 
-        $localArgs = [
+    public function enqueueBlockEditorAssets()
+    {
+        $assetFile = include plugin()->getPath('build') . 'block-editor-multiple.asset.php';
+
+        wp_enqueue_script(
+            'rrze-multilang-block-editor-multiple',
+            plugins_url('build/block-editor-multiple.js', plugin()->getBasename()),
+            $assetFile['dependencies'] ?? [],
+            $assetFile['version'] ?? plugin()->getVersion(),
+        );
+
+        if (empty($this->localizeArgs)) $this->setLocalizeArgs();
+        wp_localize_script('rrze-multilang-block-editor-multiple', 'rrzeMultilang', $this->localizeArgs);
+
+        wp_set_script_translations(
+            'rrze-multilang-block-editor-multiple',
+            'rrze-multilang',
+            plugin()->getPath('languages')
+        );
+    }
+
+    private function setLocalizeArgs()
+    {
+        $this->localizeArgs = [
             'l10n' => [
                 /* translators: accessibility text */
                 'targetBlank' => __('Opens in a new window.', 'rrze-multilang'),
@@ -105,41 +141,21 @@ class Main
             'localizablePostTypes' => Post::localizablePostTypes(),
         ];
 
-        if (in_array($hookSuffix, ['post.php', 'post-new.php'])) {
-            $currentPost = [
-                'secondarySitesToLink' => [],
-                'secondarySitesToCopy' => []
-            ];
-            if ($post = get_post()) {
-                //$postTypeObject = get_post_type_object($post->post_type);
-                //$editPostCap = $postTypeObject->cap->edit_post;
+        $currentPost = [
+            'secondarySitesToLink' => [],
+            'secondarySitesToCopy' => []
+        ];
 
-                $currentPost['postId'] = $post->ID;
+        if ($post = get_post()) {
+            //$postTypeObject = get_post_type_object($post->post_type);
+            //$editPostCap = $postTypeObject->cap->edit_post;
 
-                $currentPost['secondarySitesToLink'] = Sites::getSecondaryToLink($post);
-                $currentPost['secondarySitesToCopy'] = Sites::getSecondaryToCopy($post);
-            }
-            $localArgs['currentPost'] = $currentPost;
+            $currentPost['postId'] = $post->ID;
+
+            $currentPost['secondarySitesToLink'] = Sites::getSecondaryToLink($post);
+            $currentPost['secondarySitesToCopy'] = Sites::getSecondaryToCopy($post);
         }
 
-        wp_localize_script('rrze-multilang-admin', 'rrzeMultilang', $localArgs);
-    }
-
-    public function enqueueBlockEditorAssets()
-    {
-        $assetFile = include(plugin()->getPath('assets/block-editor/build/multiple') . 'index.asset.php');
-
-        wp_enqueue_script(
-            'rrze-multilang-block-editor-multiple',
-            plugins_url('assets/block-editor/build/multiple/index.js', plugin()->getBasename()),
-            $assetFile['dependencies'],
-            plugin()->getVersion()
-        );
-
-        wp_set_script_translations(
-            'rrze-multilang-block-editor-multiple',
-            'rrze-multilang',
-            plugin()->getPath('languages')
-        );
+        $this->localizeArgs['currentPost'] = $currentPost;
     }
 }
