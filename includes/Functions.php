@@ -264,13 +264,12 @@ class Functions
 
     public static function isCmsWorkflowPluginModuleActivated(string $modName = ''): bool
     {
-        global $cms_workflow;
+        require_once(ABSPATH . 'wp-admin/includes/plugin.php');
         if (
-            is_a($cms_workflow, '\CMS_Workflow')
-            && isset($cms_workflow->$modName)
-            && isset($cms_workflow->$modName->module->options->activated)
+            is_plugin_active('cms-workflow/cms-workflow.php')
+            && $options = get_option("_cms_workflow_{$modName}_options")
         ) {
-            return $cms_workflow->$modName->module->options->activated;
+            return (bool) $options->activated;
         }
         return false;
     }
