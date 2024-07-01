@@ -11,7 +11,7 @@ class RestApi
 {
     public function __construct()
     {
-        add_action('rest_api_init', [$this, 'restApiInit'], 10, 0);
+        add_action('rest_api_init', [$this, 'restApiInit']);
     }
 
     public function restApiInit()
