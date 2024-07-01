@@ -26,10 +26,10 @@ class Users
 
         /* Toolbar (Admin Bar) */
         add_action('admin_bar_menu', [$this, 'adminBarInit'], 0, 1);
-        add_action('wp_after_admin_bar_render', [$this, 'afterAdminBarRender'], 10, 0);
+        add_action('wp_after_admin_bar_render', [$this, 'afterAdminBarRender']);
         add_action('admin_bar_menu', [$this, 'adminBarMenu'], 10, 1);
 
-        add_action('admin_init', [$this, 'switchUserLocale'], 10, 0);
+        add_action('admin_init', [$this, 'switchUserLocale']);
         add_filter('insert_user_meta', [$this, 'userMetaFilter'], 10, 3);
     }
 
