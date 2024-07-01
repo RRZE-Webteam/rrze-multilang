@@ -15,7 +15,7 @@ class Post
     {
         $this->options = (object) Options::getOptions();
 
-        add_action('init', [$this, 'init'], 10, 0);
+        add_action('init', [$this, 'init']);
 
         /* Post Template */
         add_filter('body_class', [$this, 'bodyClass'], 10, 2);
@@ -34,7 +34,7 @@ class Post
         add_action('restrict_manage_posts', [$this, 'restrictManagePosts'], 10, 2);
         add_filter('post_row_actions', [$this, 'postRowActions'], 10, 2);
         add_filter('page_row_actions', [$this, 'postRowActions'], 10, 2);
-        add_action('admin_init', [$this, 'addTranslation'], 10, 0);
+        add_action('admin_init', [$this, 'addTranslation']);
     }
 
     public function init()
