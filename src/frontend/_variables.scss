@@ -1,0 +1,24 @@
+/*
+    Variables
+    Created on : 12.03.2021, 15:37:03
+*/
+
+$screen-lg: 1200px !default;
+$screen-sm: 768px !default;
+$colorDefault: #003366;
+$colorMetaHover: #e9edf2;
+$colorMeta: $colorDefault;
+$colorMetaBackground: #e9edf2;
+
+/*
+Mixins File for Wordpress Theme FAU
+*/
+
+@mixin box-shadow($shadow) {
+    box-shadow: $shadow;
+}
+
+@mixin border-radius($radius) {
+    border-radius: $radius;
+    background-clip: padding-box;
+}
