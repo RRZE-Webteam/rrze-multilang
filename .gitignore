@@ -11,5 +11,9 @@ node_modules/
 package-lock.json
 ### Composer ###
 composer.lock
+### WordPress ###
+*.pot
+*.po~
+*.pot~
 ### Tmp ###
 _tmp/

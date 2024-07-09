@@ -18,7 +18,7 @@ class Rewrite
         $this->optionName = Options::getOptionName();
         $this->options = (object) Options::getOptions();
 
-        add_action('init', [$this, 'addRewriteTags'], 10, 0);
+        add_action('init', [$this, 'addRewriteTags']);
         add_filter('rewrite_rules_array', [$this, 'rewriteRulesArray'], 10, 1);
     }
 

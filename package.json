@@ -1,51 +1,27 @@
 {
-    "name": "rrze-multilang",
-    "version": "1.1.8",
-    "description": "Multilanguage plugin for WordPress.",
-    "main": "rrze-multilang.php",
-    "textdomain": "rrze-multilang",
-    "private": true,
-    "scripts": {
-        "build": "wp-scripts build assets/block-editor/src/single/index.js --output-path=assets/block-editor/build/single && wp-scripts build assets/block-editor/src/multiple/index.js --output-path=assets/block-editor/build/multiple"
+    "engines": {
+        "node": ">=22.4.0",
+        "npm": ">=10.8.1"
     },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/RRZE-Webteam/rrze-multilang.git"
-    },
-    "author": "RRZE-Webteam",
-    "license": "GPL-2.0-or-later",
-    "bugs": {
-        "url": "https://github.com/RRZE-Webteam/rrze-multilang/issues"
-    },
-    "source": {
-        "js": "./src/js/",
-        "sass": "./src/sass/"
-    },
-    "target": {
-        "js": "./assets/js/",
-        "sass": "./assets/css/"
-    },
-    "homepage": "https://github.com/RRZE-Webteam/rrze-multilang",
     "browserslist": [
-        "last 3 years",
-        "ie 11"
+        "extends @wordpress/browserslist-config"
     ],
+    "scripts": {
+        "start": "wp-scripts start",
+        "build": "wp-scripts build",
+        "format": "wp-scripts format src",
+        "lint:js": "wp-scripts lint-js src",
+        "check-engines": "wp-scripts check-engines",
+        "check-licenses": "wp-scripts check-licenses --prod --gpl2",
+        "packages-update": "wp-scripts packages-update"
+    },
+    "dependencies": {
+        "@wordpress/components": "latest",
+        "@wordpress/data": "latest",
+        "@wordpress/edit-post": "latest",
+        "@wordpress/plugins": "latest"
+    },
     "devDependencies": {
-        "@babel/core": "^7.14.6",
-        "@babel/preset-env": "^7.14.7",
-        "@wordpress/scripts": "^16.1.4",
-        "autoprefixer": "^10.3.1",
-        "gulp": "^4.0.2",
-        "gulp-babel": "^8.0.0",
-        "gulp-bump": "^3.2.0",
-        "gulp-clean-css": "^4.3.0",
-        "gulp-csso": "^4.0.1",
-        "gulp-postcss": "^9.0.0",
-        "gulp-rename": "^2.0.0",
-        "gulp-sass": "^5.0.0",
-        "gulp-touch-cmd": "0.0.1",
-        "gulp-uglify": "^3.0.2",
-        "node-sass": "^6.0.1",
-        "semver": "^7.3.5"
+        "@wordpress/scripts": "^19.2.4"
     }
 }

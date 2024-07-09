@@ -22,7 +22,7 @@ class RestApi
 
         $this->currentBlogId = get_current_blog_id();
 
-        add_action('rest_api_init', [$this, 'restApiInit'], 10, 0);
+        add_action('rest_api_init', [$this, 'restApiInit']);
     }
 
     public function restApiInit()

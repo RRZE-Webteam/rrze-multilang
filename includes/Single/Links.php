@@ -26,7 +26,7 @@ class Links
         add_filter('term_link', [$this, 'termLink'], 10, 3);
 
         add_filter('home_url', [$this, 'homeUrl'], 10, 1);
-        add_action('wp_head', [$this, 'm17nHeaders'], 10, 0);
+        add_action('wp_head', [$this, 'm17nHeaders']);
 
         add_filter('get_previous_post_join', [$this, 'adjacentPostJoin'], 10, 3);
         add_filter('get_next_post_join', [$this, 'adjacentPostJoin'], 10, 3);
