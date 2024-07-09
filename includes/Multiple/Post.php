@@ -41,9 +41,9 @@ class Post
 
         if (!isset($columns['locale'])) {
             $columns = array_merge(
-                array_slice($columns, 0, 3),
+                array_slice($columns, 0, 2),
                 ['locale' => __('Translation', 'rrze-multilang')],
-                array_slice($columns, 3)
+                array_slice($columns, 2)
             );
         }
 
@@ -87,7 +87,7 @@ class Post
             }
         }
 
-        if (empty($reference)) {
+        if (empty($reference) || !is_array($reference)) {
             return $posts;
         }
 
