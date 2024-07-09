@@ -1,216 +1,138 @@
-import { PluginDocumentSettingPanel } from "@wordpress/edit-post";
-import {
-    PanelRow,
-    Button,
-    SelectControl,
-    Spinner,
-} from "@wordpress/components";
-import { withState } from "@wordpress/compose";
-import { useState } from "@wordpress/element";
-import { dispatch, useSelect } from "@wordpress/data";
-import { __ } from "@wordpress/i18n";
-import apiFetch from "@wordpress/api-fetch";
+import { PluginDocumentSettingPanel } from '@wordpress/edit-post';
+import { PanelRow, Button, SelectControl, Spinner } from '@wordpress/components';
+import { useState } from '@wordpress/element';
+import { dispatch, useSelect } from '@wordpress/data';
+import { __ } from '@wordpress/i18n';
+import apiFetch from '@wordpress/api-fetch';
 
 export default function LanguagePanel() {
     const currentPost = useSelect((select) => {
-        return Object.assign(
-            {},
-            select("core/editor").getCurrentPost(),
+        return Object.assign({},
+            select('core/editor').getCurrentPost(),
             rrzeMultilang.currentPost
         );
     });
 
-    if (rrzeMultilang.localizablePostTypes.indexOf(currentPost.type) == -1) {
-        return <></>;
+    if (rrzeMultilang.localizablePostTypes.indexOf(currentPost.type) === -1) {
+        return (<></>);
     }
 
-    if ("auto-draft" == currentPost.status) {
-        return <></>;
+    if (currentPost.status === 'auto-draft') {
+        return (<></>);
     }
 
-    const [secondarySitesToLink, setSecondarySitesToLink] = useState(
-        currentPost.secondarySitesToLink
-    );
-
-    const [secondarySitesToCopy, setSecondarySitesToCopy] = useState(
-        currentPost.secondarySitesToCopy
-    );
+    const [secondarySitesToLink, setSecondarySitesToLink] = useState(currentPost.secondarySitesToLink);
+    const [secondarySitesToCopy, setSecondarySitesToCopy] = useState(currentPost.secondarySitesToCopy);
 
     const SecondarySitesToLink = () => {
-        const listItems = [];
-        Object.entries(secondarySitesToLink).forEach(([key, value]) => {
-            let mainLabel = value.name + " \u2014 " + value.language;
-            let selected = value.selected;
-            const LinkSelectControl = withState({
-                link: selected,
-            })(({ link, setState }) => (
-                <SelectControl
-                    label={mainLabel}
-                    value={link}
-                    options={value.options}
-                    onChange={(link, value) => {
-                        setState({ link });
-                        let val = link.split(":");
-                        let blogId = val[0];
-                        let postId = val[1];
-                        apiFetch({
-                            path:
-                                "/rrze-multilang/v1/link/" +
-                                currentPost.id +
-                                "/blog/" +
-                                blogId +
-                                "/post/" +
-                                postId,
-                            method: "POST",
-                        }).then((response) => {
-                            let blogName = response[postId].blogName;
-                            let postTitle = response[postId].postTitle;
-                            dispatch("core/notices").createInfoNotice(
-                                __(
-                                    `Linked to ${postTitle} on ${blogName}.`,
-                                    "rrze-multilang"
-                                ),
-                                {
-                                    isDismissible: true,
-                                    type: "snackbar",
-                                    speak: true,
-                                }
-                            );
-                        });
-                    }}
-                />
-            ));
+        const listItems = Object.entries(secondarySitesToLink).map(([key, value]) => {
+            const mainLabel = value.name + ' \u2014 ' + value.language;
+            const [link, setLink] = useState(value.selected);
 
-            listItems.push(
-                <PanelRow>
-                    <LinkSelectControl />
+            const handleLinkChange = (link) => {
+                setLink(link);
+                const [blogId, postId] = link.split(':');
+                apiFetch({
+                    path: `/rrze-multilang/v1/link/${currentPost.id}/blog/${blogId}/post/${postId}`,
+                    method: 'POST',
+                }).then((response) => {
+                    const blogName = response[postId].blogName;
+                    const postTitle = response[postId].postTitle;
+                    dispatch('core/notices').createInfoNotice(
+                        __(`Linked to ${postTitle} on ${blogName}.`, 'rrze-multilang'),
+                        {
+                            isDismissible: true,
+                            type: 'snackbar',
+                            speak: true
+                        }
+                    );
+                });
+            };
+
+            return (
+                <PanelRow key={key}>
+                    <SelectControl
+                        label={mainLabel}
+                        value={link}
+                        options={value.options}
+                        onChange={handleLinkChange}
+                    />
                 </PanelRow>
             );
         });
 
-        const ListItems = (props) => {
-            if (props.listItems.length) {
-                return props.listItems;
-            } else {
-                return (
-                    <em>
-                        {__(
-                            "There are no websites available for translations.",
-                            "rrze-multilang"
-                        )}
-                    </em>
-                );
-            }
-        };
-
-        return <ListItems listItems={listItems} />;
+        return listItems.length ? listItems : (
+            <em>{__('There are no websites available for translations.', 'rrze-multilang')}</em>
+        );
     };
 
     const SecondarySitesToCopy = () => {
         const addSecondarySitesToCopy = (blogId) => {
-            const secondarySitesToCopyAlt = Object.assign(
-                {},
-                secondarySitesToCopy
-            );
-
-            secondarySitesToCopyAlt[blogId] = {
-                creating: true,
-            };
-
-            setSecondarySitesToCopy(secondarySitesToCopyAlt);
+            const updatedSecondarySitesToCopy = { ...secondarySitesToCopy, [blogId]: { creating: true } };
+            setSecondarySitesToCopy(updatedSecondarySitesToCopy);
 
             apiFetch({
-                path:
-                    "/rrze-multilang/v1/copy/" +
-                    currentPost.id +
-                    "/blog/" +
-                    blogId,
-                method: "POST",
+                path: `/rrze-multilang/v1/copy/${currentPost.id}/blog/${blogId}`,
+                method: 'POST',
             }).then((response) => {
-                const secondarySitesToCopyAlt = Object.assign(
-                    {},
-                    secondarySitesToCopy
-                );
-
-                secondarySitesToCopyAlt[blogId] = {
+                const updatedSecondarySitesToCopy = { ...secondarySitesToCopy, [blogId]: {
                     blogId: response[blogId].blogId,
                     blogName: response[blogId].blogName,
                     creating: false,
-                };
+                }};
 
-                setSecondarySitesToCopy(secondarySitesToCopyAlt);
+                setSecondarySitesToCopy(updatedSecondarySitesToCopy);
 
-                let blogName = secondarySitesToCopyAlt[blogId].blogName;
-
-                dispatch("core/notices").createInfoNotice(
-                    __(
-                        `A copy has been added to ${blogName}.`,
-                        "rrze-multilang"
-                    ),
+                const blogName = updatedSecondarySitesToCopy[blogId].blogName;
+                dispatch('core/notices').createInfoNotice(
+                    __(`A copy has been added to ${blogName}.`, 'rrze-multilang'),
                     {
                         isDismissible: true,
-                        type: "snackbar",
-                        speak: true,
+                        type: 'snackbar',
+                        speak: true
                     }
                 );
             });
         };
 
-        const listItems = [];
-        let blogIdVal = 0;
+        const listItems = Object.entries(secondarySitesToCopy).map(([key, value]) => {
+            const [blogId, setBlogId] = useState(key);
 
-        Object.entries(secondarySitesToCopy).forEach(([key, value]) => {
-            const CopySelectControl = withState({
-                blogId: key,
-            })(({ blogId, setState }) => (
-                <SelectControl
-                    label={__("Copy To:", "rrze-multilang")}
-                    value={blogId}
-                    options={value.options}
-                    onChange={(blogId) => {
-                        setState({ blogId });
-                        blogIdVal = blogId;
-                    }}
-                />
-            ));
+            const handleCopyChange = (blogId) => {
+                setBlogId(blogId);
+            };
 
-            if (value.creating == undefined) {
-                listItems.push(
+            return (
+                <div key={key}>
                     <PanelRow>
-                        <CopySelectControl />
+                        <SelectControl
+                            label={__('Copy To:', 'rrze-multilang')}
+                            value={blogId}
+                            options={value.options}
+                            onChange={handleCopyChange}
+                        />
                     </PanelRow>
-                );
-
-                listItems.push(
-                    <Button
-                        isSecondary
-                        onClick={() => {
-                            addSecondarySitesToCopy(blogIdVal);
-                        }}
-                    >
-                        {__("Add Copy", "rrze-multilang")}
-                    </Button>
-                );
-            } else if (value.creating) {
-                listItems.push(<Spinner />);
-            }
+                    {value.creating === undefined ? (
+                        <Button
+                            isSecondary
+                            onClick={() => addSecondarySitesToCopy(blogId)}
+                        >
+                            {__('Add Copy', 'rrze-multilang')}
+                        </Button>
+                    ) : value.creating ? (
+                        <Spinner />
+                    ) : null}
+                </div>
+            );
         });
 
-        const ListItems = (props) => {
-            if (props.listItems.length) {
-                return props.listItems;
-            } else {
-                return <></>;
-            }
-        };
-
-        return <ListItems listItems={listItems} />;
+        return listItems.length ? listItems : (<></>);
     };
 
     return (
         <PluginDocumentSettingPanel
             name="rrze-multilang-language-panel"
-            title={__("Language", "rrze-multilang")}
+            title={__('Language', 'rrze-multilang')}
             className="rrze-multilang-language-panel"
         >
             <SecondarySitesToLink />
