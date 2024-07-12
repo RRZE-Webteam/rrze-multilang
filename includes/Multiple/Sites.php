@@ -12,12 +12,15 @@ class Sites
 {
     public static function getSecondaryToLink(\WP_Post $post): array
     {
+        $secondary = [];
+        $secondarySites = self::getSecondarySites($post->post_type, true);
+        if (empty($secondarySites)) {
+            return $secondary;
+        }
+
         $currentBlogId = get_current_blog_id();
         $reference = (array) get_post_meta($post->ID, '_rrze_multilang_multiple_reference', true);
-        $secondarySites = Sites::getSecondarySites($post->post_type, true);
         $emdash = html_entity_decode('&mdash;', ENT_COMPAT, 'UTF-8');
-
-        $secondary = [];
 
         foreach ($secondarySites as $blogId => $blog) {
             $name = esc_html($blog['name']);
@@ -72,10 +75,13 @@ class Sites
 
     public static function getSecondaryToCopy(\WP_Post $post)
     {
-        $secondarySites = self::getSecondarySites($post->post_type);
-        $emdash = html_entity_decode('&mdash;', ENT_COMPAT, 'UTF-8');
-
         $secondary = [];
+        $secondarySites = self::getSecondarySites($post->post_type);
+        if (empty($secondarySites)) {
+            return $secondary;
+        }
+
+        $emdash = html_entity_decode('&mdash;', ENT_COMPAT, 'UTF-8');
 
         $options[] = [
             'label' => sprintf(
@@ -85,7 +91,7 @@ class Sites
             ),
             'value' => 0,
             'disabled' => false
-        ];        
+        ];
 
         foreach ($secondarySites as $blogId => $blog) {
             $name = esc_html($blog['name']);
@@ -101,7 +107,6 @@ class Sites
                 'value' => $blogId,
                 'disabled' => false
             ];
-
         }
 
         $secondary[] = [
@@ -117,6 +122,9 @@ class Sites
         $currentBlogId = get_current_blog_id();
 
         $secondarySites = [];
+        if (empty($siteOptions->connections[$currentBlogId]) || !is_array($siteOptions->connections[$currentBlogId])) {
+            return $secondarySites;
+        }
         foreach ($siteOptions->connections[$currentBlogId] as $blogId) {
             if (!Functions::isBlogAvailable($blogId)) {
                 continue;
