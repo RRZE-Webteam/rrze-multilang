@@ -380,8 +380,7 @@ class Post
                             $metaKey,
                             [
                                 '_rrze_multilang_single_locale',
-                                '_rrze_multilang_single_source',
-                                '_rrze_multilang_multiple_reference'
+                                '_rrze_multilang_single_source'
                             ]
                         )
                     ) {
