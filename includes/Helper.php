@@ -11,6 +11,28 @@ use RRZE\Multilang\Single\Post;
 class Helper
 {
     /**
+     * Check if the plugin is in multilang mode.
+     *
+     * @return bool
+     */
+    public static function hasMultilangMode()
+    {
+        $options = (object) Options::getOptions();
+        return (bool) $options->multilang_mode;
+    }
+
+    /**
+     * Get post translations.
+     *
+     * @param integer $postId
+     * @return array|bool
+     */
+    public static function getPostTranslations($postId = 0)
+    {
+        return Post::getPostTranslations($postId);
+    }
+
+    /**
      * Get frontend locale information.
      *
      * @return array
@@ -60,12 +82,16 @@ class Helper
 
             if ($isSingular) {
                 if ($locale === $code) {
-                    $link['href'] = get_permalink(get_queried_object_id());
+                    $postId = get_queried_object_id();
+                    $link['post_id'] = $postId;
+                    $link['href'] = get_permalink($postId);
                 } elseif (
                     !empty($translations[$code])
                     && 'publish' == get_post_status($translations[$code])
                 ) {
-                    $link['href'] = get_permalink($translations[$code]);
+                    $post = $translations[$code];
+                    $link['post_id'] = $post->ID;
+                    $link['href'] = get_permalink($post->ID);
                 }
             }
 
@@ -75,16 +101,5 @@ class Helper
         }
 
         return $links;
-    }
-
-    /**
-     * Get post translations.
-     *
-     * @param integer $postId
-     * @return array|bool
-     */
-    public static function getPostTranslations($postId = 0)
-    {
-        return Post::getPostTranslations($postId);
     }
 }
