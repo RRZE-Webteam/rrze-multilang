@@ -11,14 +11,14 @@ use RRZE\Multilang\Single\Post;
 class Helper
 {
     /**
-     * Check if the plugin is in multilang mode.
+     * Check if the plugin is in single multilang mode.
      *
      * @return bool
      */
-    public static function hasMultilangMode()
+    public static function isSingleMultilangMode()
     {
         $options = (object) Options::getOptions();
-        return (bool) $options->multilang_mode;
+        return $options->multilang_mode == 1;
     }
 
     /**
@@ -82,16 +82,12 @@ class Helper
 
             if ($isSingular) {
                 if ($locale === $code) {
-                    $postId = get_queried_object_id();
-                    $link['post_id'] = $postId;
-                    $link['href'] = get_permalink($postId);
+                    $link['href'] = get_permalink(get_queried_object_id());
                 } elseif (
                     !empty($translations[$code])
                     && 'publish' == get_post_status($translations[$code])
                 ) {
-                    $post = $translations[$code];
-                    $link['post_id'] = $post->ID;
-                    $link['href'] = get_permalink($post->ID);
+                    $link['href'] = get_permalink($translations[$code]);
                 }
             }
 
