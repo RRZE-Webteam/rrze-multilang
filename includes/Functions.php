@@ -116,7 +116,7 @@ class Functions
         $items[] = [
             'name' => 'blogname',
             'original' => get_option('blogname'),
-            'translated' => Functions::translate(
+            'translated' => self::translate(
                 'blogname',
                 'blogname',
                 get_option('blogname')
@@ -128,7 +128,7 @@ class Functions
         $items[] = [
             'name' => 'blogdescription',
             'original' => get_option('blogdescription'),
-            'translated' => Functions::translate(
+            'translated' => self::translate(
                 'blogdescription',
                 'blogdescription',
                 get_option('blogdescription')
@@ -163,7 +163,7 @@ class Functions
                 $items[] = [
                     'name' => $name,
                     'original' => $term->name,
-                    'translated' => Functions::translate(
+                    'translated' => self::translate(
                         $name,
                         $taxonomy->name,
                         $term->name

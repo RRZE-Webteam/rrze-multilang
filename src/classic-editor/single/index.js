@@ -42,6 +42,10 @@ jQuery(document).ready(($) => {
                     location.reload();
                     return;
                 })
+                .fail(function (jqXHR) {
+                    var error = JSON.parse(jqXHR.responseText);
+                    alert(error.message); // Display the error message to the user
+                })
                 .always(function () {
                     $("#rrze-multilang-add-translation")
                         .next(".spinner")

@@ -141,7 +141,6 @@ class Media
         if ($image) {
 
             $imageDetails = [
-
                 'id'            => $thumbnailId,
                 'url'           => get_attached_file($thumbnailId),
                 'alt'           => get_post_meta($thumbnailId, '_wp_attachment_image_alt', true),
@@ -256,7 +255,7 @@ class Media
             foreach ($postMediaAttachments as $postMediaImgData) {
                 $postMediaAttachment = $postMediaImgData['object'];
                 $fileFullpath = $postMediaImgData['attached_file_path'];
-    
+
                 $alt_tag = get_post_meta($postMediaAttachment->ID, '_wp_attachment_image_alt', true);
                 $altTagsToBeCopied[$attachementCount] = $alt_tag;
                 $attachementCount++;

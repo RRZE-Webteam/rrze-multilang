@@ -104,8 +104,8 @@ class RestApi
             || get_blog_status($remoteBlogId, 'deleted')
         ) {
             return new \WP_Error(
-                'rrze_multilang_blog_id_invalid',
-                __('The requested website is not available.', 'rrze-multilang'),
+                'rrze_multilang_post_not_available',
+                __('Please select an available post.', 'rrze-multilang'),
                 ['status' => 400]
             );
         }
@@ -171,10 +171,18 @@ class RestApi
 
     public function restCopyPost(\WP_REST_Request $request)
     {
-        $postId = $request->get_param('id');
+        if ($blogId = $request->get_param('blogid')) {
+            $blogId = (int) $blogId;
+        } else {
+            return new \WP_Error(
+                'rrze_multilang_blog_id_invalid',
+                __('The requested website is not available.', 'rrze-multilang'),
+                ['status' => 400]
+            );
+        }
 
+        $postId = (int) $request->get_param('id');
         $post = get_post($postId);
-        $postType = get_post_type($post);
 
         if (!$post) {
             return new \WP_Error(
@@ -184,6 +192,8 @@ class RestApi
             );
         }
 
+        $postType = get_post_type($post);
+
         if (!in_array($postType, $this->options->post_types)) {
             return new \WP_Error(
                 'rrze_multilang_post_type_invalid',
@@ -191,8 +201,6 @@ class RestApi
                 ['status' => 400]
             );
         }
-
-        $blogId = $request->get_param('blogid');
 
         if (
             !isset($this->siteOptions->connections[$blogId])
