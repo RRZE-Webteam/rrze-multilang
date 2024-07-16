@@ -40,8 +40,8 @@ class Settings
         ];
 
         if (
-            Functions::isCmsWorkflowPluginModuleActivated('network')
-            || Functions::isCmsWorkflowPluginModuleActivated('translation')
+            method_exists('\RRZE\Workflow\Helper', 'isModuleActivated')
+            && \RRZE\Workflow\Helper::isModuleActivated('network')
         ) {
             $this->workflowModuleActivated = true;
         }
