@@ -24,8 +24,8 @@ class Main
         $this->settings = new Settings;
 
         if (
-            Functions::isCmsWorkflowPluginModuleActivated('network')
-            || Functions::isCmsWorkflowPluginModuleActivated('translation')
+            method_exists('\RRZE\Workflow\Helper', 'isPluginModuleActivated')
+            && \RRZE\Workflow\Helper::isPluginModuleActivated('network')
         ) {
             return;
         }
