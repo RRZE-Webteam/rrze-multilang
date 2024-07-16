@@ -261,16 +261,4 @@ class Functions
 
         delete_transient($transient);
     }
-
-    public static function isCmsWorkflowPluginModuleActivated(string $modName = ''): bool
-    {
-        require_once(ABSPATH . 'wp-admin/includes/plugin.php');
-        if (
-            is_plugin_active('cms-workflow/cms-workflow.php')
-            && $options = get_option("_cms_workflow_{$modName}_options")
-        ) {
-            return (bool) $options->activated;
-        }
-        return false;
-    }
 }
