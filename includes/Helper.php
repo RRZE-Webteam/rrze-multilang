@@ -22,6 +22,30 @@ class Helper
     }
 
     /**
+     * Check if the post has translation.
+     */
+    public static function hasTranslation($postId = 0)
+    {
+        $postType = get_post_type($postId);
+
+        if (!Post::isLocalizablePostType($postType)) {
+            return false;
+        }
+
+        $locale = get_post_meta($postId, '_rrze_multilang_single_locale', true);
+
+        if (empty($locale)) {
+            return false;
+        }
+
+        if ($locale != get_locale()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Get post translations.
      *
      * @param integer $postId

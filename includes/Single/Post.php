@@ -740,7 +740,6 @@ class Post
         return $columns;
     }
 
-
     public function managePostsCustomColumn($column, $postId)
     {
         if ($column !== 'locale') {
