@@ -26,7 +26,7 @@ class TermsListTable extends \WP_List_Table
 
     public function prepare_items()
     {
-        $this->localeToEdit = isset($_GET['locale']) ? $_GET['locale'] : '';
+        $this->localeToEdit = trim($_GET['locale'] ?? '');
 
         if (!Locale::isAvailableLocale($this->localeToEdit)) {
             return;
