@@ -78,8 +78,8 @@ class Tools
         //$this->adminNotice();
 
         echo '<form action="" method="get">';
-        echo '<input type="hidden" name="page" value="', isset($_REQUEST['page']) ? esc_attr($_REQUEST['page']) : '', '">';
-        echo '<input type="hidden" name="locale" value="', isset($_REQUEST['locale']) ? esc_attr($_REQUEST['locale']) : '', '">';
+        echo '<input type="hidden" name="page" value="', esc_attr($_REQUEST['page'] ?? ''), '">';
+        echo '<input type="hidden" name="locale" value="', esc_attr($_REQUEST['locale'] ?? ''), '">';
 
         $this->listTable->search_box(
             __('Search Translation', 'rrze-multilang'),
@@ -89,7 +89,7 @@ class Tools
         echo '</form>';
 
         echo '<form action="" method="post" id="rrze-multilang-terms-translation">';
-        echo '<input type="hidden" name="paged" value="', isset($_GET['paged']) ? absint($_GET['paged']) : '', '">';
+        echo '<input type="hidden" name="paged" value="', absint($_GET['paged'] ?? ''), '">';
 
         wp_nonce_field('rrze_multilang_edit_terms_translations');
         $this->listTable->display();
@@ -117,7 +117,7 @@ class Tools
             wp_die(__('You are not allowed to edit terms translations.', 'rrze-multilang'));
         }
 
-        $locale = isset($_POST['locale']) ? $_POST['locale'] : null;
+        $locale = $_POST['locale'] ?? null;
 
         if (!Locale::isAvailableLocale($locale)) {
             return;
@@ -130,7 +130,7 @@ class Tools
         $redirectTo = add_query_arg(
             [
                 'locale' => $locale,
-                'paged' => isset($_POST['paged']) ? absint($_POST['paged']) : 1,
+                'paged' => absint($_POST['paged'] ?? 1),
             ],
             menu_page_url($this->menuPage, false)
         );
