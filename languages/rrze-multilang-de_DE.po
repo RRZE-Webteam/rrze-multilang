@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RRZE Multilang 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/rrze-multilang\n"
-"POT-Creation-Date: 2024-07-12T12:04:05+00:00\n"
-"PO-Revision-Date: 2024-07-12 14:06+0200\n"
+"POT-Creation-Date: 2024-08-07T12:31:13+00:00\n"
+"PO-Revision-Date: 2024-08-07 14:32+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -264,8 +264,8 @@ msgid "Select the websites that should be connected."
 msgstr "Wählen Sie die Websites aus, die verbunden werden sollen."
 
 #: includes/Settings.php:301
-msgid "Website Default"
-msgstr "Website-Einstellung"
+msgid "Default Language"
+msgstr "Standardsprache"
 
 #: includes/Settings.php:314
 msgid "Select the languages available for the website."
@@ -299,17 +299,17 @@ msgstr "Übersetzung hinzufügen"
 msgid "Displayed on pages in"
 msgstr "Angezeigt auf Seiten in"
 
-#: includes/Single/Post.php:797
+#: includes/Single/Post.php:796
 msgid "Show all locales"
 msgstr "Alle Sprachen anzeigen"
 
 #. translators: %s: The translated post language.
-#: includes/Single/Post.php:839
+#: includes/Single/Post.php:838
 msgid "Edit %s translation"
 msgstr "%s-Übersetzung bearbeiten"
 
 #. translators: %s: The translated post language.
-#: includes/Single/Post.php:843
+#: includes/Single/Post.php:842
 msgid "Translate into %s"
 msgstr "Auf %s übersetzen"
 
@@ -361,8 +361,9 @@ msgstr "Sie dürfen keine Begriffe in dieser Sprache bearbeiten."
 
 #. translators: %s: The user website default language.
 #: includes/Single/Users.php:104
-msgid "%s &mdash; Website Default"
-msgstr "%s &mdash; Website-Einstellung"
+#| msgid "Default Language"
+msgid "%s &mdash; Default Language"
+msgstr "%s &mdash; Standardsprache"
 
 #. translators: 1: Server PHP version number, 2: Required PHP version number.
 #: rrze-multilang.php:70
@@ -407,3 +408,9 @@ msgstr "Post bearbeiten"
 #: src/block-editor/single/render.js:136
 msgid "Add %s"
 msgstr "%s hinzufügen"
+
+#~ msgid "%s &mdash; Website Default"
+#~ msgstr "%s &mdash; Website-Einstellung"
+
+#~ msgid "Website Default"
+#~ msgstr "Website-Einstellung"
