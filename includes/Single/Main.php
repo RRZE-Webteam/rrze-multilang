@@ -241,7 +241,7 @@ class Main
             ],
             'availableLanguages' => $availableLanguages,
             'defaultLocale' => Locale::getDefaultLocale(),
-            'pagenow' => isset($_GET['page']) ? trim($_GET['page']) : '',
+            'pagenow' => trim($_GET['page'] ?? ''),
             'currentPost' => [],
             'localizablePostTypes' => $localizablePostTypes,
         ];
