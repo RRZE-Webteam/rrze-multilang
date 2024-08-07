@@ -875,9 +875,8 @@ class Post
 
         check_admin_referer('rrze-multilang-add-translation');
 
-        $locale = isset($_REQUEST['locale']) ? $_REQUEST['locale'] : '';
-        $originalPost = isset($_REQUEST['original_post'])
-            ? absint($_REQUEST['original_post']) : 0;
+        $locale = trim($_REQUEST['locale'] ?? '');
+        $originalPost = absint($_REQUEST['original_post'] ?? 0);
 
         if (!Locale::isAvailableLocale($locale)) {
             return;
