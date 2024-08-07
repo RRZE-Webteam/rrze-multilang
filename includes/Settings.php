@@ -298,7 +298,7 @@ class Settings
                     '<label><input type="checkbox" checked="checked" disabled="disabled"> %1$s %2$s %3$s</label> ',
                     $code,
                     $language,
-                    '&mdash; ' . __('Website Default', 'rrze-multilang')
+                    '&mdash; ' . __('Default Language', 'rrze-multilang')
                 );
             } else {
                 printf(

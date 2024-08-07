@@ -217,16 +217,14 @@ class Query
 
     public function optionStickyPosts($posts)
     {
-        if (is_admin()) {
-            return $posts;
-        }
-
-        $locale = get_locale();
-
-        foreach ($posts as $key => $postId) {
-            if ($locale != Post::getPostLocale($postId)) {
-                unset($posts[$key]);
-            }
+        if (is_home()) {
+            $locale = get_locale();
+            $posts = array_filter(
+                $posts,
+                static function ($postId) use ($locale) {
+                    return Post::getPostLocale($postId) === $locale;
+                }
+            );
         }
 
         return $posts;
