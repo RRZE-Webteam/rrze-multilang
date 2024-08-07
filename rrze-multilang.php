@@ -4,7 +4,7 @@
 Plugin Name:        RRZE Multilang
 Plugin URI:         https://github.com/RRZE-Webteam/rrze-multilang
 Description:        Multilanguage plugin for WordPress.
-Version:            1.2.2
+Version:            1.2.3
 Requires at least:  6.6
 Requires PHP:       8.2
 Author:             RRZE-Webteam
