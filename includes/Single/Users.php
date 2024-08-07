@@ -101,7 +101,7 @@ class Users
                 'title'  => $locale == $defaultLanguage ?
                     sprintf(
                         /* translators: %s: The user website default language. */
-                        __('%s &mdash; Website Default', 'rrze-multilang'),
+                        __('%s &mdash; Default Language', 'rrze-multilang'),
                         $lang
                     ) : $lang,
                 'href'   => $url,
@@ -120,7 +120,7 @@ class Users
 
         check_admin_referer('rrze-multilang-switch-locale');
 
-        $locale = isset($_REQUEST['locale']) ? $_REQUEST['locale'] : '';
+        $locale = $_REQUEST['locale'] ?? '';
         $currentLocale = self::getUserLocale();
 
         if (
