@@ -148,6 +148,8 @@ class Switcher
             ];
 
             $defaultPage = $options->default_page ? get_permalink($options->default_page) : false;
+            $postType = get_post_type(get_queried_object_id());
+            $isLocalizablePostType = Post::isLocalizablePostType($postType);
 
             if ($isSingular) {
                 if ($locale === $code) {
@@ -157,7 +159,7 @@ class Switcher
                     && 'publish' == get_post_status($translations[$code])
                 ) {
                     $link['href'] = get_permalink($translations[$code]);
-                } elseif ($defaultPage) {
+                } elseif ($defaultPage && $isLocalizablePostType) {
                     $link['href'] = $defaultPage;
                 }
             } else {
