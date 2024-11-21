@@ -30,8 +30,8 @@ class Sites
 
             $options = [];
             $options[] = [
-                'label' => sprintf('%1$s %2$s %1$s', $emdash, __('Select', 'rrze-multilang')),
-                'value' => '0:0',
+                'label' => sprintf('%1$s %2$s %1$s', $emdash, __('None', 'rrze-multilang')),
+                'value' => sprintf('%d:0', $blogId),
                 'disabled' => false
             ];
 
