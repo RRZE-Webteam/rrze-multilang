@@ -106,6 +106,13 @@ class Main
     {
         $assetFile = include plugin()->getPath('build') . 'block-editor-multiple.asset.php';
 
+        wp_enqueue_style(
+            'rrze-multilang-block-editor-multiple',
+            plugins_url('build/block-editor-multiple.css', plugin()->getBasename()),
+            [],
+            $assetFile['version'] ?? plugin()->getVersion(),
+        );
+
         wp_enqueue_script(
             'rrze-multilang-block-editor-multiple',
             plugins_url('build/block-editor-multiple.js', plugin()->getBasename()),
