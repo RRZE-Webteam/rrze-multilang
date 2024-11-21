@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RRZE Multilang 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/rrze-multilang\n"
-"POT-Creation-Date: 2024-08-07T12:31:13+00:00\n"
-"PO-Revision-Date: 2024-08-07 14:32+0200\n"
+"POT-Creation-Date: 2024-11-21T11:38:12+00:00\n"
+"PO-Revision-Date: 2024-11-21 12:47+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.4\n"
+"X-Generator: Poedit 3.5\n"
 "X-Domain: rrze-multilang\n"
 
 #. Plugin Name of the plugin
@@ -49,29 +49,29 @@ msgstr "Website-Titel"
 msgid "Tagline"
 msgstr "Tagline"
 
-#: includes/Main.php:52
+#: includes/Main.php:56
 msgid "Settings"
 msgstr "Einstellungen"
 
 #. translators: accessibility text
-#: includes/Multiple/Main.php:131 includes/Single/Main.php:233
+#: includes/Multiple/Main.php:138 includes/Single/Main.php:233
 #: includes/Single/Metabox.php:91
 msgid "Opens in a new window."
 msgstr "Wird in einem neuen Fenster geöffnet."
 
-#: includes/Multiple/Main.php:132 includes/Single/Main.php:234
+#: includes/Multiple/Main.php:139 includes/Single/Main.php:234
 msgid "The changes you made will be lost if you navigate away from this page."
 msgstr ""
 "Die von Ihnen vorgenommenen Änderungen gehen verloren, wenn Sie von dieser "
 "Seite weg navigieren."
 
 #: includes/Multiple/Metabox.php:28 includes/Single/Metabox.php:28
-#: includes/Single/Metabox.php:62 src/block-editor/multiple/render.js:221
+#: includes/Single/Metabox.php:62 src/block-editor/multiple/render.js:225
 #: src/block-editor/single/render.js:30 src/block-editor/single/render.js:159
 msgid "Language"
 msgstr "Sprache"
 
-#: includes/Multiple/Metabox.php:44 src/block-editor/multiple/render.js:104
+#: includes/Multiple/Metabox.php:44 src/block-editor/multiple/render.js:44
 msgid "There are no websites available for translations."
 msgstr "Für Übersetzungen stehen keine Websites zur Verfügung."
 
@@ -79,7 +79,7 @@ msgstr "Für Übersetzungen stehen keine Websites zur Verfügung."
 msgid "Update Links"
 msgstr "Links aktualisieren"
 
-#: includes/Multiple/Metabox.php:97 src/block-editor/multiple/render.js:194
+#: includes/Multiple/Metabox.php:97
 msgid "Copy To:"
 msgstr "Kopieren nach:"
 
@@ -92,44 +92,48 @@ msgstr "Kopie erstellen"
 msgid "Translation"
 msgstr "Übersetzung"
 
-#: includes/Multiple/RestApi.php:44
+#: includes/Multiple/RestApi.php:43
 msgid "You are not allowed to link posts."
 msgstr "Sie dürfen keine Posts verlinken."
 
-#: includes/Multiple/RestApi.php:66
+#: includes/Multiple/RestApi.php:64
 msgid "You are not allowed to access posts in the requested copy."
 msgstr "Sie dürfen nicht auf Posts in der angeforderten Kopie zugreifen."
 
-#: includes/Multiple/RestApi.php:85 includes/Multiple/RestApi.php:123
-#: includes/Multiple/RestApi.php:190 includes/Single/RestApi.php:91
+#: includes/Multiple/RestApi.php:83 includes/Multiple/RestApi.php:121
+#: includes/Multiple/RestApi.php:188 includes/Single/RestApi.php:91
 #: includes/Single/RestApi.php:113 includes/Single/RestApi.php:202
 msgid "The requested post was not found."
 msgstr "Der angeforderte Post wurde nicht gefunden."
 
-#: includes/Multiple/RestApi.php:93 includes/Multiple/RestApi.php:131
-#: includes/Multiple/RestApi.php:200 includes/Single/RestApi.php:99
+#: includes/Multiple/RestApi.php:91 includes/Multiple/RestApi.php:129
+#: includes/Multiple/RestApi.php:198 includes/Single/RestApi.php:99
 #: includes/Single/RestApi.php:210
 msgid "The requested post type is not localizable."
 msgstr "Der angeforderte Post-Type ist nicht übersetzbar."
 
-#: includes/Multiple/RestApi.php:108
+#: includes/Multiple/RestApi.php:106
 msgid "Please select an available post."
 msgstr "Bitte wählen Sie einen verfügbaren Post aus."
 
-#: includes/Multiple/RestApi.php:179 includes/Multiple/RestApi.php:213
+#: includes/Multiple/RestApi.php:177 includes/Multiple/RestApi.php:211
 msgid "The requested website is not available."
 msgstr "Die angeforderte Website ist nicht verfügbar."
 
-#: includes/Multiple/RestApi.php:223
+#: includes/Multiple/RestApi.php:221
 msgid "Failed to copy a post."
 msgstr "Fehler beim Kopieren eines Posts."
 
 #. translators: %s: The blog name.
-#: includes/Multiple/RestApi.php:238
+#: includes/Multiple/RestApi.php:236
 msgid "A copy has been added on %s."
 msgstr "Auf %s wurde eine Kopie hinzugefügt."
 
-#: includes/Multiple/Sites.php:33 includes/Multiple/Sites.php:90
+#: includes/Multiple/Sites.php:33 src/block-editor/single/render.js:65
+msgid "None"
+msgstr "Keiner"
+
+#: includes/Multiple/Sites.php:90
 msgid "Select"
 msgstr "Auswählen"
 
@@ -361,7 +365,6 @@ msgstr "Sie dürfen keine Begriffe in dieser Sprache bearbeiten."
 
 #. translators: %s: The user website default language.
 #: includes/Single/Users.php:104
-#| msgid "Default Language"
 msgid "%s &mdash; Default Language"
 msgstr "%s &mdash; Standardsprache"
 
@@ -388,13 +391,32 @@ msgstr ""
 msgid "Plugins: %1$s: %2$s"
 msgstr "Plugins: %1$s: %2$s"
 
-#: src/block-editor/multiple/render.js:205
+#: src/block-editor/multiple/render.js:190
+msgid "Copy To"
+msgstr "Kopieren nach"
+
+#: src/block-editor/multiple/render.js:210
 msgid "Add Copy"
 msgstr "Kopie erstellen"
 
-#: src/block-editor/single/render.js:65
-msgid "None"
-msgstr "Keine"
+#: src/block-editor/multiple/render.js:228
+msgid "Secondary Sites to Link"
+msgstr "Sekundäre zu verlinkende Websites"
+
+#: src/block-editor/multiple/render.js:229
+msgid "Select the sites where you want to link the current post."
+msgstr ""
+"Wählen Sie die Sites aus, auf die Sie den aktuellen Post verlinken möchten."
+
+#: src/block-editor/multiple/render.js:232
+msgid "Secondary Sites to Copy"
+msgstr "Sekundäre Sites zum Kopieren"
+
+#: src/block-editor/multiple/render.js:233
+msgid "Select the sites where you want to create copies of the current post."
+msgstr ""
+"Wählen Sie die Sites aus, auf denen Sie Kopien des aktuellen Posts erstellen "
+"möchten."
 
 #: src/block-editor/single/render.js:103
 msgid "Translation created."
@@ -408,9 +430,3 @@ msgstr "Post bearbeiten"
 #: src/block-editor/single/render.js:136
 msgid "Add %s"
 msgstr "%s hinzufügen"
-
-#~ msgid "%s &mdash; Website Default"
-#~ msgstr "%s &mdash; Website-Einstellung"
-
-#~ msgid "Website Default"
-#~ msgstr "Website-Einstellung"
