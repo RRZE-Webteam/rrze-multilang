@@ -82,12 +82,22 @@ export default function LanguagePanel() {
                                 const remotePostId = Object.keys(response)[0];
                                 const postTitle = response[remotePostId].postTitle;
                                 const blogName = response[remotePostId].blogName;
-                                                                
-                                dispatch("core/notices").createInfoNotice(
-                                    __(
+
+                                let notice;
+                                if (postTitle) {
+                                    notice = __(
                                         `Linked to ${postTitle} on ${blogName}.`,
                                         "rrze-multilang"
-                                    ),
+                                    );
+                                } else {
+                                    notice = __(
+                                        `Unlinked from ${blogName}.`,
+                                        "rrze-multilang"
+                                    );
+                                }
+                                                                
+                                dispatch("core/notices").createInfoNotice(
+                                    notice,
                                     {
                                         isDismissible: true,
                                         type: "snackbar",
