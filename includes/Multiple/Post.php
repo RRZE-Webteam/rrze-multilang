@@ -74,6 +74,7 @@ class Post
     {
         $posts = [];
         $isMain = $this->options->connection_type == 1 ? true : false;
+        $secondarySites = Sites::getSecondarySites(get_post_type($postId));
         $reference = get_post_meta($postId, '_rrze_multilang_multiple_reference', true);
 
         if (!$isMain && is_array($reference)) {
@@ -92,7 +93,7 @@ class Post
         }
 
         foreach ($reference as $blogId => $refPostId) {
-            if ($this->currentBlogId == $blogId) {
+            if ($this->currentBlogId == $blogId || !isset($secondarySites[$blogId])) {
                 continue;
             }
             switch_to_blog($blogId);
