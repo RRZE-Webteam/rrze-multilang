@@ -5,7 +5,7 @@ import {
     SelectControl,
     Spinner,
 } from "@wordpress/components";
-import { useState } from "@wordpress/element";
+import { useState, useEffect } from "@wordpress/element";
 import { dispatch, useSelect } from "@wordpress/data";
 import { __ } from "@wordpress/i18n";
 import apiFetch from "@wordpress/api-fetch";
@@ -19,27 +19,40 @@ export default function LanguagePanel() {
         );
     });
 
+    // Ensure hooks are called in the same order
+    const [secondarySitesToLink, setSecondarySitesToLink] = useState(
+        currentPost.secondarySitesToLink || {}
+    );
+
+    const [secondarySitesToCopy, setSecondarySitesToCopy] = useState(
+        currentPost.secondarySitesToCopy || {}
+    );
+
+    // Early return if conditions are not met
     if (rrzeMultilang.localizablePostTypes.indexOf(currentPost.type) === -1) {
-        return <></>;
+        return null;
     }
 
     if (currentPost.status === "auto-draft") {
-        return <></>;
+        return null;
     }
 
-    const [secondarySitesToLink, setSecondarySitesToLink] = useState(
-        currentPost.secondarySitesToLink
-    );
-    const [secondarySitesToCopy, setSecondarySitesToCopy] = useState(
-        currentPost.secondarySitesToCopy
-    );
-
     const SecondarySitesToLink = () => {
+        if (Object.keys(secondarySitesToLink).length === 0) {
+            return (
+                <em>
+                    {__(
+                        "There are no websites available for translations.",
+                        "rrze-multilang"
+                    )}
+                </em>
+            );
+        }
+
         const listItems = Object.entries(secondarySitesToLink).map(
             ([key, value]) => {
                 const mainLabel = value.name + " \u2014 " + value.language;
                 const [link, setLink] = useState(value.selected);
-
                 const handleLinkChange = (link) => {
                     setLink(link);
                     const [blogId, postId] = link.split(":");
@@ -49,17 +62,27 @@ export default function LanguagePanel() {
                     })
                         .then((response) => {
                             if (response.code && response.message) {
-                                // Check if the response is an error
                                 dispatch("core/notices").createErrorNotice(
-                                    __(response.message, "rrze-multilang"), // Use the error message from the response
+                                    __(response.message, "rrze-multilang"),
                                     {
                                         isDismissible: true,
                                         type: "snackbar",
                                     }
                                 );
                             } else {
-                                const blogName = response[postId].blogName;
-                                const postTitle = response[postId].postTitle;
+                                const updatedSecondarySitesToLink = {
+                                    ...secondarySitesToLink,
+                                    [key]: {
+                                        ...value,
+                                        selected: link,
+                                    },
+                                };
+                                setSecondarySitesToLink(updatedSecondarySitesToLink);
+
+                                const remotePostId = Object.keys(response)[0];
+                                const postTitle = response[remotePostId].postTitle;
+                                const blogName = response[remotePostId].blogName;
+                                                                
                                 dispatch("core/notices").createInfoNotice(
                                     __(
                                         `Linked to ${postTitle} on ${blogName}.`,
@@ -75,7 +98,7 @@ export default function LanguagePanel() {
                         })
                         .catch((error) => {
                             dispatch("core/notices").createErrorNotice(
-                                __(error.message, "rrze-multilang"), // Fallback error handling for network errors etc.
+                                __(error.message, "rrze-multilang"),
                                 {
                                     isDismissible: true,
                                     type: "snackbar",
@@ -83,7 +106,6 @@ export default function LanguagePanel() {
                             );
                         });
                 };
-
                 return (
                     <PanelRow key={key}>
                         <SelectControl
@@ -96,17 +118,7 @@ export default function LanguagePanel() {
                 );
             }
         );
-
-        return listItems.length ? (
-            listItems
-        ) : (
-            <em>
-                {__(
-                    "There are no websites available for translations.",
-                    "rrze-multilang"
-                )}
-            </em>
-        );
+        return listItems;
     };
 
     const SecondarySitesToCopy = () => {
@@ -116,22 +128,19 @@ export default function LanguagePanel() {
                 [blogId]: { creating: true },
             };
             setSecondarySitesToCopy(updatedSecondarySitesToCopy);
-
             apiFetch({
                 path: `/rrze-multilang/v1/copy/${currentPost.id}/blog/${blogId}`,
                 method: "POST",
             })
                 .then((response) => {
                     if (response.code && response.message) {
-                        // Check if the response is an error
                         dispatch("core/notices").createErrorNotice(
-                            __(response.message, "rrze-multilang"), // Use the error message from the response
+                            __(response.message, "rrze-multilang"),
                             {
                                 isDismissible: true,
                                 type: "snackbar",
                             }
                         );
-                        // Update the state to reflect the error and stop creating process
                         const updatedWithError = {
                             ...secondarySitesToCopy,
                             [blogId]: {
@@ -149,9 +158,7 @@ export default function LanguagePanel() {
                                 creating: false,
                             },
                         };
-
                         setSecondarySitesToCopy(updatedSecondarySitesToCopy);
-
                         const blogName =
                             updatedSecondarySitesToCopy[blogId].blogName;
                         dispatch("core/notices").createInfoNotice(
@@ -169,7 +176,7 @@ export default function LanguagePanel() {
                 })
                 .catch((error) => {
                     dispatch("core/notices").createErrorNotice(
-                        __(error.message, "rrze-multilang"), // Fallback error handling for network errors etc.
+                        __(error.message, "rrze-multilang"),
                         {
                             isDismissible: true,
                             type: "snackbar",
@@ -178,20 +185,18 @@ export default function LanguagePanel() {
                     setSecondarySitesToCopy(currentPost.secondarySitesToCopy);
                 });
         };
-
         const listItems = Object.entries(secondarySitesToCopy).map(
             ([key, value]) => {
+                const mainLabel = __("Copy To", "rrze-multilang");
                 const [blogId, setBlogId] = useState(key);
-
                 const handleCopyChange = (blogId) => {
                     setBlogId(blogId);
                 };
-
                 return (
                     <div key={key}>
                         <PanelRow>
                             <SelectControl
-                                label={__("Copy To:", "rrze-multilang")}
+                                label={mainLabel}
                                 value={blogId}
                                 options={value.options}
                                 onChange={handleCopyChange}
@@ -211,7 +216,6 @@ export default function LanguagePanel() {
                 );
             }
         );
-
         return listItems.length ? listItems : <></>;
     };
 
@@ -221,14 +225,13 @@ export default function LanguagePanel() {
             title={__("Language", "rrze-multilang")}
             className="rrze-multilang-language-panel"
         >
+            <h3 class="rrze-multilang-setting-panel__h3">{__("Secondary Sites to Link", "rrze-multilang")}</h3>
+            <p class="rrze-multilang-setting-panel__help">{__("Select the sites where you want to link the current post.", "rrze-multilang")}</p>
             <SecondarySitesToLink />
+            <hr />
+            <h3 class="rrze-multilang-setting-panel__h3">{__("Secondary Sites to Copy", "rrze-multilang")}</h3>
+            <p class="rrze-multilang-setting-panel__help">{__("Select the sites where you want to create copies of the current post.", "rrze-multilang")}</p>
             <SecondarySitesToCopy />
         </PluginDocumentSettingPanel>
     );
 }
-
-const getLanguage = (locale) => {
-    return rrzeMultilang.availableLanguages[locale]
-        ? rrzeMultilang.availableLanguages[locale]
-        : locale;
-};
