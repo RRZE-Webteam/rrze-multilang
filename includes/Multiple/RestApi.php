@@ -109,6 +109,26 @@ class RestApi
         }
 
         $remotePostId = $request->get_param('postid');
+        if (!$remotePostId) {
+            $prevRference = get_post_meta($postId, '_rrze_multilang_multiple_reference', true);
+            $reference = $prevRference;
+            if (isset($reference[$remoteBlogId])) {
+                unset($reference[$remoteBlogId]);
+            }
+            update_post_meta($postId, '_rrze_multilang_multiple_reference', $reference, $prevRference);
+
+            switch_to_blog($remoteBlogId);
+            $remoteBlogName = get_bloginfo('name');
+            restore_current_blog();
+            $response[$remotePostId] = [
+                'blogId' => $remoteBlogId,
+                'blogName' => $remoteBlogName,
+                'postId' => 0,
+                'postTitle' => ''
+            ];
+
+            return rest_ensure_response($response);
+        }
 
         switch_to_blog($remoteBlogId);
         $remoteBlogName = get_bloginfo('name');
