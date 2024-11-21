@@ -35,7 +35,6 @@ class RestApi
                 'callback' => [$this, 'restLinkPost'],
                 'permission_callback' => function (\WP_REST_Request $request) {
                     $postId = $request->get_param('id');
-
                     if (current_user_can('edit_post', $postId)) {
                         return true;
                     } else {
@@ -57,7 +56,6 @@ class RestApi
                 'callback' => [$this, 'restCopyPost'],
                 'permission_callback' => function (\WP_REST_Request $request) {
                     $postId = $request->get_param('id');
-
                     if (current_user_can('edit_post', $postId)) {
                         return true;
                     } else {
