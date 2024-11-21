@@ -1,7 +1,7 @@
 {
     "engines": {
-        "node": ">=22.4.0",
-        "npm": ">=10.8.1"
+        "node": ">=23.2.0",
+        "npm": ">=10.9.0"
     },
     "browserslist": [
         "extends @wordpress/browserslist-config"
@@ -22,6 +22,6 @@
         "@wordpress/plugins": "latest"
     },
     "devDependencies": {
-        "@wordpress/scripts": "^19.2.4"
+        "@wordpress/scripts": "latest"
     }
 }
