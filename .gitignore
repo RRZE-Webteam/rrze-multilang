@@ -13,7 +13,5 @@ package-lock.json
 composer.lock
 ### WordPress ###
 *.pot
-*.po~
-*.pot~
 ### Tmp ###
 _tmp/
