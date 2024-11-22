@@ -15,7 +15,7 @@ class Main
         $this->options = (object) Options::getOptions();
     }
 
-    public function onLoaded()
+    public function loaded()
     {
         add_filter('plugin_action_links_' . plugin()->getBaseName(), [$this, 'settingsLink']);
 
@@ -42,6 +42,10 @@ class Main
             default:
                 return;
         }
+
+        // error_log(print_r(get_option('rrze_multilang_postmeta'), true));
+
+        // error_log(print_r(get_site_option('rrze_multilang_sitemeta'), true));
     }
 
     public function settingsLink($links)
