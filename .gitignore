@@ -10,3 +10,5 @@
 node_modules/
 ### WordPress ###
 *.pot
+### Tmp ###
+_tmp/
