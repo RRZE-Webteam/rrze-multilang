@@ -215,9 +215,9 @@ class Switcher
                 $siteUrl = get_site_url();
                 restore_current_blog();
                 if ($isMain) {
-                    $link['href'] = $siteUrl . '/' . $studiengang['path'];
+                    $link['href'] = $siteUrl . '/studiengang/' . $studiengang['post_name'] . '/';
                 } else {
-                    $link['href'] = $siteUrl . '/' . $studiengang['path_en'];
+                    $link['href'] = $siteUrl . '/studiengang/' . $studiengang['post_name_en'] . '/';
                 }
             } else {
                 $link['href'] = $defaultPage ? $defaultPage : '';
@@ -237,18 +237,11 @@ class Switcher
             $post = get_post();
             if ($post) {
                 $postId = $post->ID;
-
-                $originalLink = get_post_meta($postId, 'fau_original_link', true);
-                $parsedUrl = parse_url($originalLink);
-                $originalPath = isset($parsedUrl['path']) ? ltrim($parsedUrl['path'], '/') : '';
-
-                $originalLinkEn = get_post_meta($postId, 'fau_original_link_en', true);
-                $parsedUrl = parse_url($originalLinkEn);
-                $originalPathEn = isset($parsedUrl['path']) ? ltrim($parsedUrl['path'], '/') : '';
-
+                $postName = $post->post_name;
+                $postNameEn = get_post_meta($postId, 'post_name_en', true);
                 $studiengang = [
-                    'path' => $originalPath,
-                    'path_en' => $originalPathEn
+                    'post_name' => $postName,
+                    'post_name_en' => $postNameEn
                 ];
             }
         }
