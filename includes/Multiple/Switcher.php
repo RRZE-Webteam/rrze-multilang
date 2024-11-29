@@ -200,11 +200,24 @@ class Switcher
                 'href' => '',
             ];
 
+            $studiengang = self::getStudiengang();
+
             if ($isSingular && $refPostId) {
                 if (!in_array($postType, $refOptions->post_types)) {
                     $link['href'] = $defaultPage ? $defaultPage : '';
                 } elseif ('publish' == $refStatus) {
                     $link['href'] = $refPermalink ? $refPermalink : '';
+                }
+            } elseif ($isSingular && !empty($studiengang)) {
+                switch_to_blog($blogId);
+                $options = (object) Options::getOptions();
+                $isMain = $options->connection_type == 1 ? true : false;
+                $siteUrl = get_site_url();
+                restore_current_blog();
+                if ($isMain) {
+                    $link['href'] = $siteUrl . '/' . $studiengang['path'];
+                } else {
+                    $link['href'] = $siteUrl . '/' . $studiengang['path_en'];
                 }
             } else {
                 $link['href'] = $defaultPage ? $defaultPage : '';
@@ -214,5 +227,31 @@ class Switcher
         }
 
         return $links;
+    }
+
+    protected static function getStudiengang()
+    {
+        $studiengang = [];
+        $postType = get_post_type();
+        if ($postType === 'studiengang') {
+            $post = get_post();
+            if ($post) {
+                $postId = $post->ID;
+
+                $originalLink = get_post_meta($postId, 'fau_original_link', true);
+                $parsedUrl = parse_url($originalLink);
+                $originalPath = isset($parsedUrl['path']) ? ltrim($parsedUrl['path'], '/') : '';
+
+                $originalLinkEn = get_post_meta($postId, 'fau_original_link_en', true);
+                $parsedUrl = parse_url($originalLinkEn);
+                $originalPathEn = isset($parsedUrl['path']) ? ltrim($parsedUrl['path'], '/') : '';
+
+                $studiengang = [
+                    'path' => $originalPath,
+                    'path_en' => $originalPathEn
+                ];
+            }
+        }
+        return $studiengang;
     }
 }
