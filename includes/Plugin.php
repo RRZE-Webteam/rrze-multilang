@@ -197,4 +197,18 @@ class Plugin
     {
         return $this->data['RequiresPHP'];
     }
+
+    /**
+     * __call method
+     * Method overloading.
+     */
+    public function __call(string $name, array $arguments)
+    {
+        if (!method_exists($this, $name)) {
+            $message = sprintf('Call to undefined method %1$s::%2$s', __CLASS__, $name);
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                throw new \Exception($message);
+            }
+        }
+    }
 }
