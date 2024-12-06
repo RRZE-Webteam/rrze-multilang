@@ -3,7 +3,7 @@
 /*
 Plugin Name:        RRZE Multilang
 Plugin URI:         https://github.com/RRZE-Webteam/rrze-multilang
-Version:            1.2.7
+Version:            1.2.8
 Description:        Multilanguage plugin for WordPress.
 Author:             RRZE Webteam
 Author URI:         https://blogs.fau.de/webworking/
@@ -64,17 +64,7 @@ add_action('plugins_loaded', __NAMESPACE__ . '\loaded', 9);
  */
 function activation()
 {
-    if ($error = systemRequirements()) {
-        deactivate_plugins(plugin_basename(__FILE__));
-        wp_die(
-            sprintf(
-                /* translators: 1: The plugin name, 2: The error string. */
-                __('Plugins: %1$s: %2$s', 'rrze-multilang'),
-                plugin_basename(__FILE__),
-                $error
-            )
-        );
-    }
+    //
 }
 
 /**
