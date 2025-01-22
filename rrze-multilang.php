@@ -3,7 +3,7 @@
 /*
 Plugin Name:        RRZE Multilang
 Plugin URI:         https://github.com/RRZE-Webteam/rrze-multilang
-Version:            1.2.8
+Version:            1.2.9
 Description:        Multilanguage plugin for WordPress.
 Author:             RRZE Webteam
 Author URI:         https://blogs.fau.de/webworking/
@@ -43,7 +43,6 @@ spl_autoload_register(function ($class) {
 
 // Load the plugin's text domain for localization.
 add_action('init', fn() => load_plugin_textdomain('rrze-multilang', false, dirname(plugin_basename(__FILE__)) . '/languages'));
-
 
 // Register activation hook for the plugin
 register_activation_hook(__FILE__, __NAMESPACE__ . '\activation');
