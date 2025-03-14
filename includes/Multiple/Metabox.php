@@ -4,8 +4,6 @@ namespace RRZE\Multilang\Multiple;
 
 defined('ABSPATH') || exit;
 
-use RRZE\Multilang\Locale;
-
 class Metabox
 {
     protected $currentBlogId;
@@ -15,6 +13,7 @@ class Metabox
         $this->currentBlogId = get_current_blog_id();
 
         add_action('add_meta_boxes', [$this, 'addL10nMetabox'], 10, 2);
+        add_action('save_post', [$this, 'saveCustomFields']);
     }
 
     public function addL10nMetabox($postType, $post)
@@ -54,10 +53,14 @@ class Metabox
                 $blog['language']
             );
 
-            printf(
-                '<select class="rrze-multilang-links" name="rrze-multilang-links-to-update-%d">',
-                $blogId
-            );
+            // Add a nonce field for security
+            wp_nonce_field('rrze_multilang_to_link_nonce_action', 'rrze_multilang_to_link_nonce');
+
+            // Add hidden field
+            printf('<input type="hidden" name="rrze_multilang_blogid_to_link" value="%s">', $blogId);
+
+            // Selector/Option field
+            echo '<select class="rrze-multilang-links" name="rrze_multilang_links_to_update">';
 
             foreach ($blog['options'] as $option) {
                 $selected = $option['value'] == $blog['selected'] ? ' selected' : '';
@@ -121,5 +124,76 @@ class Metabox
         echo '</p>';
         echo '<div class="clear"></div>';
         echo '</div>';
+    }
+
+    public function saveCustomFields($postId)
+    {
+        // Check if the nonce is set
+        if (!isset($_POST['rrze_multilang_to_link_nonce']) || !wp_verify_nonce($_POST['rrze_multilang_to_link_nonce'], 'rrze_multilang_to_link_nonce_action')) {
+            return;
+        }
+
+        // Check for autosave
+        if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+            return;
+        }
+
+        // Check user permissions
+        if (!current_user_can('edit_post', $postId)) {
+            return;
+        }
+
+        // Sanitize and save the field
+        if (isset($_POST['rrze_multilang_links_to_update']) && isset($_POST['rrze_multilang_blogid_to_link'])) {
+            $postType = get_post_type($postId);
+            $remoteBlogId = $_POST['rrze_multilang_blogid_to_link'];
+            $linkToUpdate = $_POST['rrze_multilang_links_to_update'];
+            $linkToUpdate = explode(':', $linkToUpdate);
+            $remotePostId = $linkToUpdate[1] ?? null;
+
+            if (!isset($linkToUpdate[0]) || $remoteBlogId !== $linkToUpdate[0] || is_null($remotePostId)) {
+                return;
+            }
+
+            $prevReference = get_post_meta($postId, '_rrze_multilang_multiple_reference', true);
+            if (!$prevReference) {
+                $reference = [
+                    $remoteBlogId => $remotePostId
+                ];
+                add_post_meta($postId, '_rrze_multilang_multiple_reference', $reference);
+            } else {
+                $reference = $prevReference;
+                $reference[$remoteBlogId] = $remotePostId;
+                update_post_meta($postId, '_rrze_multilang_multiple_reference', $reference, $prevReference);
+            }
+
+            switch_to_blog($remoteBlogId);
+            $this->deleteRemotePostMeta('_rrze_multilang_multiple_reference', [$this->currentBlogId => $postId], $postType);
+            $reference = [
+                $this->currentBlogId => $postId
+            ];
+            add_post_meta($remotePostId, '_rrze_multilang_multiple_reference', $reference);
+            restore_current_blog();
+        }
+    }
+
+    private function deleteRemotePostMeta($metaKey, $metaValue, $postType)
+    {
+        $args = [
+            'post_type' => $postType,
+            'meta_key' => $metaKey,
+            'meta_value' => '',
+            'posts_per_page' => -1,
+            'fields' => 'ids',
+        ];
+
+        $posts = get_posts($args);
+
+        foreach ($posts as $postId) {
+            $value = get_post_meta($postId, $metaKey, true);
+            if ($value === $metaValue) {
+                delete_post_meta($postId, $metaKey);
+            }
+        }
     }
 }
