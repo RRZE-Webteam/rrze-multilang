@@ -227,6 +227,9 @@ class Media
     public static function getImagesFromTheContent($postId)
     {
         $html = get_post_field('post_content', $postId);
+        if (empty($html)) {
+            return '';
+        }
         $doc = new \DOMDocument();
 
         @$doc->loadHTML($html);
