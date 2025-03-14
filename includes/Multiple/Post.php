@@ -22,23 +22,20 @@ class Post
 
         $this->currentBlogId = get_current_blog_id();
 
-        add_filter('manage_pages_columns', [$this, 'pagesColumns'], 10, 1);
-        add_filter('manage_posts_columns', [$this, 'postsColumns'], 10, 2);
-        add_action('manage_pages_custom_column', [$this, 'managePostsCustomColumn'], 10, 2);
-        add_action('manage_posts_custom_column', [$this, 'managePostsCustomColumn'], 10, 2);
-    }
-
-    public function pagesColumns($columns)
-    {
-        return $this->postsColumns($columns, 'page');
-    }
-
-    public function postsColumns($columns, $postType)
-    {
-        if (!self::isLocalizablePostType($postType)) {
-            return $columns;
+        /* Posts List Table */
+        foreach ($this->options->post_types as $postType) {
+            add_filter("manage_edit-{$postType}_columns", [$this, 'postsColumns']);
+            add_action("manage_{$postType}_posts_custom_column", [$this, 'managePostsCustomColumn'], 10, 2);
         }
 
+        // add_filter('manage_pages_columns', [$this, 'pagesColumns'], 10, 1);
+        // add_filter('manage_posts_columns', [$this, 'postsColumns'], 10, 2);
+        // add_action('manage_pages_custom_column', [$this, 'managePostsCustomColumn'], 10, 2);
+        // add_action('manage_posts_custom_column', [$this, 'managePostsCustomColumn'], 10, 2);        
+    }
+
+    public function postsColumns($columns)
+    {
         if (!isset($columns['locale'])) {
             $columns = array_merge(
                 array_slice($columns, 0, 2),
@@ -46,7 +43,6 @@ class Post
                 array_slice($columns, 2)
             );
         }
-
         return $columns;
     }
 
@@ -57,7 +53,6 @@ class Post
         }
 
         $postType = get_post_type($postId);
-
         if (!self::isLocalizablePostType($postType)) {
             return;
         }
