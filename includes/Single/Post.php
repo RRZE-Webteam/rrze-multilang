@@ -27,11 +27,17 @@ class Post
         add_filter('wp_sitemaps_posts_query_args', [$this, 'sitemapsPostsQueryArgs'], 10, 2);
 
         /* Posts List Table */
-        add_filter('manage_pages_columns', [$this, 'pagesColumns'], 10, 1);
-        add_filter('manage_posts_columns', [$this, 'postsColumns'], 10, 2);
-        add_action('manage_pages_custom_column', [$this, 'managePostsCustomColumn'], 10, 2);
-        add_action('manage_posts_custom_column', [$this, 'managePostsCustomColumn'], 10, 2);
+        foreach ($this->options->post_types as $postType) {
+            add_filter("manage_edit-{$postType}_columns", [$this, 'postsColumns']);
+            add_action("manage_{$postType}_posts_custom_column", [$this, 'managePostsCustomColumn'], 10, 2);
+        }        
+        // add_filter('manage_pages_columns', [$this, 'pagesColumns'], 10, 1);
+        // add_filter('manage_posts_columns', [$this, 'postsColumns'], 10, 2);
+        // add_action('manage_pages_custom_column', [$this, 'managePostsCustomColumn'], 10, 2);
+        // add_action('manage_posts_custom_column', [$this, 'managePostsCustomColumn'], 10, 2);
+
         add_action('restrict_manage_posts', [$this, 'restrictManagePosts'], 10, 2);
+
         add_filter('post_row_actions', [$this, 'postRowActions'], 10, 2);
         add_filter('page_row_actions', [$this, 'postRowActions'], 10, 2);
         add_action('admin_init', [$this, 'addTranslation']);
@@ -718,17 +724,8 @@ class Post
         return rtrim($slug, '-');
     }
 
-    public function pagesColumns($columns)
+    public function postsColumns($columns)
     {
-        return $this->postsColumns($columns, 'page');
-    }
-
-    public function postsColumns($columns, $postType)
-    {
-        if (!self::isLocalizablePostType($postType)) {
-            return $columns;
-        }
-
         if (!isset($columns['locale'])) {
             $columns = array_merge(
                 array_slice($columns, 0, 2),
@@ -827,13 +824,12 @@ class Post
             return $actions;
         }
 
-        if ($translation = self::getPostTranslation($post, $userLocale)) {
-            if (
-                empty($translation->ID)
-                || $translation->ID === $post->ID
-            ) {
-                return $actions;
-            }
+        $translation = self::getPostTranslation($post, $userLocale);
+        // if (empty($translation->ID) || $translation->ID === $post->ID) {
+        //     return $actions;
+        // }
+
+        if (!empty($translation->ID) && $translation->ID != $post->ID) {
             /* translators: %s: The translated post language. */
             $text = __('Edit %s translation', 'rrze-multilang');
             $editLink = get_edit_post_link($translation->ID);
