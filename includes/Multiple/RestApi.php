@@ -110,18 +110,18 @@ class RestApi
 
         $remotePostId = $request->get_param('postid');
         if (!$remotePostId) {
-            $prevRference = get_post_meta($postId, '_rrze_multilang_multiple_reference', true);
-            $reference = $prevRference;
+            $prevReference = get_post_meta($postId, '_rrze_multilang_multiple_reference', true);
+            $reference = $prevReference;
             if (isset($reference[$remoteBlogId])) {
                 unset($reference[$remoteBlogId]);
             }
             if (empty($reference)) {
                 delete_post_meta($postId, '_rrze_multilang_multiple_reference');
                 switch_to_blog($remoteBlogId);
-                $this->deleteRemotePostMeta('_rrze_multilang_multiple_reference', [$this->currentBlogId => $postId]);
+                $this->deleteRemotePostMeta('_rrze_multilang_multiple_reference', [$this->currentBlogId => $postId], $postType);
                 restore_current_blog();
             } else {
-                update_post_meta($postId, '_rrze_multilang_multiple_reference', $reference, $prevRference);
+                update_post_meta($postId, '_rrze_multilang_multiple_reference', $reference, $prevReference);
             }
             switch_to_blog($remoteBlogId);
             $remoteBlogName = get_bloginfo('name');
@@ -157,20 +157,20 @@ class RestApi
             );
         }
 
-        $prevRference = get_post_meta($postId, '_rrze_multilang_multiple_reference', true);
-        if (!$prevRference) {
+        $prevReference = get_post_meta($postId, '_rrze_multilang_multiple_reference', true);
+        if (!$prevReference) {
             $reference = [
                 $remoteBlogId => $remotePostId
             ];
             add_post_meta($postId, '_rrze_multilang_multiple_reference', $reference);
         } else {
-            $reference = $prevRference;
+            $reference = $prevReference;
             $reference[$remoteBlogId] = $remotePostId;
-            update_post_meta($postId, '_rrze_multilang_multiple_reference', $reference, $prevRference);
+            update_post_meta($postId, '_rrze_multilang_multiple_reference', $reference, $prevReference);
         }
 
         switch_to_blog($remoteBlogId);
-        $this->deleteRemotePostMeta('_rrze_multilang_multiple_reference', [$this->currentBlogId => $postId]);
+        $this->deleteRemotePostMeta('_rrze_multilang_multiple_reference', [$this->currentBlogId => $postId], $postType);
         $reference = [
             $this->currentBlogId => $postId
         ];
@@ -268,10 +268,10 @@ class RestApi
         return rest_ensure_response($response);
     }
 
-    private function deleteRemotePostMeta($metaKey, $metaValue)
+    private function deleteRemotePostMeta($metaKey, $metaValue, $postType)
     {
         $args = [
-            'post_type' => 'any',
+            'post_type' => $postType,
             'meta_key' => $metaKey,
             'meta_value' => '',
             'posts_per_page' => -1,
