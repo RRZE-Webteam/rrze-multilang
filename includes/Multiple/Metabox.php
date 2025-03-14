@@ -145,7 +145,6 @@ class Metabox
 
         // Sanitize and save the field
         if (isset($_POST['rrze_multilang_links_to_update']) && isset($_POST['rrze_multilang_blogid_to_link'])) {
-            $postType = get_post_type($postId);
             $remoteBlogId = $_POST['rrze_multilang_blogid_to_link'];
             $linkToUpdate = $_POST['rrze_multilang_links_to_update'];
             $linkToUpdate = explode(':', $linkToUpdate);
@@ -155,45 +154,23 @@ class Metabox
                 return;
             }
 
-            $prevReference = get_post_meta($postId, '_rrze_multilang_multiple_reference', true);
-            if (!$prevReference) {
-                $reference = [
-                    $remoteBlogId => $remotePostId
-                ];
+            delete_post_meta($postId, '_rrze_multilang_multiple_reference');
+            $reference = [
+                $remoteBlogId => $remotePostId
+            ];
+            if ($remotePostId) {
                 add_post_meta($postId, '_rrze_multilang_multiple_reference', $reference);
-            } else {
-                $reference = $prevReference;
-                $reference[$remoteBlogId] = $remotePostId;
-                update_post_meta($postId, '_rrze_multilang_multiple_reference', $reference, $prevReference);
             }
 
             switch_to_blog($remoteBlogId);
-            $this->deleteRemotePostMeta('_rrze_multilang_multiple_reference', [$this->currentBlogId => $postId], $postType);
+            delete_post_meta($remotePostId, '_rrze_multilang_multiple_reference');
             $reference = [
                 $this->currentBlogId => $postId
             ];
-            add_post_meta($remotePostId, '_rrze_multilang_multiple_reference', $reference);
-            restore_current_blog();
-        }
-    }
-
-    private function deleteRemotePostMeta($metaKey, $metaValue, $postType)
-    {
-        $args = [
-            'post_type' => $postType,
-            'meta_key' => $metaKey,
-            'meta_value' => '',
-            'posts_per_page' => -1,
-            'fields' => 'ids',
-        ];
-
-        $posts = get_posts($args);
-
-        foreach ($posts as $postId) {
-            $value = get_post_meta($postId, $metaKey, true);
-            if ($value === $metaValue) {
-                delete_post_meta($postId, $metaKey);
+            if ($remotePostId) {
+                add_post_meta($remotePostId, '_rrze_multilang_multiple_reference', $reference);
             }
+            restore_current_blog();
         }
     }
 }
