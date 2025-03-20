@@ -166,6 +166,10 @@ class Switcher
             }
         }
 
+        if (empty($reference)) {
+            return $links;
+        }
+
         if (isset($reference[$currentBlogId])) {
             unset($reference[$currentBlogId]);
         }
