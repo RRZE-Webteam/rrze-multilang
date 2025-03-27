@@ -1,6 +1,6 @@
 {
   "name": "rrze-multilang",
-  "version": "1.2.12",
+  "version": "1.2.13",
   "description": "Multilanguage plugin for WordPress.",
   "main": "webpack.config.js",
   "author": "RRZE Webteam <webmaster@fau.de> (https://www.rrze.fau.de/)",
