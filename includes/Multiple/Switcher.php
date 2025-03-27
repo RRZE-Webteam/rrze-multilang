@@ -144,6 +144,8 @@ class Switcher
         $reference = [];
         $isSingular = false;
 
+        $studiengang = self::getStudiengang();
+
         if (
             is_singular()
             || !empty($wp_query->is_posts_page)
@@ -166,7 +168,7 @@ class Switcher
             }
         }
 
-        if (empty($reference)) {
+        if (empty($reference) && empty($studiengang)) {
             return $links;
         }
 
@@ -203,8 +205,6 @@ class Switcher
                 'native_name' => esc_html($nativeName),
                 'href' => '',
             ];
-
-            $studiengang = self::getStudiengang();
 
             if ($isSingular && $refPostId) {
                 if (!in_array($postType, $refOptions->post_types)) {
