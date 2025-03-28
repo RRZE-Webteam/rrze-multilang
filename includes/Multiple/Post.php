@@ -27,11 +27,6 @@ class Post
             add_filter("manage_edit-{$postType}_columns", [$this, 'postsColumns']);
             add_action("manage_{$postType}_posts_custom_column", [$this, 'managePostsCustomColumn'], 10, 2);
         }
-
-        // add_filter('manage_pages_columns', [$this, 'pagesColumns'], 10, 1);
-        // add_filter('manage_posts_columns', [$this, 'postsColumns'], 10, 2);
-        // add_action('manage_pages_custom_column', [$this, 'managePostsCustomColumn'], 10, 2);
-        // add_action('manage_posts_custom_column', [$this, 'managePostsCustomColumn'], 10, 2);        
     }
 
     public function postsColumns($columns)
@@ -72,13 +67,21 @@ class Post
         $secondarySites = Sites::getSecondarySites(get_post_type($postId));
         $reference = get_post_meta($postId, '_rrze_multilang_multiple_reference', true);
 
-        if (!$isMain && is_array($reference)) {
+        if (empty($reference) || !is_array($reference)) {
+            return $posts;
+        }
+
+        if (!$isMain) {
             $refBlogId = array_key_first($reference);
             $refPostId = isset($reference[$refBlogId]) ? $reference[$refBlogId] : 0;
             if ($refPostId) {
                 switch_to_blog($refBlogId);
                 $remoteRef = get_post_meta($refPostId, '_rrze_multilang_multiple_reference', true);
-                $reference = is_array($remoteRef) ? $reference + $remoteRef : $reference;
+                if (!$remoteRef) {
+                    $reference = [];
+                } else {
+                    $reference = is_array($remoteRef) ? $reference + $remoteRef : $reference;
+                }
                 restore_current_blog();
             }
         }
@@ -91,6 +94,16 @@ class Post
             if ($this->currentBlogId == $blogId || !isset($secondarySites[$blogId])) {
                 continue;
             }
+
+            if (
+                !isset($this->siteOptions->connections[$blogId])
+                || !in_array($this->currentBlogId, $this->siteOptions->connections[$blogId])
+                || get_blog_status($blogId, 'archived')
+                || get_blog_status($blogId, 'deleted')
+            ) {
+                continue;
+            }
+
             switch_to_blog($blogId);
             $locale = Locale::getDefaultLocale();
             $title = get_the_title($refPostId);
