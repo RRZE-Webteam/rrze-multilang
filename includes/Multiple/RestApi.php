@@ -72,7 +72,7 @@ class RestApi
 
     public function restLinkPost(\WP_REST_Request $request)
     {
-        $postId = $request->get_param('id');
+        $postId = absint($request->get_param('id'));
 
         $post = get_post($postId);
         $postType = get_post_type($post);
@@ -93,7 +93,7 @@ class RestApi
             );
         }
 
-        $remoteBlogId = $request->get_param('blogid');
+        $remoteBlogId = absint($request->get_param('blogid'));
 
         if (
             !isset($this->siteOptions->connections[$remoteBlogId])
@@ -108,10 +108,10 @@ class RestApi
             );
         }
 
-        $remotePostId = $request->get_param('postid');
+        $remotePostId = absint($request->get_param('postid'));
+
         if (!$remotePostId) {
-            $prevReference = get_post_meta($postId, '_rrze_multilang_multiple_reference', true);
-            $reference = $prevReference;
+            $reference = get_post_meta($postId, '_rrze_multilang_multiple_reference', true);
             if (isset($reference[$remoteBlogId])) {
                 unset($reference[$remoteBlogId]);
             }
@@ -121,11 +121,13 @@ class RestApi
                 $this->deleteRemotePostMeta('_rrze_multilang_multiple_reference', [$this->currentBlogId => $postId], $postType);
                 restore_current_blog();
             } else {
-                update_post_meta($postId, '_rrze_multilang_multiple_reference', $reference, $prevReference);
+                update_post_meta($postId, '_rrze_multilang_multiple_reference', $reference);
             }
+
             switch_to_blog($remoteBlogId);
             $remoteBlogName = get_bloginfo('name');
             restore_current_blog();
+
             $response[$remotePostId] = [
                 'blogId' => $remoteBlogId,
                 'blogName' => $remoteBlogName,
@@ -157,23 +159,23 @@ class RestApi
             );
         }
 
-        $prevReference = get_post_meta($postId, '_rrze_multilang_multiple_reference', true);
-        if (!$prevReference) {
+        $reference = get_post_meta($postId, '_rrze_multilang_multiple_reference', true);
+        if (!$reference) {
             $reference = [
                 $remoteBlogId => $remotePostId
             ];
             add_post_meta($postId, '_rrze_multilang_multiple_reference', $reference);
         } else {
-            $reference = $prevReference;
             $reference[$remoteBlogId] = $remotePostId;
-            update_post_meta($postId, '_rrze_multilang_multiple_reference', $reference, $prevReference);
+            update_post_meta($postId, '_rrze_multilang_multiple_reference', $reference);
         }
 
         switch_to_blog($remoteBlogId);
-        $this->deleteRemotePostMeta('_rrze_multilang_multiple_reference', [$this->currentBlogId => $postId], $postType);
         $reference = [
             $this->currentBlogId => $postId
         ];
+        $this->deleteRemotePostMeta('_rrze_multilang_multiple_reference', $reference, $postType);
+        delete_post_meta($remotePostId, '_rrze_multilang_multiple_reference');
         add_post_meta($remotePostId, '_rrze_multilang_multiple_reference', $reference);
         restore_current_blog();
 
@@ -268,23 +270,32 @@ class RestApi
         return rest_ensure_response($response);
     }
 
+    /**
+     * Delete the meta for the filtered posts
+     *
+     * @param string $metaKey
+     * @param mixed $metaValue
+     * @param string $postType
+     */
     private function deleteRemotePostMeta($metaKey, $metaValue, $postType)
     {
-        $args = [
-            'post_type' => $postType,
-            'meta_key' => $metaKey,
-            'meta_value' => '',
-            'posts_per_page' => -1,
-            'fields' => 'ids',
-        ];
+        global $wpdb;
 
-        $posts = get_posts($args);
+        // Query to find posts with the specific meta key and value
+        $query = $wpdb->prepare(
+            "SELECT post_id FROM {$wpdb->postmeta} pm
+            INNER JOIN {$wpdb->posts} p ON pm.post_id = p.ID
+            WHERE pm.meta_key = %s AND pm.meta_value = %s AND p.post_type = %s",
+            $metaKey,
+            maybe_serialize($metaValue),
+            $postType
+        );
 
-        foreach ($posts as $postId) {
-            $value = get_post_meta($postId, $metaKey, true);
-            if ($value === $metaValue) {
-                delete_post_meta($postId, $metaKey);
-            }
+        $postIds = $wpdb->get_col($query);
+
+        // Delete the meta for the filtered posts
+        foreach ($postIds as $postId) {
+            delete_post_meta($postId, $metaKey);
         }
     }
 }
