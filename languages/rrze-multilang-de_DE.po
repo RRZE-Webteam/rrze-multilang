@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RRZE Multilang 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/rrze-multilang\n"
-"POT-Creation-Date: 2024-11-22T11:32:29+00:00\n"
-"PO-Revision-Date: 2024-11-22 12:34+0100\n"
+"POT-Creation-Date: 2025-04-01T11:56:31+00:00\n"
+"PO-Revision-Date: 2025-04-01 13:58+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.5\n"
+"X-Generator: Poedit 3.6\n"
 "X-Domain: rrze-multilang\n"
 
 #. Plugin Name of the plugin
@@ -65,32 +65,36 @@ msgstr ""
 "Die von Ihnen vorgenommenen Änderungen gehen verloren, wenn Sie von dieser "
 "Seite weg navigieren."
 
-#: includes/Multiple/Metabox.php:28 includes/Single/Metabox.php:28
+#: includes/Multiple/Metabox.php:35 includes/Single/Metabox.php:28
 #: includes/Single/Metabox.php:62 src/block-editor/multiple/render.js:235
 #: src/block-editor/single/render.js:30 src/block-editor/single/render.js:159
 msgid "Language"
 msgstr "Sprache"
 
-#: includes/Multiple/Metabox.php:44 src/block-editor/multiple/render.js:44
+#: includes/Multiple/Metabox.php:51 src/block-editor/multiple/render.js:44
 msgid "There are no websites available for translations."
 msgstr "Für Übersetzungen stehen keine Websites zur Verfügung."
 
-#: includes/Multiple/Metabox.php:80
+#: includes/Multiple/Metabox.php:92
 msgid "Update Links"
 msgstr "Links aktualisieren"
 
-#: includes/Multiple/Metabox.php:97
+#: includes/Multiple/Metabox.php:109
 msgid "Copy To:"
 msgstr "Kopieren nach:"
 
-#: includes/Multiple/Metabox.php:118
+#: includes/Multiple/Metabox.php:130
 msgid "Add a Copy"
 msgstr "Kopie erstellen"
 
-#: includes/Multiple/Post.php:45 includes/Single/Post.php:735
+#: includes/Multiple/Post.php:37 includes/Single/Post.php:732
 #: includes/Single/TermsListTable.php:20
 msgid "Translation"
 msgstr "Übersetzung"
+
+#: includes/Multiple/Post.php:121
+msgid "No title"
+msgstr "Kein Titel"
 
 #: includes/Multiple/RestApi.php:43
 msgid "You are not allowed to link posts."
@@ -100,14 +104,14 @@ msgstr "Sie dürfen keine Posts verlinken."
 msgid "You are not allowed to access posts in the requested copy."
 msgstr "Sie dürfen nicht auf Posts in der angeforderten Kopie zugreifen."
 
-#: includes/Multiple/RestApi.php:83 includes/Multiple/RestApi.php:147
-#: includes/Multiple/RestApi.php:208 includes/Single/RestApi.php:91
+#: includes/Multiple/RestApi.php:83 includes/Multiple/RestApi.php:149
+#: includes/Multiple/RestApi.php:210 includes/Single/RestApi.php:91
 #: includes/Single/RestApi.php:113 includes/Single/RestApi.php:202
 msgid "The requested post was not found."
 msgstr "Der angeforderte Post wurde nicht gefunden."
 
-#: includes/Multiple/RestApi.php:91 includes/Multiple/RestApi.php:155
-#: includes/Multiple/RestApi.php:218 includes/Single/RestApi.php:99
+#: includes/Multiple/RestApi.php:91 includes/Multiple/RestApi.php:157
+#: includes/Multiple/RestApi.php:220 includes/Single/RestApi.php:99
 #: includes/Single/RestApi.php:210
 msgid "The requested post type is not localizable."
 msgstr "Der angeforderte Post-Type ist nicht übersetzbar."
@@ -116,16 +120,16 @@ msgstr "Der angeforderte Post-Type ist nicht übersetzbar."
 msgid "Please select an available post."
 msgstr "Bitte wählen Sie einen verfügbaren Post aus."
 
-#: includes/Multiple/RestApi.php:197 includes/Multiple/RestApi.php:231
+#: includes/Multiple/RestApi.php:199 includes/Multiple/RestApi.php:233
 msgid "The requested website is not available."
 msgstr "Die angeforderte Website ist nicht verfügbar."
 
-#: includes/Multiple/RestApi.php:241
+#: includes/Multiple/RestApi.php:243
 msgid "Failed to copy a post."
 msgstr "Fehler beim Kopieren eines Posts."
 
 #. translators: %s: The blog name.
-#: includes/Multiple/RestApi.php:256
+#: includes/Multiple/RestApi.php:258
 msgid "A copy has been added on %s."
 msgstr "Auf %s wurde eine Kopie hinzugefügt."
 
@@ -303,17 +307,17 @@ msgstr "Übersetzung hinzufügen"
 msgid "Displayed on pages in"
 msgstr "Angezeigt auf Seiten in"
 
-#: includes/Single/Post.php:796
+#: includes/Single/Post.php:793
 msgid "Show all locales"
 msgstr "Alle Sprachen anzeigen"
 
 #. translators: %s: The translated post language.
-#: includes/Single/Post.php:838
+#: includes/Single/Post.php:834
 msgid "Edit %s translation"
 msgstr "%s-Übersetzung bearbeiten"
 
 #. translators: %s: The translated post language.
-#: includes/Single/Post.php:842
+#: includes/Single/Post.php:838
 msgid "Translate into %s"
 msgstr "Auf %s übersetzen"
 
@@ -368,13 +372,8 @@ msgstr "Sie dürfen keine Begriffe in dieser Sprache bearbeiten."
 msgid "%s &mdash; Default Language"
 msgstr "%s &mdash; Standardsprache"
 
-#. translators: 1: The plugin name, 2: The error string.
-#: rrze-multilang.php:68 rrze-multilang.php:180
-msgid "Plugins: %1$s: %2$s"
-msgstr "Plugins: %1$s: %2$s"
-
 #. translators: 1: Server WordPress version number, 2: Required WordPress version number.
-#: rrze-multilang.php:131
+#: rrze-multilang.php:124
 msgid ""
 "The server is running WordPress version %1$s. The plugin requires at least "
 "WordPress version %2$s."
@@ -383,13 +382,18 @@ msgstr ""
 "WordPress Version %2$s."
 
 #. translators: 1: Server PHP version number, 2: Required PHP version number.
-#: rrze-multilang.php:139
+#: rrze-multilang.php:132
 msgid ""
 "The server is running PHP version %1$s. The plugin requires at least PHP "
 "version %2$s."
 msgstr ""
 "Auf dem Server läuft PHP Version %1$s. Das Plugin erfordert mindestens PHP "
 "Version %2$s."
+
+#. translators: 1: The plugin name, 2: The error string.
+#: rrze-multilang.php:170
+msgid "Plugins: %1$s: %2$s"
+msgstr "Plugins: %1$s: %2$s"
 
 #: src/block-editor/multiple/render.js:200
 msgid "Copy To"
