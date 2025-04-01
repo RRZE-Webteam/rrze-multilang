@@ -104,11 +104,22 @@ class Post
                 continue;
             }
 
+            $permalink = '';
+            $title = '';
+
             switch_to_blog($blogId);
             $locale = Locale::getDefaultLocale();
             $title = get_the_title($refPostId);
             $permalink = get_permalink($refPostId);
             restore_current_blog();
+
+            if (empty($permalink)) {
+                continue;
+            }
+
+            if (empty($title)) {
+                $title = __('No title', 'rrze-multilang');
+            }
 
             $nativeName = Locale::getLanguageNativeName($locale);
 
