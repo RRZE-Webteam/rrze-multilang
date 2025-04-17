@@ -21,7 +21,7 @@ class Metabox
         $this->currentBlogId = get_current_blog_id();
 
         add_action('add_meta_boxes', [$this, 'addL10nMetabox'], 10, 2);
-        add_action('save_post', [$this, 'saveCustomFields']);
+        add_action('save_post', [$this, 'saveCustomFields'], 10, 2);
     }
 
     public function addL10nMetabox($postType, $post)
@@ -135,7 +135,7 @@ class Metabox
         echo '</div>';
     }
 
-    public function saveCustomFields($postId)
+    public function saveCustomFields($postId, $post)
     {
         // Check if the nonce is set
         if (
@@ -145,8 +145,8 @@ class Metabox
             return;
         }
 
-        // Check for autosave
-        if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        // Check if this is a revision or an autosave
+        if (wp_is_post_revision($postId) || wp_is_post_autosave($postId)) {
             return;
         }
 
@@ -164,7 +164,7 @@ class Metabox
             return;
         }
 
-        $postType = get_post_type($postId);
+        $postType = $post->post_type;
         $remoteBlogIds = $_POST['rrze_multilang_blogids_to_link'];
         $remoteBlogIds = explode(',', $remoteBlogIds);
 
