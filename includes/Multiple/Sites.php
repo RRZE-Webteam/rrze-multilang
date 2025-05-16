@@ -25,6 +25,7 @@ class Sites
         foreach ($secondarySites as $blogId => $blog) {
             $name = esc_html($blog['name']);
             $language = esc_html(Locale::getLanguageNativeName($blog['language']));
+            $url = esc_url($blog['url']);
 
             $selectedValue = 0;
 
@@ -66,6 +67,7 @@ class Sites
             $secondary[$blogId] = [
                 'name' => $name,
                 'language' => $language,
+                'url' => $url,
                 'selected' => $selectedValue,
                 'options' => $options
             ];
