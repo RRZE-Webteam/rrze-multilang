@@ -1,4 +1,4 @@
-import { PluginDocumentSettingPanel } from "@wordpress/edit-post";
+import { PluginDocumentSettingPanel } from "@wordpress/editor";
 import {
     PanelRow,
     Button,
@@ -50,14 +50,27 @@ export default function LanguagePanel() {
         }
 
         const listItems = Object.entries(secondarySitesToLink).map(
-            ([key, value]) => {
-                const mainLabel = value.name + " \u2014 " + value.language;
-                const [link, setLink] = useState(value.selected);
-                const handleLinkChange = (link) => {
-                    setLink(link);
-                    const [blogId, postId] = link.split(":");
+            ([key, site]) => {
+                const { name, language, url, options, selected } = site;
+                const labelText = `${name} \u2014 ${language}`;
+                const siteUrl = url;
+                const [selBlogId, selPostId] = (selected || "").split(":");
+                const labelElement =
+                    selBlogId && selPostId && siteUrl ? (
+                        <a
+                            href={`${siteUrl}?p=${selPostId}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            {labelText}
+                        </a>
+                    ) : (
+                        <span>{labelText}</span>
+                    );
+                const handleLinkChange = (newSelection) => {
+                    const [newBlogId, newPostId] = newSelection.split(":");
                     apiFetch({
-                        path: `/rrze-multilang/v1/link/${currentPost.id}/blog/${blogId}/post/${postId}`,
+                        path: `/rrze-multilang/v1/link/${currentPost.id}/blog/${newBlogId}/post/${newPostId}`,
                         method: "POST",
                     })
                         .then((response) => {
@@ -69,42 +82,38 @@ export default function LanguagePanel() {
                                         type: "snackbar",
                                     }
                                 );
+                                return;
+                            }
+                            setSecondarySitesToLink((prev) => ({
+                                ...prev,
+                                [key]: {
+                                    ...prev[key],
+                                    selected: newSelection,
+                                },
+                            }));
+
+                            const remotePostId = Object.keys(response)[0];
+                            const postTitle = response[remotePostId].postTitle;
+                            const blogName = response[remotePostId].blogName;
+
+                            let notice;
+                            if (postTitle) {
+                                notice = __(
+                                    `Linked to ${postTitle} on ${blogName}.`,
+                                    "rrze-multilang"
+                                );
                             } else {
-                                const updatedSecondarySitesToLink = {
-                                    ...secondarySitesToLink,
-                                    [key]: {
-                                        ...value,
-                                        selected: link,
-                                    },
-                                };
-                                setSecondarySitesToLink(updatedSecondarySitesToLink);
-
-                                const remotePostId = Object.keys(response)[0];
-                                const postTitle = response[remotePostId].postTitle;
-                                const blogName = response[remotePostId].blogName;
-
-                                let notice;
-                                if (postTitle) {
-                                    notice = __(
-                                        `Linked to ${postTitle} on ${blogName}.`,
-                                        "rrze-multilang"
-                                    );
-                                } else {
-                                    notice = __(
-                                        `Unlinked from ${blogName}.`,
-                                        "rrze-multilang"
-                                    );
-                                }
-                                                                
-                                dispatch("core/notices").createInfoNotice(
-                                    notice,
-                                    {
-                                        isDismissible: true,
-                                        type: "snackbar",
-                                        speak: true,
-                                    }
+                                notice = __(
+                                    `Unlinked from ${blogName}.`,
+                                    "rrze-multilang"
                                 );
                             }
+
+                            dispatch("core/notices").createInfoNotice(notice, {
+                                isDismissible: true,
+                                type: "snackbar",
+                                speak: true,
+                            });
                         })
                         .catch((error) => {
                             dispatch("core/notices").createErrorNotice(
@@ -119,9 +128,9 @@ export default function LanguagePanel() {
                 return (
                     <PanelRow key={key}>
                         <SelectControl
-                            label={mainLabel}
-                            value={link}
-                            options={value.options}
+                            label={labelElement}
+                            value={selected}
+                            options={options}
                             onChange={handleLinkChange}
                         />
                     </PanelRow>
@@ -235,12 +244,26 @@ export default function LanguagePanel() {
             title={__("Language", "rrze-multilang")}
             className="rrze-multilang-language-panel"
         >
-            <h3 class="rrze-multilang-setting-panel__h3">{__("Secondary Sites to Link", "rrze-multilang")}</h3>
-            <p class="rrze-multilang-setting-panel__help">{__("Select the sites where you want to link the current post.", "rrze-multilang")}</p>
+            <h3 class="rrze-multilang-setting-panel__h3">
+                {__("Secondary Sites to Link", "rrze-multilang")}
+            </h3>
+            <p class="rrze-multilang-setting-panel__help">
+                {__(
+                    "Select the sites where you want to link the current post.",
+                    "rrze-multilang"
+                )}
+            </p>
             <SecondarySitesToLink />
             <hr />
-            <h3 class="rrze-multilang-setting-panel__h3">{__("Secondary Sites to Copy", "rrze-multilang")}</h3>
-            <p class="rrze-multilang-setting-panel__help">{__("Select the sites where you want to create copies of the current post.", "rrze-multilang")}</p>
+            <h3 class="rrze-multilang-setting-panel__h3">
+                {__("Secondary Sites to Copy", "rrze-multilang")}
+            </h3>
+            <p class="rrze-multilang-setting-panel__help">
+                {__(
+                    "Select the sites where you want to create copies of the current post.",
+                    "rrze-multilang"
+                )}
+            </p>
             <SecondarySitesToCopy />
         </PluginDocumentSettingPanel>
     );
