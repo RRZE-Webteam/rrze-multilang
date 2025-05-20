@@ -203,17 +203,17 @@ class Main
         $assetFile = include plugin()->getPath('build') . 'block-editor-single.asset.php';
 
         wp_enqueue_script(
-            'rrze-multilang-block-editor-single',
+            '292882e06552f8bb23727601be8ff691',
             plugins_url('build/block-editor-single.js', plugin()->getBasename()),
             $assetFile['dependencies'] ?? [],
             $assetFile['version'] ?? plugin()->getVersion()
         );
 
         if (empty($this->localizeArgs)) $this->setLocalizeArgs();
-        wp_localize_script('rrze-multilang-block-editor-single', 'rrzeMultilang', $this->localizeArgs);
+        wp_localize_script('292882e06552f8bb23727601be8ff691', 'rrzeMultilang', $this->localizeArgs);
 
         wp_set_script_translations(
-            'rrze-multilang-block-editor-single',
+            '292882e06552f8bb23727601be8ff691',
             'rrze-multilang',
             plugin()->getPath('languages')
         );

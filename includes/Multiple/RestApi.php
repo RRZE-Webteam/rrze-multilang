@@ -115,13 +115,18 @@ class RestApi
             if (isset($reference[$remoteBlogId])) {
                 unset($reference[$remoteBlogId]);
             }
-            if (empty($reference)) {
-                delete_post_meta($postId, '_rrze_multilang_multiple_reference');
+            if (empty($reference[$remoteBlogId])) {
                 switch_to_blog($remoteBlogId);
-                $this->deleteRemotePostMeta('_rrze_multilang_multiple_reference', [$this->currentBlogId => $postId], $postType);
+                $remoteReference = [
+                    $this->currentBlogId => $postId
+                ];
+                $this->deleteRemotePostMeta('_rrze_multilang_multiple_reference', $remoteReference, $postType);
                 restore_current_blog();
-            } else {
+            }
+            if (!empty($reference)) {
                 update_post_meta($postId, '_rrze_multilang_multiple_reference', $reference);
+            } else {
+                delete_post_meta($postId, '_rrze_multilang_multiple_reference');
             }
 
             switch_to_blog($remoteBlogId);
@@ -235,6 +240,14 @@ class RestApi
             );
         }
 
+        if (!current_user_can_for_site($blogId, 'edit_posts')) {
+            return new \WP_Error(
+                'rrze_multilang_copy_forbidden',
+                __('You are not allowed to copy posts to the requested website.', 'rrze-multilang'),
+                ['status' => 403]
+            );
+        }
+
         $newPostId = Post::duplicatePost($postId, $blogId, $postType);
 
         if (!$newPostId) {
@@ -248,14 +261,26 @@ class RestApi
         $blogDetails = get_blog_details(['blog_id' => $blogId]);
         $blogName = $blogDetails->blogname;
 
-        //$newPost = get_post($newPostId);
-        //$postTypeObj = get_post_type_object($newPost->post_type);
-        //$postTypeLabel = $postTypeObj->labels->singular_name;
+        $reference = get_post_meta($postId, '_rrze_multilang_multiple_reference', true) ?: [];
+        if (empty($reference[$blogId])) {
+            $reference[$blogId] = $newPostId;
+            update_post_meta($postId, '_rrze_multilang_multiple_reference', $reference);
+
+            switch_to_blog($blogId);
+            $newPost = get_post($newPostId);
+            $reference = [
+                $this->currentBlogId => $postId
+            ];
+            $this->deleteRemotePostMeta('_rrze_multilang_multiple_reference', $reference, $postType);
+            delete_post_meta($newPostId, '_rrze_multilang_multiple_reference');
+            add_post_meta($newPostId, '_rrze_multilang_multiple_reference', $reference);
+            restore_current_blog();
+        }
 
         Functions::flashAdminNotice(
             sprintf(
                 /* translators: %s: The blog name. */
-                __('A copy has been added on %s.', 'rrze-multilang'),
+                __('A copy has been added to %s.', 'rrze-multilang'),
                 $blogName
             ),
             'updated'
@@ -264,7 +289,9 @@ class RestApi
         $response[$blogId] = $blogId;
         $response[$blogId] = [
             'blogId' => $blogId,
-            'blogName' => $blogName
+            'blogName' => $blogName,
+            'postId' => $newPostId,
+            'postTitle' => $newPost->post_title
         ];
 
         return rest_ensure_response($response);

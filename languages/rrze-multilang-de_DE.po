@@ -1,11 +1,9 @@
-# Copyright (C) 2021 RRZE-Webteam
-# This file is distributed under the same license as the RRZE Multilang plugin.
 msgid ""
 msgstr ""
 "Project-Id-Version: RRZE Multilang 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/rrze-multilang\n"
-"POT-Creation-Date: 2025-04-01T11:56:31+00:00\n"
-"PO-Revision-Date: 2025-04-01 13:58+0200\n"
+"POT-Creation-Date: 2025-05-20T08:55:09+00:00\n"
+"PO-Revision-Date: 2025-05-20 11:15+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -66,7 +64,7 @@ msgstr ""
 "Seite weg navigieren."
 
 #: includes/Multiple/Metabox.php:35 includes/Single/Metabox.php:28
-#: includes/Single/Metabox.php:62 src/block-editor/multiple/render.js:235
+#: includes/Single/Metabox.php:62 src/block-editor/multiple/render.js:274
 #: src/block-editor/single/render.js:30 src/block-editor/single/render.js:159
 msgid "Language"
 msgstr "Sprache"
@@ -77,7 +75,7 @@ msgstr "Für Übersetzungen stehen keine Websites zur Verfügung."
 
 #: includes/Multiple/Metabox.php:92
 msgid "Update Links"
-msgstr "Links aktualisieren"
+msgstr "Verknüpfungen aktualisieren"
 
 #: includes/Multiple/Metabox.php:109
 msgid "Copy To:"
@@ -98,20 +96,20 @@ msgstr "Kein Titel"
 
 #: includes/Multiple/RestApi.php:43
 msgid "You are not allowed to link posts."
-msgstr "Sie dürfen keine Posts verlinken."
+msgstr "Sie dürfen keine Posts verknüpfen."
 
 #: includes/Multiple/RestApi.php:64
 msgid "You are not allowed to access posts in the requested copy."
 msgstr "Sie dürfen nicht auf Posts in der angeforderten Kopie zugreifen."
 
-#: includes/Multiple/RestApi.php:83 includes/Multiple/RestApi.php:149
-#: includes/Multiple/RestApi.php:210 includes/Single/RestApi.php:91
+#: includes/Multiple/RestApi.php:83 includes/Multiple/RestApi.php:154
+#: includes/Multiple/RestApi.php:215 includes/Single/RestApi.php:91
 #: includes/Single/RestApi.php:113 includes/Single/RestApi.php:202
 msgid "The requested post was not found."
 msgstr "Der angeforderte Post wurde nicht gefunden."
 
-#: includes/Multiple/RestApi.php:91 includes/Multiple/RestApi.php:157
-#: includes/Multiple/RestApi.php:220 includes/Single/RestApi.php:99
+#: includes/Multiple/RestApi.php:91 includes/Multiple/RestApi.php:162
+#: includes/Multiple/RestApi.php:225 includes/Single/RestApi.php:99
 #: includes/Single/RestApi.php:210
 msgid "The requested post type is not localizable."
 msgstr "Der angeforderte Post-Type ist nicht übersetzbar."
@@ -120,24 +118,29 @@ msgstr "Der angeforderte Post-Type ist nicht übersetzbar."
 msgid "Please select an available post."
 msgstr "Bitte wählen Sie einen verfügbaren Post aus."
 
-#: includes/Multiple/RestApi.php:199 includes/Multiple/RestApi.php:233
+#: includes/Multiple/RestApi.php:204 includes/Multiple/RestApi.php:238
 msgid "The requested website is not available."
 msgstr "Die angeforderte Website ist nicht verfügbar."
 
-#: includes/Multiple/RestApi.php:243
+#: includes/Multiple/RestApi.php:246
+msgid "You are not allowed to copy posts to the requested website."
+msgstr "Sie dürfen keine Posts auf der angeforderten Website kopieren."
+
+#: includes/Multiple/RestApi.php:256
 msgid "Failed to copy a post."
 msgstr "Fehler beim Kopieren eines Posts."
 
 #. translators: %s: The blog name.
-#: includes/Multiple/RestApi.php:258
-msgid "A copy has been added on %s."
-msgstr "Auf %s wurde eine Kopie hinzugefügt."
+#. translators: %s: the blog name
+#: includes/Multiple/RestApi.php:283 src/block-editor/multiple/render.js:179
+msgid "A copy has been added to %s."
+msgstr "Eine Kopie wurde zu %s hinzugefügt."
 
-#: includes/Multiple/Sites.php:33 src/block-editor/single/render.js:65
+#: includes/Multiple/Sites.php:34 src/block-editor/single/render.js:65
 msgid "None"
 msgstr "Keiner"
 
-#: includes/Multiple/Sites.php:90
+#: includes/Multiple/Sites.php:92
 msgid "Select"
 msgstr "Auswählen"
 
@@ -395,32 +398,42 @@ msgstr ""
 msgid "Plugins: %1$s: %2$s"
 msgstr "Plugins: %1$s: %2$s"
 
-#: src/block-editor/multiple/render.js:200
+#. translators: 1: the post title, 2: the blog name
+#: src/block-editor/multiple/render.js:109
+msgid "Linked to %1$s on %2$s."
+msgstr "Mit %1$s auf %2$s verknüpft."
+
+#. translators: %s: the blog name
+#: src/block-editor/multiple/render.js:119
+msgid "Unlinked from %s."
+msgstr "Verknüpfung mit %s getrennt."
+
+#: src/block-editor/multiple/render.js:239
 msgid "Copy To"
 msgstr "Kopieren nach"
 
-#: src/block-editor/multiple/render.js:220
+#: src/block-editor/multiple/render.js:259
 msgid "Add Copy"
 msgstr "Kopie erstellen"
 
-#: src/block-editor/multiple/render.js:238
-msgid "Secondary Sites to Link"
-msgstr "Sekundäre zu verlinkende Websites"
+#: src/block-editor/multiple/render.js:278
+msgid "Secondary Websites to Link"
+msgstr "Sekundäre Websites zum verknüpfen"
 
-#: src/block-editor/multiple/render.js:239
-msgid "Select the sites where you want to link the current post."
+#: src/block-editor/multiple/render.js:281
+msgid "Select the websites where you want to link the current post."
+msgstr "Websites auswählen, auf denen der aktuelle Post verknüpft werden soll."
+
+#: src/block-editor/multiple/render.js:289
+msgid "Secondary Websites to Copy"
+msgstr "Sekundäre Websites zum kopieren"
+
+#: src/block-editor/multiple/render.js:292
+msgid ""
+"Select the websites where you want to create copies of the current post."
 msgstr ""
-"Wählen Sie die Sites aus, auf die Sie den aktuellen Post verlinken möchten."
-
-#: src/block-editor/multiple/render.js:242
-msgid "Secondary Sites to Copy"
-msgstr "Sekundäre Sites zum Kopieren"
-
-#: src/block-editor/multiple/render.js:243
-msgid "Select the sites where you want to create copies of the current post."
-msgstr ""
-"Wählen Sie die Sites aus, auf denen Sie Kopien des aktuellen Posts erstellen "
-"möchten."
+"Websites auswählen, auf denen Kopien des aktuellen Posts erstellt werden "
+"sollen."
 
 #: src/block-editor/single/render.js:103
 msgid "Translation created."
