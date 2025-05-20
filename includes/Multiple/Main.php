@@ -107,24 +107,24 @@ class Main
         $assetFile = include plugin()->getPath('build') . 'block-editor-multiple.asset.php';
 
         wp_enqueue_style(
-            'rrze-multilang-block-editor-multiple',
+            '47fa4799dbb8f653dbe5b07ed336f078',
             plugins_url('build/block-editor-multiple.css', plugin()->getBasename()),
             [],
             $assetFile['version'] ?? plugin()->getVersion(),
         );
 
         wp_enqueue_script(
-            'rrze-multilang-block-editor-multiple',
+            '47fa4799dbb8f653dbe5b07ed336f078',
             plugins_url('build/block-editor-multiple.js', plugin()->getBasename()),
             $assetFile['dependencies'] ?? [],
             $assetFile['version'] ?? plugin()->getVersion(),
         );
 
         if (empty($this->localizeArgs)) $this->setLocalizeArgs();
-        wp_localize_script('rrze-multilang-block-editor-multiple', 'rrzeMultilang', $this->localizeArgs);
+        wp_localize_script('47fa4799dbb8f653dbe5b07ed336f078', 'rrzeMultilang', $this->localizeArgs);
 
         wp_set_script_translations(
-            'rrze-multilang-block-editor-multiple',
+            '47fa4799dbb8f653dbe5b07ed336f078',
             'rrze-multilang',
             plugin()->getPath('languages')
         );
