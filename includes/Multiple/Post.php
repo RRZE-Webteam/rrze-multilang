@@ -138,17 +138,26 @@ class Post
         return $posts;
     }
 
-    public static function getPosts(string $postType, array $postStatus)
+    public static function getPosts(string $postType, array $postStatus): array
     {
-        return get_posts(
+        $posts = get_posts(
             [
-                'post_type' => $postType,
+                'post_type'   => $postType,
                 'post_status' => $postStatus,
-                'orderby' => 'title',
-                'order' => 'ASC',
-                'nopaging' => true
+                'orderby'     => 'title',
+                'order'       => 'ASC',
+                'nopaging'    => true,
             ]
         );
+
+        $filtered = array_filter(
+            $posts,
+            static function (\WP_Post $post): bool {
+                return trim($post->post_title) !== '';
+            }
+        );
+
+        return array_values($filtered);
     }
 
     public static function duplicatePost($postId, $blogId, $postType)
@@ -236,6 +245,7 @@ class Post
 
         $postId = wp_insert_post($sourcePost);
         if ($postId == 0 && is_wp_error($postId)) {
+            restore_current_blog();
             return 0;
         }
 
