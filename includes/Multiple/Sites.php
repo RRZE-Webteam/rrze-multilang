@@ -142,7 +142,7 @@ class Sites
                     'name' => get_bloginfo('name'),
                     'url' => untrailingslashit(get_bloginfo('url')),
                     'language' => Locale::getDefaultLocale(),
-                    'posts' => $posts ? Post::getPosts($postType, ['publish', 'future', 'draft']) : []
+                    'posts' => $posts ? Post::getPosts($postType, ['publish', 'future', 'draft', 'pending']) : []
                 ];
             }
             restore_current_blog();
