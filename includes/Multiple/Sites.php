@@ -140,13 +140,14 @@ class Sites
             ) {
                 $secondarySites[$blogId] = [
                     'name' => get_bloginfo('name'),
-                    'url' => get_bloginfo('url'),
+                    'url' => untrailingslashit(get_bloginfo('url')),
                     'language' => Locale::getDefaultLocale(),
-                    'posts' => $posts ? Post::getPosts($postType, ['publish']) : []
+                    'posts' => $posts ? Post::getPosts($postType, ['publish', 'future', 'draft']) : []
                 ];
             }
             restore_current_blog();
         }
+
         return $secondarySites;
     }
 }
