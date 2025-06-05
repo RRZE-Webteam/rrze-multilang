@@ -214,15 +214,11 @@ class Switcher
                 }
             } elseif ($isSingular && !empty($studiengang)) {
                 switch_to_blog($blogId);
-                $options = (object) Options::getOptions();
-                $isMain = $options->connection_type == 1 ? true : false;
                 $siteUrl = get_site_url();
+                $postName = substr(Locale::getDefaultLocale(), 0, 2) === 'de' ? 'post_name' : 'post_name_en';
                 restore_current_blog();
-                if ($isMain) {
-                    $link['href'] = $siteUrl . '/studiengang/' . $studiengang['post_name'] . '/';
-                } else {
-                    $link['href'] = $siteUrl . '/studiengang/' . $studiengang['post_name_en'] . '/';
-                }
+
+                $link['href'] = $siteUrl . '/studiengang/' . $studiengang[$postName] . '/';
             } else {
                 $link['href'] = $defaultPage ? $defaultPage : '';
             }
