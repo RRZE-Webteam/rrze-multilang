@@ -122,6 +122,8 @@ class Switcher
         $translations = [];
         $isSingular = false;
 
+        $studiengang = self::getStudiengang();
+
         if (
             is_singular()
             || !empty($wp_query->is_posts_page)
@@ -151,7 +153,7 @@ class Switcher
             $postType = get_post_type(get_queried_object_id());
             $isLocalizablePostType = Post::isLocalizablePostType($postType);
 
-            if ($isSingular) {
+            if ($isSingular && empty($studiengang)) {
                 if ($locale === $code) {
                     $link['href'] = get_permalink(get_queried_object_id());
                 } elseif (
@@ -162,6 +164,9 @@ class Switcher
                 } elseif ($defaultPage && $isLocalizablePostType) {
                     $link['href'] = $defaultPage;
                 }
+            } elseif ($isSingular && !empty($studiengang)) {
+                $postName = substr($code, 0, 2) === 'de' ? 'post_name' : 'post_name_en';
+                $link['href'] = Locale::url(get_site_url(), $code) . '/studiengang/' . $studiengang[$postName] . '/';
             } else {
                 $link['href'] = Locale::url(null, $code);
             }
@@ -170,5 +175,24 @@ class Switcher
         }
 
         return $links;
+    }
+
+    protected static function getStudiengang()
+    {
+        $studiengang = [];
+        $postType = get_post_type();
+        if ($postType === 'studiengang') {
+            $post = get_post();
+            if ($post) {
+                $postId = $post->ID;
+                $postName = $post->post_name;
+                $postNameEn = get_post_meta($postId, 'post_name_en', true);
+                $studiengang = [
+                    'post_name' => $postName,
+                    'post_name_en' => $postNameEn
+                ];
+            }
+        }
+        return $studiengang;
     }
 }

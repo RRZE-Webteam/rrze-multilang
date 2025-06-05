@@ -3,7 +3,7 @@
 /*
 Plugin Name:        RRZE Multilang
 Plugin URI:         https://github.com/RRZE-Webteam/rrze-multilang
-Version:            1.2.17
+Version:            1.2.18
 Description:        Multilanguage plugin for WordPress.
 Author:             RRZE Webteam
 Author URI:         https://blogs.fau.de/webworking/
@@ -41,9 +41,6 @@ spl_autoload_register(function ($class) {
     }
 });
 
-// Load the plugin's text domain for localization.
-add_action('init', fn() => load_plugin_textdomain('rrze-multilang', false, dirname(plugin_basename(__FILE__)) . '/languages'));
-
 // Register activation hook for the plugin
 register_activation_hook(__FILE__, __NAMESPACE__ . '\activation');
 
@@ -56,14 +53,16 @@ register_deactivation_hook(__FILE__, __NAMESPACE__ . '\deactivation');
  * This code hooks into the 'plugins_loaded' action hook to execute a callback function when
  * WordPress has fully loaded all active plugins and the theme's functions.php file.
  */
-add_action('plugins_loaded', __NAMESPACE__ . '\loaded', 9);
+add_action('plugins_loaded', __NAMESPACE__ . '\loaded', 11);
 
 /**
  * Activation callback function.
+ * 
+ * @return void
  */
 function activation()
 {
-    //
+    // Nothing to do here, but use this if we need to set up options or perform actions on activation.
 }
 
 /**
@@ -99,6 +98,20 @@ function plugin()
 }
 
 /**
+ * Callback function to load the plugin textdomain.
+ * 
+ * @return void
+ */
+function load_textdomain()
+{
+    load_plugin_textdomain(
+        'rrze-multilang',
+        false,
+        dirname(plugin_basename(__FILE__)) . '/languages'
+    );
+}
+
+/**
  * Check system requirements for the plugin.
  *
  * This method checks if the server environment meets the minimum WordPress and PHP version requirements
@@ -108,29 +121,23 @@ function plugin()
  */
 function systemRequirements(): string
 {
-    // Get the global WordPress version.
-    global $wp_version;
-
-    // Get the PHP version.
-    $phpVersion = phpversion();
-
     // Initialize an error message string.
     $error = '';
 
     // Check if the WordPress version is compatible with the plugin's requirement.
-    if (!is_wp_version_compatible(plugin()->getRequiresWP())) {
+    if (version_compare(get_bloginfo('version'), plugin()->getRequiresWP(), '<')) {
         $error = sprintf(
             /* translators: 1: Server WordPress version number, 2: Required WordPress version number. */
             __('The server is running WordPress version %1$s. The plugin requires at least WordPress version %2$s.', 'rrze-multilang'),
-            $wp_version,
+            get_bloginfo('version'),
             plugin()->getRequiresWP()
         );
-    } elseif (!is_php_version_compatible(plugin()->getRequiresPHP())) {
+    } elseif (version_compare(PHP_VERSION, plugin()->getRequiresPHP(), '<')) {
         // Check if the PHP version is compatible with the plugin's requirement.
         $error = sprintf(
             /* translators: 1: Server PHP version number, 2: Required PHP version number. */
             __('The server is running PHP version %1$s. The plugin requires at least PHP version %2$s.', 'rrze-multilang'),
-            $phpVersion,
+            PHP_VERSION,
             plugin()->getRequiresPHP()
         );
     }
@@ -149,6 +156,12 @@ function loaded()
 {
     // Trigger the 'loaded' method of the main plugin instance.
     plugin()->loaded();
+
+    // Load the plugin textdomain for translations.
+    add_action(
+        'init',
+        __NAMESPACE__ . '\load_textdomain'
+    );
 
     // Check system requirements and store any error messages.
     if ($error = systemRequirements()) {

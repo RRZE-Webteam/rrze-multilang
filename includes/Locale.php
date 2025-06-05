@@ -6,8 +6,19 @@ defined('ABSPATH') || exit;
 
 use RRZE\Multilang\Single\Users;
 
+/**
+ * Class Locale
+ *
+ * @package RRZE\Multilang
+ */
 class Locale
 {
+    /**
+     * Get the available locales.
+     *
+     * @param array $args
+     * @return array
+     */
     public static function availableLocales($args = '')
     {
         $defaults = [
@@ -64,6 +75,11 @@ class Locale
         return array_unique(array_filter($availableLocales));
     }
 
+    /**
+     * Get the default locale.
+     *
+     * @return string
+     */
     public static function getDefaultLocale()
     {
         static $locale;
@@ -75,13 +91,13 @@ class Locale
         if (is_multisite()) {
             if (
                 wp_installing()
-                || false === $ms_locale = get_option('WPLANG')
+                || false === $msLocale = get_option('WPLANG')
             ) {
-                $ms_locale = get_site_option('WPLANG');
+                $msLocale = get_site_option('WPLANG');
             }
 
-            if ($ms_locale !== false) {
-                $locale = $ms_locale;
+            if ($msLocale !== false) {
+                $locale = $msLocale;
             }
         } else {
             $db_locale = get_option('WPLANG');
@@ -98,6 +114,12 @@ class Locale
         return 'en_US';
     }
 
+    /**
+     * Check if the locale is the default locale.
+     *
+     * @param string $locale
+     * @return bool
+     */
     public static function isDefaultLocale($locale)
     {
         $defaultLocale = self::getDefaultLocale();
@@ -105,11 +127,24 @@ class Locale
         return !empty($locale) && $locale == $defaultLocale;
     }
 
+    /**
+     * Filter locales based on availability.
+     *
+     * @param array $locales
+     * @param string $filter
+     * @return array
+     */
     public static function filterLocales($locales, $filter = 'available')
     {
         return array_intersect((array) $locales, self::availableLocales());
     }
 
+    /**
+     * Check if the locale is available.
+     *
+     * @param string $locale
+     * @return bool
+     */
     public static function isAvailableLocale($locale)
     {
         if (empty($locale)) {
@@ -125,6 +160,12 @@ class Locale
         return in_array($locale, $availableLocales);
     }
 
+    /**
+     * Get the language tag for a locale.
+     *
+     * @param string $locale
+     * @return string
+     */
     public static function languageTag($locale)
     {
         $tag = preg_replace('/[^0-9a-zA-Z]+/', '-', $locale);
@@ -133,6 +174,12 @@ class Locale
         return apply_filters('rrze_multilang_language_tag', $tag, $locale);
     }
 
+    /**
+     * Get the language slug for a locale.
+     *
+     * @param string $locale
+     * @return string
+     */
     public static function langSlug($locale)
     {
         $tag = self::languageTag($locale);
@@ -154,6 +201,12 @@ class Locale
         return apply_filters('rrze_multilang_lang_slug', $slug, $locale);
     }
 
+    /**
+     * Get the language for a locale.
+     *
+     * @param string $locale
+     * @return string
+     */
     public static function getLanguage($locale)
     {
         $defaultLocale = self::getDefaultLocale();
@@ -168,6 +221,11 @@ class Locale
         return $language;
     }
 
+    /**
+     * Get the available languages.
+     *
+     * @return array
+     */
     public static function languages()
     {
         static $languages = [];
@@ -186,6 +244,12 @@ class Locale
         return apply_filters('rrze_multilang_languages', $languages);
     }
 
+    /**
+     * Check if the locale is ISO 639.
+     *
+     * @param string $locale
+     * @return bool
+     */
     public static function isLocaleIso639($locale)
     {
         $tag = self::languageTag($locale);
@@ -199,6 +263,12 @@ class Locale
         return strlen($slug) < strlen($tag);
     }
 
+    /**
+     * Get the short name for a locale.
+     *
+     * @param string $origName
+     * @return string
+     */
     public static function getShortName($origName)
     {
         $shortName = $origName;
@@ -226,6 +296,11 @@ class Locale
         return trim($shortName);
     }
 
+    /**
+     * Get the available translations.
+     *
+     * @return array
+     */
     public static function getAvailableTranslations()
     {
         if (!function_exists('wp_get_available_translations')) {
@@ -250,6 +325,12 @@ class Locale
         return array_merge($translations, $english);
     }
 
+    /**
+     * Get the available languages.
+     *
+     * @param array $args
+     * @return array
+     */
     public static function getAvailableLanguages($args = '')
     {
         $defaults = [
@@ -295,6 +376,12 @@ class Locale
         return $availableLanguages;
     }
 
+    /**
+     * Get the closest locale for a given string.
+     *
+     * @param string $var
+     * @return string|false
+     */
     public static function getClosestLocale($var)
     {
         $var = strtolower($var);
@@ -342,6 +429,13 @@ class Locale
         return false;
     }
 
+    /**
+     * Get the URL with the language slug.
+     *
+     * @param string $url
+     * @param string $lang
+     * @return string
+     */
     public static function url($url = '', $lang = '')
     {
         if (!$lang) {
@@ -355,6 +449,12 @@ class Locale
         return self::getUrlWithLang($url, $lang, $args);
     }
 
+    /**
+     * Get the language from the URL.
+     *
+     * @param string $url
+     * @return string|false
+     */
     public static function getLangFromUrl($url = '')
     {
         if (!$url) {
@@ -398,6 +498,14 @@ class Locale
         return false;
     }
 
+    /**
+     * Get the URL with the language slug.
+     *
+     * @param string $url
+     * @param string $lang
+     * @param array $args
+     * @return string
+     */
     public static function getUrlWithLang($url = '', $lang = '', $args = '')
     {
         global $wp_rewrite;
@@ -510,6 +618,11 @@ class Locale
         return $url;
     }
 
+    /**
+     * Get the language regex.
+     *
+     * @return string
+     */
     public static function getLangRegex()
     {
         $langs = array_map([__CLASS__, 'langSlug'], self::availableLocales());
@@ -522,6 +635,12 @@ class Locale
         return '(' . implode('|', $langs) . ')';
     }
 
+    /**
+     * Get the native name for a locale.
+     *
+     * @param string $locale
+     * @return string|false
+     */
     public static function getLanguageNativeName($locale)
     {
         if ('en_US' == $locale) {

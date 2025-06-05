@@ -10,31 +10,31 @@ class Plugin
      * The full path and filename of the plugin.
      * @var string
      */
-    protected $pluginFile;
+    protected string $pluginFile;
 
     /**
      * The basename of the plugin.
      * @var string
      */
-    protected $basename;
+    protected string $basename;
 
     /**
      * The filesystem directory path (with trailing slash) for the plugin.
      * @var string
      */
-    protected $directory;
+    protected string $directory;
 
     /**
      * The URL directory path (with trailing slash) for the plugin.
      * @var string
      */
-    protected $url;
+    protected string $url;
 
     /**
      * The data of the plugin.
      * @var array
      */
-    protected $data;
+    protected array $data;
 
     /**
      * Constructor.
@@ -79,7 +79,7 @@ class Plugin
      * Set the basename of the plugin.
      * @return object This Plugin object.
      */
-    public function setBasename(): object
+    public function setBasename(): self
     {
         $this->basename = plugin_basename($this->pluginFile);
         return $this;
@@ -98,7 +98,7 @@ class Plugin
      * Set the filesystem directory path (with trailing slash) for the plugin.
      * @return object This Plugin object.
      */
-    public function setDirectory(): object
+    public function setDirectory(): self
     {
         $this->directory = rtrim(plugin_dir_path($this->pluginFile), '/') . '/';
         return $this;
@@ -128,7 +128,7 @@ class Plugin
      * Set the URL directory path (with trailing slash) for the plugin.
      * @return object This Plugin object.
      */
-    public function setUrl(): object
+    public function setUrl(): self
     {
         $this->url = rtrim(plugin_dir_url($this->pluginFile), '/') . '/';
         return $this;
@@ -147,7 +147,7 @@ class Plugin
      * Set the data of the plugin.
      * @return object This Plugin object.
      */
-    public function setData(): object
+    public function setData(): self
     {
         $this->data = get_plugin_data($this->pluginFile, false, false);
         return $this;
@@ -186,7 +186,7 @@ class Plugin
      */
     public function getRequiresWP(): string
     {
-        return $this->data['RequiresWP'];
+        return $this->data['RequiresWP'] ?? '';
     }
 
     /**
@@ -195,7 +195,7 @@ class Plugin
      */
     public function getRequiresPHP(): string
     {
-        return $this->data['RequiresPHP'];
+        return $this->data['RequiresPHP'] ?? '';
     }
 
     /**
@@ -209,6 +209,7 @@ class Plugin
             if (defined('WP_DEBUG') && WP_DEBUG) {
                 throw new \Exception($message);
             }
+            error_log($message);
         }
     }
 }

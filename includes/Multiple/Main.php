@@ -78,13 +78,19 @@ class Main
         );
     }
 
-    public function adminEnqueueScripts($hook)
+    public function adminEnqueueScripts()
     {
-        if (
-            $hook !== 'post.php' &&
-            $hook !== 'post-new.php' &&
-            !in_array(get_post_type(), Post::localizablePostTypes())
-        ) {
+        if (! function_exists('get_current_screen')) {
+            return;
+        }
+
+        $screen = get_current_screen();
+
+        if (! $screen || 'post' !== $screen->base) {
+            return;
+        }
+
+        if (! in_array($screen->post_type, Post::localizablePostTypes(), true)) {
             return;
         }
 
@@ -104,6 +110,20 @@ class Main
 
     public function enqueueBlockEditorAssets()
     {
+        if (! function_exists('get_current_screen')) {
+            return;
+        }
+
+        $screen = get_current_screen();
+
+        if (! $screen || 'post' !== $screen->base) {
+            return;
+        }
+
+        if (! in_array($screen->post_type, Post::localizablePostTypes(), true)) {
+            return;
+        }
+
         $assetFile = include plugin()->getPath('build') . 'block-editor-multiple.asset.php';
 
         wp_enqueue_style(
