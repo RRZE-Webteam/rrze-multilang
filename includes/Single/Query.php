@@ -5,6 +5,7 @@ namespace RRZE\Multilang\Single;
 defined('ABSPATH') || exit;
 
 use RRZE\Multilang\Locale;
+use WP_Query;
 
 class Query
 {
@@ -13,7 +14,7 @@ class Query
         add_action('parse_query', [$this, 'parseQuery'], 10, 1);
         add_filter('posts_join', [$this, 'postsJoin'], 10, 2);
         add_filter('posts_where', [$this, 'postsWhere'], 10, 2);
-        add_filter('option_sticky_posts', [$this, 'optionStickyPosts'], 10, 1);
+        add_filter('pre_get_posts', [$this, 'optionStickyPosts'], 10, 1);
         add_filter('option_page_on_front', [$this, 'getLocalPost'], 10, 1);
         add_filter('option_page_for_posts', [$this, 'getLocalPost'], 10, 1);
     }
@@ -215,19 +216,21 @@ class Query
         return $where;
     }
 
-    public function optionStickyPosts($posts)
+    public function optionStickyPosts(WP_Query $query)
     {
-        if (is_home()) {
+        // Only on the public home and the main query
+        if (! is_admin() && $query->is_main_query() && $query->is_home()) {
             $locale = get_locale();
-            $posts = array_filter(
-                $posts,
-                static function ($postId) use ($locale) {
-                    return Post::getPostLocale($postId) === $locale;
-                }
-            );
-        }
+            $stickies = get_option('sticky_posts', []);
+            $filtered = array_filter($stickies, function ($post_id) use ($locale) {
+                return Post::getPostLocale($post_id) === $locale;
+            });
 
-        return $posts;
+            // Overwrite the sticky posts that will be included
+            $query->set('post__in', $filtered);
+            // Ensure the sticky posts remain at the top
+            $query->set('ignore_sticky_posts', false);
+        }
     }
 
     public function getLocalPost($postId)
