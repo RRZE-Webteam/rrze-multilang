@@ -659,4 +659,35 @@ class Locale
 
         return false;
     }
+
+    /**
+     * Normalize a locale to WP format: ll_CC.
+     * 
+     * @param string $locale
+     * @return string
+     */
+    public static function normalizeLocale(string $locale): string
+    {
+        $l = str_replace('-', '_', trim($locale));
+        if ($l === '') {
+            return 'en_US';
+        }
+        if (!str_contains($l, '_')) {
+            return strtolower($l);
+        }
+        [$base, $region] = explode('_', $l, 2);
+        return strtolower($base) . '_' . strtoupper($region);
+    }
+
+    /**
+     * Get the base part of a locale (first two letters).
+     * 
+     * @param string $locale
+     * @return string
+     */
+    public static function localeBase(string $locale): string
+    {
+        $l = str_replace('-', '_', $locale);
+        return strtolower(explode('_', $l, 2)[0]);
+    }
 }
