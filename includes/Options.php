@@ -8,18 +8,21 @@ class Options
 {
     /**
      * Option name
+     * 
      * @var string
      */
     protected static $optionName = 'rrze_multilang_postmeta';
 
     /**
      * Site Option Name
+     * 
      * @var string
      */
     protected static $siteOptionName = 'rrze_multilang_sitemeta';
 
     /**
      * Default options
+     * 
      * @return array
      */
     protected static function defaultOptions(): array
@@ -48,6 +51,7 @@ class Options
 
     /**
      * Default site options
+     * 
      * @return array
      */
     protected static function defaultSiteOptions(): array
@@ -61,7 +65,7 @@ class Options
 
     /**
      * Returns the default options.
-     * @return object
+     * @return array
      */
     public static function getDefaultOptions(): array
     {
@@ -70,7 +74,8 @@ class Options
 
     /**
      * Returns the options.
-     * @return object
+     * 
+     * @return array
      */
     public static function getOptions(): array
     {
@@ -84,7 +89,8 @@ class Options
 
     /**
      * Returns the site options.
-     * @return object
+     * 
+     * @return array
      */
     public static function getSiteOptions(): array
     {
@@ -98,6 +104,7 @@ class Options
 
     /**
      * Returns the name of the option.
+     * 
      * @return string
      */
     public static function getOptionName(): string
@@ -107,6 +114,7 @@ class Options
 
     /**
      * Returns the name of the site option.
+     * 
      * @return string
      */
     public static function getSiteOptionName(): string
@@ -114,11 +122,21 @@ class Options
         return self::$siteOptionName;
     }
 
+    /**
+     * Deletes the option.
+     * 
+     * @return bool
+     */
     public static function deleteOption(): bool
     {
         return delete_option(self::$optionName);
     }
 
+    /**
+     * Deletes current blog connections.
+     * 
+     * @return void
+     */
     public static function deleteCurrentBlogConnections()
     {
         $currentBlogId = get_current_blog_id();

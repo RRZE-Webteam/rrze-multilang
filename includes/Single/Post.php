@@ -136,7 +136,13 @@ class Post
         return (int) $wpdb->get_var($q);
     }
 
-    public static function getPostTranslations($postId = 0)
+    /**
+     * Get all post translations for a given post ID.
+     * 
+     * @param integer $postId Post ID to get translations for.
+     * @return array|false Array of WP_Post objects keyed by locale, or false on failure.
+     */
+    public static function getPostTranslations(int $postId = 0)
     {
         $post = get_post($postId);
 
@@ -196,6 +202,13 @@ class Post
         return $translations[$post->ID];
     }
 
+    /**
+     * Get a specific post translation for a given post ID and locale.
+     * 
+     * @param integer $postId Post ID to get translation for.
+     * @param string $locale Locale code of the desired translation.
+     * @return \WP_Post|false WP_Post object of the translation, or false if not found.
+     */
     public static function getPostTranslation($postId, $locale)
     {
         $translations = self::getPostTranslations($postId);
@@ -424,7 +437,7 @@ class Post
                     $originalPostGuid = $originalPost->ID;
                 }
 
-                $translations = self::getPostTranslations($originalPost);
+                $translations = self::getPostTranslations($originalPost->ID);
 
                 update_post_meta(
                     $originalPost->ID,
@@ -824,7 +837,7 @@ class Post
             return $actions;
         }
 
-        $translation = self::getPostTranslation($post, $userLocale);
+        $translation = self::getPostTranslation($post->ID, $userLocale);
         // if (empty($translation->ID) || $translation->ID === $post->ID) {
         //     return $actions;
         // }

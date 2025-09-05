@@ -58,6 +58,8 @@ class Main
             case 2:
                 if (is_multisite()) {
                     new \RRZE\Multilang\Multiple\Main;
+                } else {
+                    return;
                 }
                 break;
             default:

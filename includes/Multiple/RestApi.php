@@ -279,7 +279,7 @@ class RestApi
 
         Functions::flashAdminNotice(
             sprintf(
-                /* translators: %s: The blog name. */
+                /* trasnslator: %s is the blog name */
                 __('A copy has been added to %s.', 'rrze-multilang'),
                 $blogName
             ),
