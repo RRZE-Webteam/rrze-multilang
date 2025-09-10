@@ -182,7 +182,7 @@ class Switcher
                 $link['href'] = Locale::url(null, $code);
             }
 
-            $links[] = $link;
+            $links[$code] = $link;
         }
 
         return $links;
